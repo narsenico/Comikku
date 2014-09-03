@@ -19,7 +19,8 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification) {
+.factory('ComicsReader', ['$q', '$filter', '$datex', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
+function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification) {
 	console.log("new ComicsReader");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
@@ -78,22 +79,46 @@ angular.module('starter.services', [])
 		},
 		//
 		getComics: function(orderBy, desc) {
-			//console.log("getComics", orderBy, desc);
+			console.log("getComics", orderBy, desc);
 
-			//TEST
-			orderBy = "name";
-			desc = false;
+			//provo ad aggiornare best release ogni volta che vengono richiesti i comics
+			this.refreshBestRelease(this.comics);
 
-			//TODO
-			if (orderBy) {
+			if (orderBy == "bestRelease") {
+				var sorted = this.comics.sort(function(a, b) {
+					var res;
+					if (a.bestRelease.date && b.bestRelease.date) {
+						res = a.bestRelease.date > b.bestRelease.date ? 1 : -1;
+					} else if (a.bestRelease.date && !b.bestRelease.date) {
+						res = -1;
+					} else if (!a.bestRelease.date && b.bestRelease.date) {
+						res = 1;
+					} else if (a.bestRelease.number && b.bestRelease.number) {
+						res = a.bestRelease.number - b.bestRelease.number;
+					} else if (a.bestRelease.number && !b.bestRelease.number) {
+						res = -1;
+					} else if (!a.bestRelease.number && b.bestRelease.number) {
+						res = 1;
+					} else {
+						res = a.name.toLowerCase() > b.name.toLowerCase() ? 1: -1;
+					}
+
+					if (desc)
+						res = -res;
+
+					return res;
+				});
+				return (this.comics = sorted);
+			} else if (orderBy == "name") {
 				var sorted = this.comics.sort(function(a, b) {
 					if (desc)
-						return eval("a." + orderBy).toLowerCase() > eval("b." + orderBy).toLowerCase() ? -1 : 1;
+						return a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 1;
 					else
-						return eval("a." + orderBy).toLowerCase() > eval("b." + orderBy).toLowerCase() ? 1 : -1;
+						return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
 				});
 				return (this.comics = sorted);
 			} else {
+				console.log("getComics: orderBy not supported " + orderBy);
 				return this.comics;
 			}
 		},
@@ -165,9 +190,9 @@ angular.module('starter.services', [])
 				return _.find(sorted, function(rel) { /*console.log(item.name, rel.date, rel.purchased);*/ return rel.date < today && rel.purchased != 'T'; }) || 
 					_.find(sorted, function(rel) { return rel.date >= today && rel.purchased != 'T'; }) ||
 					_.find(sorted, function(rel) { return !rel.date && rel.purchased != 'T'; }) ||
-					this.newRelease({ date: $filter('date')( $datex.getMax(), 'yyyy-MM-dd' ) });
+					this.newRelease();
 			} else
-				return this.newRelease({ date: $filter('date')( $datex.getMax(), 'yyyy-MM-dd' ) });
+				return this.newRelease();
 		},
 		//
 		refreshBestRelease: function(items) {
@@ -305,7 +330,7 @@ angular.module('starter.services', [])
 	};
 
   return DB;
-})
+}])
 
 .factory('Settings', function () {
 
@@ -314,7 +339,7 @@ angular.module('starter.services', [])
 		comicsCompactMode: 'F',
 		comicsSearchPublisher: 'F',
 		autoFillReleaseNumber: 'T',
-		comicsOrderBy: 'bestRelease.date',
+		comicsOrderBy: 'bestRelease',
 		comicsOrderByDesc: 'F',
 		weekStartMonday: 'F'
 	};

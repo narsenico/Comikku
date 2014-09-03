@@ -68,22 +68,26 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, Comics
 	};
 	//
 	$scope.getComicsInfo = function(item) {
-		//TODO
-		return "";
+    if (_.str.isBlank(item.series))
+      return item.notes;
+    else if (_.str.isBlank(item.notes))
+      return item.series
+    else
+      return item.series + " - " + item.notes;
 	};
 	//funzione di rimozione elemento
 	$scope.removeComicsEntry = function(item) {
-	ComicsReader.remove(item);
-	ComicsReader.save();
+		ComicsReader.remove(item);
+		ComicsReader.save();
 
-	$timeout(function() {
-	  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
-	    if (res == 'ok') {
-	      ComicsReader.undoRemove();
-	      ComicsReader.save();
-	    }
-	  });
-	}, 250);
+		$timeout(function() {
+		  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
+		    if (res == 'ok') {
+		      ComicsReader.undoRemove();
+		      ComicsReader.save();
+		    }
+		  });
+		}, 250);
 	};
 	//apre il template per l'editing
 	$scope.addComicsEntry = function() {
@@ -103,4 +107,18 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, Comics
     //TODO attiva la multi selezione, tap su item seleziona, pulsanti nel footer (cancella tutti, etc)
   };
 
-}]);
+}])
+.directive('bestRelease', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      comics: '='
+    },
+    controller: ['$scope', '$filter', 'ComicsReader', function($scope, $filter, ComicsReader) {
+      $scope.best = $scope.comics.bestRelease;
+      var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+      $scope.expired = $scope.best.date && $scope.best.date < today;
+    }],
+    templateUrl: 'templates/bestRelease.html'
+  };
+});
