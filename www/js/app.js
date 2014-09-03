@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ngAnimate', 'ngCordova', 'rmm'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -30,43 +30,63 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       controller: 'AppCtrl'
     })
 
-    .state('app.search', {
-      url: "/search",
+    .state('app.releases', {
+      url: "/releases",
       views: {
         'menuContent' :{
-          templateUrl: "templates/search.html"
+          templateUrl: "templates/releases.html",
+          controller: 'ReleasesEntryCtrl'
+        }
+      }
+    })
+    .state('app.releases_entry', {
+      url: "/releases/:comicsId",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/releases.html",
+          controller: 'ReleasesEntryCtrl'
+        }
+      }
+    })
+    .state('app.release_editor', {
+      url: "/release/:comicsId/:releaseId",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/releaseEditor.html",
+          controller: 'ReleaseEditorCtrl'
         }
       }
     })
 
-    .state('app.browse', {
-      url: "/browse",
+    .state('app.comics', {
+      url: "/comics",
       views: {
         'menuContent' :{
-          templateUrl: "templates/browse.html"
+          templateUrl: "templates/comics.html",
+          controller: 'ComicsCtrl'
         }
       }
     })
-    .state('app.playlists', {
-      url: "/playlists",
+    .state('app.comics_editor', {
+      url: "/comics/:comicsId",
       views: {
         'menuContent' :{
-          templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
+          templateUrl: "templates/comicsEditor.html",
+          controller: 'ComicsEditorCtrl'
         }
       }
     })
 
-    .state('app.single', {
-      url: "/playlists/:playlistId",
+    .state('app.options', {
+      url: "/options",
       views: {
         'menuContent' :{
-          templateUrl: "templates/playlist.html",
-          controller: 'PlaylistCtrl'
+          templateUrl: "templates/options.html",
+          controller: 'OptionsCtrl'
         }
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/comics');
 });
 
