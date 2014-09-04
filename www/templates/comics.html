@@ -17,21 +17,18 @@
   </ion-header-bar>
   <ion-content class="has-header" has-bouncing="false">
     <ion-list can-swipe="true">
-      <!-- <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
-        ng-repeat="item in items | orderBy:orderByField:orderByDesc" 
-        href="#/app/releases/{{item.id}}"> -->
         <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
           ng-repeat="item in comics track by item.id" 
           href="#/app/releases/{{item.id}}">
 
         <div>
-          <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{item.name}}</span>
+          <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{$index}}. {{item.name}}</span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
           <span class="comics-notes" ng-if="debugMode">id {{item.id}} last upd {{item.lastUpdate}} best {{item.bestRelease.date}}</span>
         </div>
 
-        <best-release comics="item"></best-release>
+        <best-release comics="item" ng-if="item.bestRelease.number"></best-release>
 
         <ion-option-button class="button button-energized icon ion-plus-round"
                            ng-click="showAddRelease(item)">
@@ -54,9 +51,4 @@
         distance="1%">
       </ion-infinite-scroll>
   </ion-content>
-  <!-- TODO non va bene, footer occupa cmq spazio anche se non visibile -->
-  <!-- il problema è la class has-footer di ion-content: tramite direttiva a ion-content si potrebbe gestire la classe (toggle) -->
-  <!-- <div class="bar bar-footer bar-balanced" ng-show="isMultiSelectionMode">
-    <div class="title">Footer</div>
-  </div> -->
 </ion-view>
