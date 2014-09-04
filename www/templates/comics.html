@@ -17,18 +17,18 @@
   </ion-header-bar>
   <ion-content class="has-header" has-bouncing="false">
     <ion-list can-swipe="true">
-        <ion-item class="item item-comics" on-hold="toggleMultiSelectionMode()" 
+        <ion-item bindonce class="item item-comics" on-hold="toggleMultiSelectionMode()" 
           ng-repeat="item in comics track by item.id" 
           href="#/app/releases/{{item.id}}">
 
         <div>
-          <span class="comics-title"><i class="icon ion-ios7-filing-outline" ng-show="item.reserved=='T'"></i> {{$index}}. {{item.name}}</span>
+          <span class="comics-title"><i class="icon ion-ios7-filing-outline" bo-if="item.reserved=='T'"></i> {{item.name}}</span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
-          <span class="comics-notes" ng-if="debugMode">id {{item.id}} last upd {{item.lastUpdate}} best {{item.bestRelease.date}}</span>
+          <span class="comics-notes" bo-if="debugMode">id {{item.id}} last upd {{item.lastUpdate}} best {{item.bestRelease.date}}</span>
         </div>
 
-        <best-release comics="item" ng-if="item.bestRelease.number"></best-release>
+        <best-release comics="item" bo-if="item.bestRelease.number"></best-release>
 
         <ion-option-button class="button button-energized icon ion-plus-round"
                            ng-click="showAddRelease(item)">
