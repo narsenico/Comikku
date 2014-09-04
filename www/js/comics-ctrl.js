@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$debounce', 'ComicsReader', 'Settings', 
-function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, ComicsReader, Settings) {
+	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$debounce', '$ionicScrollDelegate', 'ComicsReader', 'Settings', 
+function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, $ionicScrollDelegate, ComicsReader, Settings) {
 	//recupero i dati già ordinati
 	var orderedComics = ComicsReader.getComics(Settings.userOptions.comicsOrderBy || 'name', Settings.userOptions.comicsOrderByDesc == 'T');
 	//conterrà i dati filtrati (tramite campo di ricerca)
@@ -26,6 +26,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, Comics
 		$scope.comics = [];
 		$scope.totComics = filteredComics.length;
 		$scope.loadMore();
+		$ionicScrollDelegate.scrollTop();
 	};
 	//
 	$scope.debugMode = Settings.userOptions.debugMode == 'T';
