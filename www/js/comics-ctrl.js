@@ -79,12 +79,14 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, Comics
 	$scope.removeComicsEntry = function(item) {
 		ComicsReader.remove(item);
 		ComicsReader.save();
+		applyFilter();
 
 		$timeout(function() {
 		  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
 		    if (res == 'ok') {
 		      ComicsReader.undoRemove();
 		      ComicsReader.save();
+		      applyFilter();
 		    }
 		  });
 		}, 250);

@@ -100,7 +100,8 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 					} else if (!a.bestRelease.number && b.bestRelease.number) {
 						res = 1;
 					} else {
-						res = a.name.toLowerCase() > b.name.toLowerCase() ? 1: -1;
+						//res = a.name.toLowerCase() > b.name.toLowerCase() ? 1: -1;
+						res = a.lastUpdate > b.lastUpdate ? -1 : 1;
 					}
 
 					if (desc)
