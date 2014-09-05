@@ -7,7 +7,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, $ionic
 	//conterrà i dati filtrati (tramite campo di ricerca)
 	var filteredComics = orderedComics;
 	//indcia quanti dati caricare alla volta tramite infinite scroll
-	var loadChunk = 7;
+	var loadChunk = 20;
 	//funzione di filtraggio dei dati (su orderedComics)
 	var applyFilter = function() {
 		console.log("applyFilter");

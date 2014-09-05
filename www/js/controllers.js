@@ -345,6 +345,7 @@ angular.module('starter.controllers', ['starter.services'])
         Settings.loadDefault();
         Settings.save();
         $scope.userOptions = Settings.userOptions;
+        $toast.show("Settings reset to default");
       }
     });
   };
@@ -357,6 +358,7 @@ angular.module('starter.controllers', ['starter.services'])
       if (res) {
         ComicsReader.clear();
         ComicsReader.save();
+        $toast.show("Data deleted");
       }
     });
   };
@@ -370,6 +372,7 @@ angular.module('starter.controllers', ['starter.services'])
         ComicsReader.repairData();
         ComicsReader.save();
         ComicsReader.read(ComicsReader.uid, true);
+        $toast.show("Data repaired");
       }
     });
   };
@@ -428,6 +431,7 @@ angular.module('starter.controllers', ['starter.services'])
     for (var ii=1; ii<=100; ii++)
       ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
     ComicsReader.save();
+    $toast.show(ComicsReader.comics.length + " fake comics created");
   };
   //
   $scope.switchUser = function() {
@@ -437,6 +441,7 @@ angular.module('starter.controllers', ['starter.services'])
       ComicsReader.read("USER");
     $scope.currentUser = ComicsReader.uid;
     $scope.readLastBackup();
+    $toast.show("Hello " + $scope.currentUser);
   };
   //
   $scope.test = function($event) {
