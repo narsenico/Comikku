@@ -20,92 +20,135 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-.controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, ComicsReader, Settings) {
-  $scope.debugMode = Settings.userOptions.debugMode == 'T';
-  $scope.orderByField = Settings.userOptions.comicsOrderBy;
-  $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
-  //rendo disponibile l'elenco allo scope
-  $scope.comics = ComicsReader.comics;
-  //filtro i fumetti in base a $scope.search
-  $scope.getComics = function() {
-    var arr = $scope.comics.filter(function(item) {
-      //tolgo spazi superflui con _.str.clean
-      var bOk = false;
-      if (Settings.userOptions.comicsSearchPublisher == 'T') {
-        bOk = !$scope.search ||  _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
-      }
-      return bOk || (!$scope.search ||  _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
-    });
-    //aggiorno bestRelease per i comics filtrati
-    ComicsReader.refreshBestRelease(arr);
-    return arr;
-  };
-  //pulisco filtro
-  $scope.clearSearch = function() {
-    $scope.search = "";
-  };
-  //
-  $scope.getComicsInfo = function(item) {
-    if (_.str.isBlank(item.series))
-      return item.notes;
-    else if (_.str.isBlank(item.notes))
-      return item.series
-    else
-      return item.series + " - " + item.notes;
-  };
-  //funzione di rimozione elemento
-  $scope.removeComicsEntry = function(item) {
-    ComicsReader.remove(item);
-    ComicsReader.save();
+//** see comics-ctrl.js
+// .controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, ComicsReader, Settings) {
+//   //filtro i fumetti in base a $scope.search
+//   var applyFilter = function() {
+//     console.log("applyFilter " + $scope.search);
+//     var arr;
+//     if (_.isEmpty($scope.search)) {
+//       arr = $scope.comics;
+//     } else {
+//       arr = $scope.comics.filter(function(item) {
+//         //tolgo spazi superflui con _.str.clean
+//         var bOk = false;
+//         if (Settings.userOptions.comicsSearchPublisher == 'T') {
+//           bOk = !$scope.search || _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
+//         }
+//         return bOk || (!$scope.search || _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
+//       });
+//     }
+//     //aggiorno bestRelease per i comics filtrati
+//     ComicsReader.refreshBestRelease(arr);
+//     $scope.filteredComics = arr;
+//   };
 
-    $timeout(function() {
-      $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
-        if (res == 'ok') {
-          ComicsReader.undoRemove();
-          ComicsReader.save();
-        }
-      });
-    }, 250);
+//   $scope.debugMode = Settings.userOptions.debugMode == 'T';
+//   $scope.uid = ComicsReader.uid;
+//   $scope.orderByField = Settings.userOptions.comicsOrderBy;
+//   $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
+//   //rendo disponibile l'elenco allo scope
+//   $scope.comics = ComicsReader.comics;
+//   $scope.filteredComics = [];
+//   $scope.items = [];
+//   //
+//   $scope.$watch('search', function(newValue, oldValue) {
+//     if (newValue === oldValue) { return; }
+//     $debounce(applyFilter, 300); //chiamo applyFilter solo se non viene modificato search per 300ms
+//   });
+//   //
+//   $scope.$on('stateChangeSuccess', function() {
+//     $scope.loadMore();
+//   });
+//   //pulisco filtro
+//   $scope.clearSearch = function() {
+//     $scope.search = "";
+//     applyFilter();
+//   };
+//   //
+//   $scope.loadMore = function() {
+//     var data = [];
+//     var from = $scope.items.length;
+//     var max = Math.min(from + 7, $scope.filteredComics.length);
+//     console.log("loadMore " + from + "~" + max);
+//     if (from < max) {
+//       for (var ii=from; ii<max; ii++) {
+//         data.push($scope.filteredComics[ii]);
+//       }
+//       $scope.items = $scope.items.concat(data);
+//     }
+//     console.log("end");
+//     $scope.$broadcast('scroll.infiniteScrollComplete');
+//     $scope.$broadcast('scroll.resize');
+//   };
+//   //
+//   $scope.moreDataCanBeLoaded = function() {
+//     console.log("check more");
+//     return $scope.items.length < $scope.filteredComics.length;
+//   };
+//   //
+//   $scope.getComicsInfo = function(item) {
+//     if (_.str.isBlank(item.series))
+//       return item.notes;
+//     else if (_.str.isBlank(item.notes))
+//       return item.series
+//     else
+//       return item.series + " - " + item.notes;
+//   };
+//   //funzione di rimozione elemento
+//   $scope.removeComicsEntry = function(item) {
+//     ComicsReader.remove(item);
+//     ComicsReader.save();
 
-  };
-  //apre il template per l'editing
-  $scope.addComicsEntry = function() {
-    $location.path("/app/comics/new").replace();
-  };
-  //apre il template per l'editing del fumetto
-  $scope.editComicsEntry = function(item) {
-    $location.path("/app/comics/" + item.id).replace();
-  };
-  //apre te template per l'editing dell'uscita
-  $scope.showAddRelease = function(item) {
-    $location.path("/app/release/" + item.id + "/new").replace();
-  };
-  // //ritorna l'uscita più significativa da mostrare nell'item del fumetto
-  // $scope.getBestRelease = function(item) {
-  //   return ComicsReader.getBestRelease(item);
-  // };
-  //
-  $scope.isMultiSelectionMode = false;
-  //
-  $scope.toggleMultiSelectionMode = function() {
-    $scope.isMultiSelectionMode = !$scope.isMultiSelectionMode;
-    //TODO attiva la multi selezione, tap su item seleziona, pulsanti nel footer (cancella tutti, etc)
-  };
-})
-.directive('bestRelease', function() {
-  return {
-    restrict: 'E',
-    scope: {
-      comics: '='
-    },
-    controller: function($scope, $filter, ComicsReader) {
-      $scope.best = $scope.comics.bestRelease; //ComicsReader.getBestRelease($scope.comics);
-      var today = $filter('date')(new Date(), 'yyyy-MM-dd');
-      $scope.expired = $scope.best.date && $scope.best.date < today;
-    },
-    templateUrl: 'templates/bestRelease.html'
-  };
-})
+//     $timeout(function() {
+//       $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
+//         if (res == 'ok') {
+//           ComicsReader.undoRemove();
+//           ComicsReader.save();
+//         }
+//       });
+//     }, 250);
+//   };
+//   //apre il template per l'editing
+//   $scope.addComicsEntry = function() {
+//     $location.path("/app/comics/new").replace();
+//   };
+//   //apre il template per l'editing del fumetto
+//   $scope.editComicsEntry = function(item) {
+//     $location.path("/app/comics/" + item.id).replace();
+//   };
+//   //apre te template per l'editing dell'uscita
+//   $scope.showAddRelease = function(item) {
+//     $location.path("/app/release/" + item.id + "/new").replace();
+//   };
+//   // //ritorna l'uscita più significativa da mostrare nell'item del fumetto
+//   // $scope.getBestRelease = function(item) {
+//   //   return ComicsReader.getBestRelease(item);
+//   // };
+//   //
+//   $scope.isMultiSelectionMode = false;
+//   //
+//   $scope.toggleMultiSelectionMode = function() {
+//     $scope.isMultiSelectionMode = !$scope.isMultiSelectionMode;
+//     //TODO attiva la multi selezione, tap su item seleziona, pulsanti nel footer (cancella tutti, etc)
+//   };
+//   //
+//   applyFilter();
+// })
+// .directive('bestRelease', function() {
+//   return {
+//     restrict: 'E',
+//     scope: {
+//       comics: '='
+//     },
+//     controller: function($scope, $filter, ComicsReader) {
+//       $scope.best = $scope.comics.bestRelease; //ComicsReader.getBestRelease($scope.comics);
+//       var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+//       $scope.expired = $scope.best.date && $scope.best.date < today;
+//     },
+//     templateUrl: 'templates/bestRelease.html'
+//   };
+// })
 
 .controller('ComicsEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
   //console.log($stateParams, ComicsReader)
@@ -277,7 +320,8 @@ angular.module('starter.controllers', ['starter.services'])
   $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, ComicsReader, Settings) {
   //
   $scope.version = null;
-  $scope.lastBackup = null;
+  $scope.lastBackup = 'not found';
+  $scope.currentUser = ComicsReader.uid;
   //
   if (window.cordova) {
     window.cordova.getAppVersion(function (version) {
@@ -301,6 +345,7 @@ angular.module('starter.controllers', ['starter.services'])
         Settings.loadDefault();
         Settings.save();
         $scope.userOptions = Settings.userOptions;
+        $toast.show("Settings reset to default");
       }
     });
   };
@@ -313,6 +358,7 @@ angular.module('starter.controllers', ['starter.services'])
       if (res) {
         ComicsReader.clear();
         ComicsReader.save();
+        $toast.show("Data deleted");
       }
     });
   };
@@ -326,6 +372,7 @@ angular.module('starter.controllers', ['starter.services'])
         ComicsReader.repairData();
         ComicsReader.save();
         ComicsReader.read(ComicsReader.uid, true);
+        $toast.show("Data repaired");
       }
     });
   };
@@ -334,6 +381,8 @@ angular.module('starter.controllers', ['starter.services'])
     if (window.cordova) {
       ComicsReader.getLastBackup().then(function(result) {
         $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
+      }, function(error) {
+        $scope.lastBackup = 'not found';
       });
     }
   };
@@ -375,11 +424,24 @@ angular.module('starter.controllers', ['starter.services'])
   //DEBUG
   //
   $scope.fakeEntries = function() {
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
-    ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
+    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
+    for (var ii=1; ii<=100; ii++)
+      ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
     ComicsReader.save();
+    $toast.show(ComicsReader.comics.length + " fake comics created");
+  };
+  //
+  $scope.switchUser = function() {
+    if (ComicsReader.uid == "USER")
+      ComicsReader.read("DEBUG");
+    else
+      ComicsReader.read("USER");
+    $scope.currentUser = ComicsReader.uid;
+    $scope.readLastBackup();
+    $toast.show("Hello " + $scope.currentUser);
   };
   //
   $scope.test = function($event) {
