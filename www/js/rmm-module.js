@@ -1,5 +1,6 @@
 /**
  * Ionic Angula module: rmm
+ * - $utils
  * - $undoPopup: Undo Popup (google way)
  *   promise return: 'ok', 'timeout', 'discarded'
  * - $toast: simple toast
@@ -24,6 +25,25 @@ var TOAST_TPL =
   '<div class="toast-container" ng-class="position">' +
     '<span ng-bind-html="text"></span>'
   '</div>';
+
+IonicModule
+.factory('$utils', function() {
+  return {
+    indexFindWhere: function(arr, filter) {
+      var found = false;
+      for (var ii=0; ii<arr.length; ii++) {
+        found = true;
+        for (var aa in filter) {
+          if (arr[ii][aa] !== filter[aa]) {
+            found = false
+          }
+        }
+        if (found) return ii;
+      }
+      return -1;
+    }
+  };
+});
 
 /*
 $undoPopup

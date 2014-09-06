@@ -79,7 +79,7 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 		},
 		//
 		getComics: function(orderBy, desc) {
-			console.log("getComics", orderBy, desc);
+			//console.log("getComics", orderBy, desc);
 
 			//provo ad aggiornare best release ogni volta che vengono richiesti i comics
 			this.refreshBestRelease(this.comics);
@@ -213,6 +213,11 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 		},
 		//
 		remove: function(item) {
+			//TODO gestire item come array
+			if (_.isArray(item)) {
+				item = item[0];
+			}
+
 			var id = item.id;
 			var idx = indexByKey(this.comics, item.id, 'id');
 			if (idx > -1) {

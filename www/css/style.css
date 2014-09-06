@@ -22,12 +22,26 @@
 	background-color: #F0E3C2;
 }
 
+.bar .item-search {
+	background-color: inherit;
+	border-radius: 0;
+}
 .bar .button.button-icon.rmm-search-button {
 	right: 5px;
 }
 .bar .button.button-icon.rmm-search-button:before {
 	font-size: 20px;
 }
+.bar .header-options {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	bottom: 5px;
+}
+
+.bar.bar-header.bar-options {
+background-color: #ddd;
+border-bottom: solid 2px #6397EB;}
 
 /* compatibilità pulsante a destra con pulsanti opzioni item */
 .rmm-button-right > .button,

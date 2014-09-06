@@ -1,12 +1,22 @@
-<ion-view title="Comics ({{comics.length}}/{{totComics}})">
+<ion-view title="Comics">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-plus-round" ng-click="addComicsEntry()"></button>
   </ion-nav-buttons>
+  <!-- barra delle opzioni, visibile solo se la barra di navigazione viene nascosta -->
+  <header class="bar bar-header bar-options title">
+    <!-- <button menu-toggle="left" class="button button-icon icon ion-navicon"></button> -->
+    <button class="button button-icon icon ion-android-checkmark" ng-click="hideOptionsBar()"></button>
+    <div class="buttons header-options">
+      <button class="button button-icon icon ion-compose" ng-disabled="multiSelection" ng-click="editComicsEntry()"></button>
+      <button class="button button-icon icon ion-android-trash" ng-click="removeComicsEntry()"></button>
+    </div>
+  </header>
+  <!-- search bar -->
   <ion-header-bar class="bar bar-subheader item-input-inset">
-    <label class="item-input-wrapper">
+    <label class="item-input-wrapper item-search">
       <i class="icon ion-ios7-search placeholder-icon"></i>
       <input type="search" placeholder="Filter comics..." ng-model="search">
     </label>
@@ -15,9 +25,11 @@
       ng-click="clearSearch()">
     </button>
   </ion-header-bar>
+  <!-- content -->
   <ion-content class="has-header" has-bouncing="false">
-    <ion-list can-swipe="true">
-        <ion-item bindonce class="item item-comics" on-hold="toggleMultiSelectionMode()" 
+    <!-- <ion-list can-swipe="true"> -->
+    <ion-list>
+        <ion-item bindonce class="item item-comics" on-hold="selectItem(item, $index, $event)" 
           ng-repeat="item in comics track by item.id" 
           href="#/app/releases/{{item.id}}">
 
@@ -30,7 +42,7 @@
 
         <best-release comics="item" bo-if="item.bestRelease.number"></best-release>
 
-        <ion-option-button class="button button-energized icon ion-plus-round"
+        <!-- <ion-option-button class="button button-energized icon ion-plus-round"
                            ng-click="showAddRelease(item)">
           Add
         </ion-option-button>
@@ -41,7 +53,7 @@
         <ion-option-button class="button button-assertive icon ion-trash-a"
                            ng-click="removeComicsEntry(item)">
           Del
-        </ion-option-button>
+        </ion-option-button> -->
       </ion-item>
     </ion-list>
     <ion-infinite-scroll
