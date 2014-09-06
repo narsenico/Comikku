@@ -1,7 +1,9 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$utils', '$debounce', '$ionicScrollDelegate', '$ionicNavBarDelegate', 'ComicsReader', 'Settings', 
-function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce, $ionicScrollDelegate, $ionicNavBarDelegate, ComicsReader, Settings) {
+	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$utils', '$debounce', 
+	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', 'ComicsReader', 'Settings', 
+function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce, 
+	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, ComicsReader, Settings) {
 	//recupero i dati già ordinati
 	var orderedComics = ComicsReader.getComics(Settings.userOptions.comicsOrderBy || 'name', Settings.userOptions.comicsOrderByDesc == 'T');
 	//conterrà i dati filtrati (tramite campo di ricerca)
@@ -114,9 +116,11 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		$location.path("/app/release/" + item.id + "/new").replace();
 	};
 	//
-	$scope.hideOptionsBar = function() {
+	$scope.showHeaderBar = function() {
 		$scope.selectedComics = [];
 		$scope.currentBar = 'title'
+    //TODO $scope._deregisterBackButton && $scope._deregisterBackButton();
+    //TODO $scope._deregisterBackButton = null;
 	};
 	//
 	$scope.selectItem = function(item) {
@@ -132,11 +136,11 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 
 		//nascondo la barra di navigazione (e mostro quella delle opzioni) se c'è almeno un elemento selezionato
 		if ($scope.selectedComics.length == 0) {
-	    $scope.currentBar = 'title'
+	    $scope.showHeaderBar();
 		} else {
 			$scope.currentBar = 'options'
 			$scope.canEdit = ($scope.selectedComics.length == 1);
-			//TODO gestire back $ionicPlatform.registerBackButtonAction(function() {}, 1)
+			//TODO $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { $scope.showHeaderBar() }, 1)
 		}
 	}
 	//

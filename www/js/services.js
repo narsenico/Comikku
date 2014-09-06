@@ -213,6 +213,8 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 		},
 		//
 		remove: function(items) {
+			lastsRemoved = [];
+			
 			angular.forEach(items, function(item) {
 				var id = item.id;
 				var idx = indexByKey(this.comics, item.id, 'id');

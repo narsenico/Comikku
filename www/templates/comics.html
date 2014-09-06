@@ -9,7 +9,7 @@
   <!-- barra delle opzioni, visibile solo se la barra di navigazione viene nascosta -->
   <header class="bar bar-header bar-options title" ng-show="currentBar=='options'">
     <!-- <button menu-toggle="left" class="button button-icon icon ion-navicon"></button> -->
-    <button class="button button-icon icon ion-ios7-arrow-down" ng-click="hideOptionsBar()"></button>
+    <button class="button button-icon icon ion-ios7-arrow-down" ng-click="showHeaderBar()"></button>
     <div class="buttons header-options">
       <button class="button button-icon icon ion-compose" ng-disabled="!canEdit" ng-click="editComicsEntry()"></button>
       <button class="button button-icon icon ion-android-trash button-badged" ng-click="removeComicsEntry()" title="{{selectedComics.length}}"></button>
