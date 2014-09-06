@@ -24,7 +24,7 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 	console.log("new ComicsReader");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
-	var lastRemoved = null;
+	var lastsRemoved = [];
 	var lastRemovedRelease = null;
 
 	var comicsDefaults = {
@@ -212,25 +212,26 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 			updated(item);
 		},
 		//
-		remove: function(item) {
-			//TODO gestire item come array
-			if (_.isArray(item)) {
-				item = item[0];
-			}
+		remove: function(items) {
+			angular.forEach(items, function(item) {
+				var id = item.id;
+				var idx = indexByKey(this.comics, item.id, 'id');
+				if (idx > -1) {
+					lastsRemoved.push([idx, this.comics[idx]]);
+					this.comics.splice(idx, 1);
+				}
+			}, this);
 
-			var id = item.id;
-			var idx = indexByKey(this.comics, item.id, 'id');
-			if (idx > -1) {
-				lastRemoved = [idx, this.comics[idx]];
-				this.comics.splice(idx, 1);
-			}
+			console.log(lastsRemoved);
 		},
 		//
 		undoRemove: function() {
-			//console.log("undo")
-			if (lastRemoved) {
-				this.comics.splice(lastRemoved[0], 0, lastRemoved[1]);
-				lastRemoved = null;
+			if (lastsRemoved != null && lastsRemoved.length > 0) {
+				for (var ii=lastsRemoved.length-1; ii>=0; ii--) {
+					var lr = lastsRemoved[ii];
+					this.comics.splice(lr[0], 0, lr[1]);
+				}
+				lastsRemoved = [];
 			}
 		},
 		//

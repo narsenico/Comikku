@@ -40,8 +40,13 @@
 }
 
 .bar.bar-header.bar-options {
-background-color: #ddd;
-border-bottom: solid 2px #6397EB;}
+	background-color: #ddd;
+	border-bottom: solid 2px #6397EB;
+}
+
+.custom-header {
+	top: 44px;
+}
 
 /* compatibilità pulsante a destra con pulsanti opzioni item */
 .rmm-button-right > .button,
@@ -245,6 +250,10 @@ border-bottom: solid 2px #6397EB;}
 	margin-bottom: 0;
 }
 
+.item-comics.selected .item-content {
+	background-color: #E8EDF3;
+}
+
 .best-release {
 	position: absolute;
 	right: 16px;
@@ -289,11 +298,20 @@ border-bottom: solid 2px #6397EB;}
 	font-size: 0.7em;
 	text-align: center;
 	line-height: 20px;
-	/*border-top: solid 1px #ddd;*/
+	background-color: #fff;
 	border-left: solid 1px #ddd;
 	border-right: solid 1px #ddd;
 	border-bottom: solid 1px #ddd;
 	border-radius: 0 0 2px 2px;
+}
+
+.bar.bar-options .button-badged:after {
+	content: attr(title);
+	position: absolute;
+	top: 6px;
+	right: -6px;
+	font-size: 0.5em;
+	color: #fff;
 }
 
 /* Release */

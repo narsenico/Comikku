@@ -6,8 +6,6 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	var orderedComics = ComicsReader.getComics(Settings.userOptions.comicsOrderBy || 'name', Settings.userOptions.comicsOrderByDesc == 'T');
 	//conterrà i dati filtrati (tramite campo di ricerca)
 	var filteredComics = orderedComics;
-	//
-	var selectedItems = [];
 	//indcia quanti dati caricare alla volta tramite infinite scroll
 	var loadChunk = 20;
 	//funzione di filtraggio dei dati (su orderedComics)
@@ -32,12 +30,16 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	};
 	//
 	$scope.debugMode = Settings.userOptions.debugMode == 'T';
+	//
+	$scope.currentBar = 'title';
 	//conterrà i comics caricati poco alla volta tramite infirnite scroll
 	$scope.comics = [];
 	//
 	$scope.totComics = filteredComics.length;
-	//indica se sono stati selezionati più elementi
-	$scope.multiSelection = false;
+	//
+	$scope.selectedComics = [];
+	//indica è possibile editare l'elemento selezionato
+	$scope.canEdit = false;
 	//campo di ricerca
 	$scope.search = "";
 	//
@@ -79,24 +81,24 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
       return item.series + " - " + item.notes;
 	};
 	//funzione di rimozione elemento
-	$scope.removeComicsEntry = function(item) {
-		if (!_.isEmpty(selectedItems)) {
-			ComicsReader.remove(selectedItems);
-		} else {
-			ComicsReader.remove(item);
-		}
-		ComicsReader.save();
-		applyFilter();
+	$scope.removeComicsEntry = function() {
+		if (!_.isEmpty($scope.selectedComics)) {
+			ComicsReader.remove($scope.selectedComics);
+			ComicsReader.save();
+			$scope.selectedComics = [];
+			$scope.canEdit = false;
+			applyFilter();
 
-		$timeout(function() {
-		  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
-		    if (res == 'ok') {
-		      ComicsReader.undoRemove();
-		      ComicsReader.save();
-		      applyFilter();
-		    }
-		  });
-		}, 250);
+			$timeout(function() {
+			  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
+			    if (res == 'ok') {
+			      ComicsReader.undoRemove();
+			      ComicsReader.save();
+			      applyFilter();
+			    }
+			  });
+			}, 250);
+		}
 	};
 	//apre il template per l'editing
 	$scope.addComicsEntry = function() {
@@ -104,7 +106,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	};
 	//apre il template per l'editing del fumetto
 	$scope.editComicsEntry = function(item) {
-		item = item || selectedItems[0];
+		item = item || $scope.selectedComics[0];
 		$location.path("/app/comics/" + item.id).replace();
 	};
 	//apre te template per l'editing dell'uscita
@@ -113,38 +115,37 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	};
 	//
 	$scope.hideOptionsBar = function() {
-		selectedItems = [];
-		//TODO ripristinare stile elementi selezioanti
-		$ionicNavBarDelegate.showBar(true);
+		$scope.selectedComics = [];
+		$scope.currentBar = 'title'
 	};
 	//
-	$scope.selectItem = function(item, $index, $event) {
-		//console.log("sel", item, $event)
-
+	$scope.selectItem = function(item) {
 		//cerco l'indice dell'elemento selezionato
-		var idx = $utils.indexFindWhere(selectedItems, {id: item.id});
+		var idx = $utils.indexFindWhere($scope.selectedComics, {id: item.id});
 
 		//se è già selezionato lo rimuovo
 		if (idx >= 0) {
-			selectedItems.splice(idx, 1);
+			$scope.selectedComics.splice(idx, 1);
 		} else {
-			selectedItems.push(item);
-			//console.log($event, $event.target)
+			$scope.selectedComics.push(item);
 		}
 
 		//nascondo la barra di navigazione (e mostro quella delle opzioni) se c'è almeno un elemento selezionato
-		if (selectedItems.length == 0) {
-	    $ionicNavBarDelegate.showBar(true);
+		if ($scope.selectedComics.length == 0) {
+	    $scope.currentBar = 'title'
 		} else {
-			$ionicNavBarDelegate.showBar(false);
-			$scope.multiSelection = (selectedItems.length > 1);
+			$scope.currentBar = 'options'
+			$scope.canEdit = ($scope.selectedComics.length == 1);
+			//TODO gestire back $ionicPlatform.registerBackButtonAction(function() {}, 1)
 		}
-
-		//TODO cambiare stile elementi selezionati
-
-		//TODO nascosto al back (intercettare)
-		//$ionicPlatform.registerBackButtonAction
 	}
+	//
+	$scope.isSelected = function(id) {
+		return $utils.indexFindWhere($scope.selectedComics, {id: id}) >= 0;
+	};
+
+	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
+	$timeout(function() { $ionicNavBarDelegate.showBar(false); }, 250);
 
 }])
 .directive('bestRelease', function() {
