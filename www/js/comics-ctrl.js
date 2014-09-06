@@ -113,14 +113,21 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	};
 	//apre te template per l'editing dell'uscita
 	$scope.showAddRelease = function(item) {
+		item = item || $scope.selectedComics[0];
 		$location.path("/app/release/" + item.id + "/new").replace();
 	};
 	//
 	$scope.showHeaderBar = function() {
 		$scope.selectedComics = [];
 		$scope.currentBar = 'title'
-    //TODO $scope._deregisterBackButton && $scope._deregisterBackButton();
-    //TODO $scope._deregisterBackButton = null;
+	};
+	//
+	$scope.clickItem = function(item) {
+		if ($scope.currentBar == 'options') {
+			$scope.selectItem(item);
+		} else {
+			$location.path("/app/releases/" + item.id).replace();
+		}
 	};
 	//
 	$scope.selectItem = function(item) {
@@ -138,9 +145,15 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		if ($scope.selectedComics.length == 0) {
 	    $scope.showHeaderBar();
 		} else {
-			$scope.currentBar = 'options'
 			$scope.canEdit = ($scope.selectedComics.length == 1);
-			//TODO $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { $scope.showHeaderBar() }, 1)
+			if ($scope.currentBar != 'options') {
+				$scope.currentBar = 'options';
+				$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { 
+					$scope.showHeaderBar();
+					$scope.$apply(); //altrimenti non vengono aggiornati 
+					$scope._deregisterBackButton && $scope._deregisterBackButton();
+	    		$scope._deregisterBackButton = null;
+				}, 100);}
 		}
 	}
 	//
@@ -150,6 +163,9 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 
 	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
 	$timeout(function() { $ionicNavBarDelegate.showBar(false); }, 250);
+
+	//deregistro l'evento sul back all'uscita
+	$scope.$on('$destroy', function() { $scope._deregisterBackButton && $scope._deregisterBackButton(); });
 
 }])
 .directive('bestRelease', function() {
