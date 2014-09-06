@@ -144,6 +144,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		//nascondo la barra di navigazione (e mostro quella delle opzioni) se c'è almeno un elemento selezionato
 		if ($scope.selectedComics.length == 0) {
 	    $scope.showHeaderBar();
+			$scope._deregisterBackButton && $scope._deregisterBackButton();
+  		$scope._deregisterBackButton = null;
 		} else {
 			$scope.canEdit = ($scope.selectedComics.length == 1);
 			if ($scope.currentBar != 'options') {
