@@ -1,11 +1,11 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
 	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$utils', '$debounce', 
-	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', 'ComicsReader', 'Settings', 
+	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings', 
 function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce, 
-	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, ComicsReader, Settings) {
+	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
 	//recupero i dati già ordinati
-	var orderedComics = ComicsReader.getComics(Settings.userOptions.comicsOrderBy || 'name', Settings.userOptions.comicsOrderByDesc == 'T');
+	var orderedComics = $comicsData.getComics($settings.userOptions.comicsOrderBy || 'name', $settings.userOptions.comicsOrderByDesc == 'T');
 	//conterrà i dati filtrati (tramite campo di ricerca)
 	var filteredComics = orderedComics;
 	//indcia quanti dati caricare alla volta tramite infinite scroll
@@ -19,7 +19,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		} else {
 			filteredComics = orderedComics.filter(function(item) {
 	      var bOk = false;
-	      if (Settings.userOptions.comicsSearchPublisher == 'T') {
+	      if ($settings.userOptions.comicsSearchPublisher == 'T') {
 	        bOk = !$scope.search || _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
 	      }
 	      return bOk || (!$scope.search || _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));				
@@ -31,7 +31,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		$ionicScrollDelegate.scrollTop();
 	};
 	//
-	$scope.debugMode = Settings.userOptions.debugMode == 'T';
+	$scope.debugMode = $settings.userOptions.debugMode == 'T';
 	//
 	$scope.currentBar = 'title';
 	//conterrà i comics caricati poco alla volta tramite infirnite scroll
@@ -85,8 +85,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	//funzione di rimozione elemento
 	$scope.removeComicsEntry = function() {
 		if (!_.isEmpty($scope.selectedComics)) {
-			ComicsReader.remove($scope.selectedComics);
-			ComicsReader.save();
+			$comicsData.remove($scope.selectedComics);
+			$comicsData.save();
 			$scope.selectedComics = [];
 			$scope.canEdit = false;
 			applyFilter();
@@ -94,8 +94,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 			$timeout(function() {
 			  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
-			      ComicsReader.undoRemove();
-			      ComicsReader.save();
+			      $comicsData.undoRemove();
+			      $comicsData.save();
 			      applyFilter();
 			    }
 			  });
@@ -176,7 +176,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
     scope: {
       comics: '='
     },
-    controller: ['$scope', '$filter', 'ComicsReader', function($scope, $filter, ComicsReader) {
+    controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
       $scope.best = $scope.comics.bestRelease;
       var today = $filter('date')(new Date(), 'yyyy-MM-dd');
       $scope.expired = $scope.best.date && $scope.best.date < today;

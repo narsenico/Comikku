@@ -19,9 +19,9 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('ComicsReader', ['$q', '$filter', '$datex', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
+.factory('$comicsData', ['$q', '$filter', '$datex', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
 function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification) {
-	console.log("new ComicsReader");
+	console.log("new $comicsData");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastsRemoved = [];
@@ -306,7 +306,7 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 					badge = this.countReleases(date);
 				}
 				//TODO alre proprietà impostare defaults in deviceready
-				//TODO ora da settings
+				//TODO ora da $settings
 				var dd = new Date(Date.parse(date + " 06:00:00"));
 				$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
 				.then(function(result) {
@@ -326,7 +326,7 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 						});		
 					} else {
 						//TODO alre proprietà impostare defaults in deviceready
-						//TODO ora da settings
+						//TODO ora da $settings
 						var dd = new Date(Date.parse(date + " 06:00:00"));
 						$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
 						.then(function(result) {
@@ -341,7 +341,7 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
   return DB;
 }])
 
-.factory('Settings', function () {
+.factory('$settings', function () {
 
 	var def = {
 		debugMode: 'F',

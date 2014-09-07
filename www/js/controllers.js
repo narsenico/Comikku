@@ -1,11 +1,11 @@
 angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $datex, Settings, ComicsReader) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $datex, $settings, $comicsData) {
   //
-  Settings.load();
-  $datex.weekStartMonday = Settings.userOptions.weekStartMonday == 'T';
+  $settings.load();
+  $datex.weekStartMonday = $settings.userOptions.weekStartMonday == 'T';
   //leggo l'elenco dei fumetti (per utente USER)
-  ComicsReader.read("USER");
+  $comicsData.read("USER");
 })
 
 .directive('buttonHref', function($location) {
@@ -20,146 +20,16 @@ angular.module('starter.controllers', ['starter.services'])
   };
 })
 
-//** see comics-ctrl.js
-// .controller('ComicsCtrl', function($scope, $ionicModal, $timeout, $location, $undoPopup, $debounce, ComicsReader, Settings) {
-//   //filtro i fumetti in base a $scope.search
-//   var applyFilter = function() {
-//     console.log("applyFilter " + $scope.search);
-//     var arr;
-//     if (_.isEmpty($scope.search)) {
-//       arr = $scope.comics;
-//     } else {
-//       arr = $scope.comics.filter(function(item) {
-//         //tolgo spazi superflui con _.str.clean
-//         var bOk = false;
-//         if (Settings.userOptions.comicsSearchPublisher == 'T') {
-//           bOk = !$scope.search || _.str.include(_.str.clean(item.publisher).toLowerCase(), _.str.clean($scope.search).toLowerCase());   
-//         }
-//         return bOk || (!$scope.search || _.str.include(_.str.clean(item.name).toLowerCase(), _.str.clean($scope.search).toLowerCase()));
-//       });
-//     }
-//     //aggiorno bestRelease per i comics filtrati
-//     ComicsReader.refreshBestRelease(arr);
-//     $scope.filteredComics = arr;
-//   };
-
-//   $scope.debugMode = Settings.userOptions.debugMode == 'T';
-//   $scope.uid = ComicsReader.uid;
-//   $scope.orderByField = Settings.userOptions.comicsOrderBy;
-//   $scope.orderByDesc = Settings.userOptions.comicsOrderByDesc == 'T';
-//   //rendo disponibile l'elenco allo scope
-//   $scope.comics = ComicsReader.comics;
-//   $scope.filteredComics = [];
-//   $scope.items = [];
-//   //
-//   $scope.$watch('search', function(newValue, oldValue) {
-//     if (newValue === oldValue) { return; }
-//     $debounce(applyFilter, 300); //chiamo applyFilter solo se non viene modificato search per 300ms
-//   });
-//   //
-//   $scope.$on('stateChangeSuccess', function() {
-//     $scope.loadMore();
-//   });
-//   //pulisco filtro
-//   $scope.clearSearch = function() {
-//     $scope.search = "";
-//     applyFilter();
-//   };
-//   //
-//   $scope.loadMore = function() {
-//     var data = [];
-//     var from = $scope.items.length;
-//     var max = Math.min(from + 7, $scope.filteredComics.length);
-//     console.log("loadMore " + from + "~" + max);
-//     if (from < max) {
-//       for (var ii=from; ii<max; ii++) {
-//         data.push($scope.filteredComics[ii]);
-//       }
-//       $scope.items = $scope.items.concat(data);
-//     }
-//     console.log("end");
-//     $scope.$broadcast('scroll.infiniteScrollComplete');
-//     $scope.$broadcast('scroll.resize');
-//   };
-//   //
-//   $scope.moreDataCanBeLoaded = function() {
-//     console.log("check more");
-//     return $scope.items.length < $scope.filteredComics.length;
-//   };
-//   //
-//   $scope.getComicsInfo = function(item) {
-//     if (_.str.isBlank(item.series))
-//       return item.notes;
-//     else if (_.str.isBlank(item.notes))
-//       return item.series
-//     else
-//       return item.series + " - " + item.notes;
-//   };
-//   //funzione di rimozione elemento
-//   $scope.removeComicsEntry = function(item) {
-//     ComicsReader.remove(item);
-//     ComicsReader.save();
-
-//     $timeout(function() {
-//       $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
-//         if (res == 'ok') {
-//           ComicsReader.undoRemove();
-//           ComicsReader.save();
-//         }
-//       });
-//     }, 250);
-//   };
-//   //apre il template per l'editing
-//   $scope.addComicsEntry = function() {
-//     $location.path("/app/comics/new").replace();
-//   };
-//   //apre il template per l'editing del fumetto
-//   $scope.editComicsEntry = function(item) {
-//     $location.path("/app/comics/" + item.id).replace();
-//   };
-//   //apre te template per l'editing dell'uscita
-//   $scope.showAddRelease = function(item) {
-//     $location.path("/app/release/" + item.id + "/new").replace();
-//   };
-//   // //ritorna l'uscita più significativa da mostrare nell'item del fumetto
-//   // $scope.getBestRelease = function(item) {
-//   //   return ComicsReader.getBestRelease(item);
-//   // };
-//   //
-//   $scope.isMultiSelectionMode = false;
-//   //
-//   $scope.toggleMultiSelectionMode = function() {
-//     $scope.isMultiSelectionMode = !$scope.isMultiSelectionMode;
-//     //TODO attiva la multi selezione, tap su item seleziona, pulsanti nel footer (cancella tutti, etc)
-//   };
-//   //
-//   applyFilter();
-// })
-// .directive('bestRelease', function() {
-//   return {
-//     restrict: 'E',
-//     scope: {
-//       comics: '='
-//     },
-//     controller: function($scope, $filter, ComicsReader) {
-//       $scope.best = $scope.comics.bestRelease; //ComicsReader.getBestRelease($scope.comics);
-//       var today = $filter('date')(new Date(), 'yyyy-MM-dd');
-//       $scope.expired = $scope.best.date && $scope.best.date < today;
-//     },
-//     templateUrl: 'templates/bestRelease.html'
-//   };
-// })
-
-.controller('ComicsEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader) {
-  //console.log($stateParams, ComicsReader)
+.controller('ComicsEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, $comicsData) {
+  //console.log($stateParams, $comicsData)
   $scope.periodicities = PERIODICITIES;
   //originale
-  $scope.master = ComicsReader.getComicsById($stateParams.comicsId);
+  $scope.master = $comicsData.getComicsById($stateParams.comicsId);
   //aggiorno l'originale e torno indietro
   $scope.update = function(entry) {
     angular.copy(entry, $scope.master);
-    ComicsReader.update($scope.master);
-    ComicsReader.save();
+    $comicsData.update($scope.master);
+    $comicsData.save();
     $ionicNavBarDelegate.back();
   };
   $scope.reset = function() {
@@ -169,17 +39,17 @@ angular.module('starter.controllers', ['starter.services'])
     $ionicNavBarDelegate.back();
   };
   $scope.isUnique = function(entry) {
-    return ComicsReader.normalizeComicsName($scope.master.name) == ComicsReader.normalizeComicsName(entry.name) || 
-      ComicsReader.isComicsUnique(entry);
+    return $comicsData.normalizeComicsName($scope.master.name) == $comicsData.normalizeComicsName(entry.name) || 
+      $comicsData.isComicsUnique(entry);
   };
   $scope.reset();
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, $undoPopup, $timeout, ComicsReader, Settings) {
+.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, $undoPopup, $timeout, $comicsData, $settings) {
   $scope.entry = null;
   $scope.releases = [];
-  $scope.purchasedVisible = Settings.filters.releases.purchasedVisible;
-  $scope.period = Settings.filters.releases.period; //week, month, everytime
+  $scope.purchasedVisible = $settings.filters.releases.purchasedVisible;
+  $scope.period = $settings.filters.releases.period; //week, month, everytime
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
@@ -187,16 +57,16 @@ angular.module('starter.controllers', ['starter.services'])
   };
   //
   $scope.removeRelease = function(rel) {
-    ComicsReader.removeRelease(rel.entry, rel.release);
-    ComicsReader.save();
+    $comicsData.removeRelease(rel.entry, rel.release);
+    $comicsData.save();
     //console.log("remove ", rel.index, $scope.releases)
     $scope.releases.splice(rel.index, 1);
 
     $timeout(function() {
       $undoPopup.show({title: "Release removed", timeout: "long"}).then(function(res) {
         if (res == 'ok') {
-          ComicsReader.undoRemoveRelease();
-          ComicsReader.save();
+          $comicsData.undoRemoveRelease();
+          $comicsData.save();
           $scope.changeFilter($scope.purchasedVisible, $scope.period);
         }
       });
@@ -205,22 +75,22 @@ angular.module('starter.controllers', ['starter.services'])
   //
   $scope.setPurchased = function(rel, value) {
     rel.release.purchased = value;
-    ComicsReader.save();
+    $comicsData.save();
 
     $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
   };
   //
   $scope.changeFilter = function(purchasedVisible, period) {
-    $scope.purchasedVisible = Settings.filters.releases.purchasedVisible = purchasedVisible;
-    $scope.period = Settings.filters.releases.period = period;
+    $scope.purchasedVisible = $settings.filters.releases.purchasedVisible = purchasedVisible;
+    $scope.period = $settings.filters.releases.period = period;
     $scope.filterInfo = "";
 
     var arr;
     if ($stateParams.comicsId == null) {
-      arr = ComicsReader.comics;
+      arr = $comicsData.comics;
     } else {
       //uscite di un fumetto
-      $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
+      $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
       arr = [ $scope.entry ];
     }
 
@@ -275,12 +145,12 @@ angular.module('starter.controllers', ['starter.services'])
 
   $scope.changeFilter($scope.purchasedVisible, $scope.period);
 })
-.controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, ComicsReader, Settings) {
-  $scope.entry = ComicsReader.getComicsById($stateParams.comicsId);
+.controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, $comicsData, $settings) {
+  $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
   //originale
-  $scope.master = ComicsReader.getReleaseById($scope.entry, $stateParams.releaseId);
+  $scope.master = $comicsData.getReleaseById($scope.entry, $stateParams.releaseId);
 
-  if (Settings.userOptions.autoFillReleaseNumber == 'T' && $scope.master.number == null) {
+  if ($settings.userOptions.autoFillReleaseNumber == 'T' && $scope.master.number == null) {
     var maxrel = _.max($scope.entry.releases, function(rel) { return rel.number; });
     //console.log(maxrel);
     if (_.isEmpty(maxrel)) {
@@ -300,8 +170,8 @@ angular.module('starter.controllers', ['starter.services'])
     // con comicsId + number (release)
 
     angular.copy(release, $scope.master);
-    ComicsReader.updateRelease($scope.entry, $scope.master);
-    ComicsReader.save();
+    $comicsData.updateRelease($scope.entry, $scope.master);
+    $comicsData.save();
     $ionicNavBarDelegate.back();
   };
   $scope.reset = function() {
@@ -311,17 +181,17 @@ angular.module('starter.controllers', ['starter.services'])
     $ionicNavBarDelegate.back();
   };
   $scope.isUnique = function(release) {
-    return $stateParams.releaseId == release.number || ComicsReader.isReleaseUnique($scope.entry, release);
+    return $stateParams.releaseId == release.number || $comicsData.isReleaseUnique($scope.entry, release);
   };
   $scope.reset();
 })
 
 .controller('OptionsCtrl', function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $cordovaDevice, 
-  $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, ComicsReader, Settings) {
+  $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, $comicsData, $settings) {
   //
   $scope.version = null;
   $scope.lastBackup = 'not found';
-  $scope.currentUser = ComicsReader.uid;
+  $scope.currentUser = $comicsData.uid;
   //
   if (window.cordova) {
     window.cordova.getAppVersion(function (version) {
@@ -329,22 +199,22 @@ angular.module('starter.controllers', ['starter.services'])
     });
   }
   //
-  $scope.userOptions = Settings.userOptions;
+  $scope.userOptions = $settings.userOptions;
   //console.log($scope.userOptions)
   $scope.optionsChanged = function() {
     $datex.weekStartMonday = $scope.userOptions.weekStartMonday == 'T';
-    Settings.save();    
+    $settings.save();    
   };
   //
   $scope.resetOptions = function() {
     $ionicPopup.confirm({
       title: 'Confirm',
-      template: 'Reset to default settings?'
+      template: 'Reset to default Settings?'
     }).then(function(res) {
       if (res) {
-        Settings.loadDefault();
-        Settings.save();
-        $scope.userOptions = Settings.userOptions;
+        $settings.loadDefault();
+        $settings.save();
+        $scope.userOptions = $settings.userOptions;
         $toast.show("Settings reset to default");
       }
     });
@@ -356,8 +226,8 @@ angular.module('starter.controllers', ['starter.services'])
       template: 'Delete all data?'
     }).then(function(res) {
       if (res) {
-        ComicsReader.clear();
-        ComicsReader.save();
+        $comicsData.clear();
+        $comicsData.save();
         $toast.show("Data deleted");
       }
     });
@@ -369,9 +239,9 @@ angular.module('starter.controllers', ['starter.services'])
       template: 'Repair data?'
     }).then(function(res) {
       if (res) {
-        ComicsReader.repairData();
-        ComicsReader.save();
-        ComicsReader.read(ComicsReader.uid, true);
+        $comicsData.repairData();
+        $comicsData.save();
+        $comicsData.read($comicsData.uid, true);
         $toast.show("Data repaired");
       }
     });
@@ -379,7 +249,7 @@ angular.module('starter.controllers', ['starter.services'])
   //
   $scope.readLastBackup = function() {
     if (window.cordova) {
-      ComicsReader.getLastBackup().then(function(result) {
+      $comicsData.getLastBackup().then(function(result) {
         $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
       }, function(error) {
         $scope.lastBackup = 'not found';
@@ -393,7 +263,7 @@ angular.module('starter.controllers', ['starter.services'])
       template: 'Backup data? Previous backup will be overridden.'
     }).then(function(res) {
       if (res) {
-        ComicsReader.backupDataToFile().then(function(res) {
+        $comicsData.backupDataToFile().then(function(res) {
           $scope.readLastBackup();
           $toast.show("Backup complete");
         }, function(error) {
@@ -409,7 +279,7 @@ angular.module('starter.controllers', ['starter.services'])
       template: 'Restore data from backup? Current data will be overridden.'
     }).then(function(res) {
       if (res) {
-        ComicsReader.restoreDataFromFile().then(function(res) {
+        $comicsData.restoreDataFromFile().then(function(res) {
           $toast.show("Restore complete");
         }, function(error) {
           $toast.show("Read error " + error.code);
@@ -424,22 +294,22 @@ angular.module('starter.controllers', ['starter.services'])
   //DEBUG
   //
   $scope.fakeEntries = function() {
-    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
-    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
-    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
-    // ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
+    // $comicsData.update( $comicsData.newComics( { id: "new", name: "One Piece", publisher: "Star Comics" } ) );
+    // $comicsData.update( $comicsData.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
+    // $comicsData.update( $comicsData.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
+    // $comicsData.update( $comicsData.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
     for (var ii=1; ii<=100; ii++)
-      ComicsReader.update( ComicsReader.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
-    ComicsReader.save();
-    $toast.show(ComicsReader.comics.length + " fake comics created");
+      $comicsData.update( $comicsData.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
+    $comicsData.save();
+    $toast.show($comicsData.comics.length + " fake comics created");
   };
   //
   $scope.switchUser = function() {
-    if (ComicsReader.uid == "USER")
-      ComicsReader.read("DEBUG");
+    if ($comicsData.uid == "USER")
+      $comicsData.read("DEBUG");
     else
-      ComicsReader.read("USER");
-    $scope.currentUser = ComicsReader.uid;
+      $comicsData.read("USER");
+    $scope.currentUser = $comicsData.uid;
     $scope.readLastBackup();
     $toast.show("Hello " + $scope.currentUser);
   };
@@ -463,7 +333,7 @@ angular.module('starter.controllers', ['starter.services'])
 
     //$ionicPopover.fromTemplate('<ion-popover-view><ion-header-bar><h1 class="title">My Popover Title</h1></ion-header-bar><ion-content>content</ion-content></ion-popover-view>', { scope: $scope }).show($event);
     try {
-      // ComicsReader.backupDataToFile().then(function(result) {
+      // $comicsData.backupDataToFile().then(function(result) {
       //     console.log("bck res " + result);
       //     $scope.testresult = result;
       // }, function(err) {
@@ -471,7 +341,7 @@ angular.module('starter.controllers', ['starter.services'])
       //     $scope.testresult = err;
       // });
 
-      // ComicsReader.getLastBackup().then(function(result) {
+      // $comicsData.getLastBackup().then(function(result) {
       //     console.log("bck res " + result);
       //     $scope.testresult = result;
       // }, function(err) {
@@ -507,7 +377,7 @@ angular.module('starter.controllers', ['starter.services'])
       //   }
       // );
 
-      //ComicsReader.addNotification("2014-08-30");
+      //$comicsData.addNotification("2014-08-30");
 
       // var q = $q.defer();
       // $timeout(function() { q.resolve(true) }, 2000);
