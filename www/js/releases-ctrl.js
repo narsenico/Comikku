@@ -7,11 +7,41 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	$debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, $comicsData, $settings,
 	$dateParser) {
 
+  //
+  var applyFilter = function() {
+    $scope.filterInfo = "";
+
+    //estraggo tutt le releases
+    var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
+    	[($scope.entry = $comicsData.getComicsById($stateParams.comicsId))]);
+
+    //TODO BUG su smartphone non si vede luscita senza data (quando è da sola)
+
+    //elimino quelle con data inferiore a startTime
+    if ($scope.entry == null) {
+	    for (var ii=0; ii<rels.length; ii++) {
+	    	if (rels[ii].date >= $scope.startDate) {
+	    		rels.splice(0, ii);
+	    		break;
+	    	}
+	    }
+	  }
+
+    //TODO raggruppare per settimana/mese dalla settimana/mese corrente
+    //	oppure senza gruppo, dal giorno corrente
+    var grps = _.groupBy(rels, function(rel) {
+    	if (rel.date) {
+	    	return  $filter('date')( $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd')), 'EEE, dd MMM');
+    	} else {
+    		return 'zzz';
+    	}
+    });
+
+    $scope.groups = grps;
+  };
+
 	//comics selezionato (se arrivo dal menu laterale, sarà sempre null)
   $scope.entry = null;
-  //filtri
-  $scope.purchasedVisible = $settings.filters.releases.purchasedVisible;
-  $scope.period = $settings.filters.releases.period; //week, month, everytime
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
 	//
@@ -20,28 +50,39 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   $scope.releases = [];
 	//
 	$scope.selectedReleases = [];
+	//
+	$scope.startDate = $filter('date')($datex.firstDayOfWeek(), 'yyyy-MM-dd');
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
     $location.path("/app/release/" + item.id + "/new").replace();
   };
   //
-  $scope.removeReleaseEntry = function(rel) {
-  	//TODO gestire cancellazione multipla
-    // $comicsData.removeRelease(rel.entry, rel.release);
-    // $comicsData.save();
-    // //console.log("remove ", rel.index, $scope.releases)
-    // $scope.releases.splice(rel.index, 1);
+  $scope.editReleaseEntry = function(release) {
+  	release = release || $scope.selectedReleases[0];
+		var cid = $comicsData.getComicsById(release.comicsId).id;
+		$location.path("/app/release/" + cid + "/" + release.number).replace();
+  };
+  //
+  $scope.removeReleaseEntry = function() {
 
-    // $timeout(function() {
-    //   $undoPopup.show({title: "Release removed", timeout: "long"}).then(function(res) {
-    //     if (res == 'ok') {
-    //       $comicsData.undoRemoveRelease();
-    //       $comicsData.save();
-    //       $scope.changeFilter($scope.purchasedVisible, $scope.period);
-    //     }
-    //   });
-    // }, 250);
+		if (!_.isEmpty($scope.selectedReleases)) {
+			$comicsData.removeReleases($scope.selectedReleases);
+			$comicsData.save();
+			$scope.selectedReleases = [];
+			$scope.canEdit = false;
+			applyFilter();
+
+			$timeout(function() {
+			  $undoPopup.show({title: "Releases removed", timeout: "long"}).then(function(res) {
+			    if (res == 'ok') {
+			      $comicsData.undoRemoveReleases();
+			      $comicsData.save();
+			      applyFilter();
+			    }
+			  });
+			}, 250);
+		}
   };
   //
   $scope.setPurchased = function(release, value) {
@@ -54,27 +95,6 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   $scope.getComicsById = function(comicsId) {
   	return $comicsData.getComicsById(comicsId);
   };
-  //
-  $scope.changeFilter = function(purchasedVisible, period) {
-    $scope.purchasedVisible = $settings.filters.releases.purchasedVisible = purchasedVisible;
-    $scope.period = $settings.filters.releases.period = period;
-    $scope.filterInfo = "";
-
-    //estraggo tutt le releases
-    var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
-    	[($scope.entry = $comicsData.getComicsById($stateParams.comicsId))]);
-
-    //TODO raggruppare per period
-    var grps = _.groupBy(rels, function(rel) {
-    	if (rel.date) {
-	    	return $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd'));
-    	} else {
-    		return $datex.getMax();
-    	}
-    });
-
-    $scope.groups = grps;
-  };
 	//
 	$scope.showHeaderBar = function() {
 		$scope.selectedReleases = [];
@@ -85,7 +105,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 		if ($scope.currentBar == 'options') {
 			$scope.selectRelease(release);
 		} else {
-			//TODO $location.path("/app/releases/" + item.id).replace();
+			//todo
 		}
 	};
 	//
@@ -128,7 +148,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     return release.date && release.date < today;
   }
   //
-  $scope.changeFilter($scope.purchasedVisible, $scope.period);
+  applyFilter();
 	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
 	$timeout(function() { $ionicNavBarDelegate.showBar(false); }, 250);
 	//deregistro l'evento sul back all'uscita

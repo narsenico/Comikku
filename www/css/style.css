@@ -40,7 +40,7 @@
 }
 
 .bar.bar-header.bar-options {
-	background-color: #ddd;
+	background-color: #DDDDDD;
 	border-bottom: solid 2px #6397EB;
 }
 
@@ -251,7 +251,7 @@
 }
 
 .item-comics.selected .item-content {
-	background-color: #E8EDF3;
+	background-color: #EEEEEE;
 }
 
 .best-release {
@@ -315,6 +315,19 @@
 }
 
 /* Release */
+.item-release-group {
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-top: 0;
+}
+
+.item-release-group>div {
+	padding-top: 16px;
+	padding-left: 16px;
+	border-bottom: solid 2px #33B5E5;
+}
+
 .item-release {
 	padding: 8px 49px 8px 16px;
 }
@@ -324,5 +337,5 @@
 }
 
 .item-release.selected {
-	background-color: #E8EDF3;
+	background-color: #EEEEEE;
 }

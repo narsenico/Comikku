@@ -25,7 +25,7 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastsRemoved = [];
-	var lastRemovedRelease = null;
+	var lastsRemovedRelease = [];
 
 	var comicsDefaults = {
 		id: null,
@@ -176,20 +176,31 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 			updated(item);
 		},
 		//
-		removeRelease: function(item, release) {
-			var idx = indexByKey(item.releases, release.number, 'number');
-			if (idx > -1) {
-				lastRemovedRelease = [idx, item, release];
-				item.releases.splice(idx, 1);
-			}
-			//aggiorno ultima modifica
-			updated(item);
+		removeReleases: function(releases) {
+			lastsRemovedRelease = [];
+
+			angular.forEach(releases, function(release) {
+				var comicsId = release.comicsId;
+				var number = release.number;
+				var item = this.getComicsById(comicsId);
+				var idx = indexByKey(item.releases, release.number, 'number');
+				if (idx > -1) {
+					lastsRemovedRelease.push(item.releases[idx]);
+					item.releases.splice(idx, 1);
+				}
+			}, this);
 		},
 		//
-		undoRemoveRelease: function() {
-			if (lastRemovedRelease) {
-				lastRemovedRelease[1].releases.splice(lastRemovedRelease[0], 0, lastRemovedRelease[2]);
-				lastRemovedRelease = null;
+		undoRemoveReleases: function() {
+			if (lastsRemovedRelease != null && lastsRemovedRelease.length > 0) {
+				for (var ii=lastsRemovedRelease.length-1; ii>=0; ii--) {
+					var release = lastsRemovedRelease[ii];
+					var comicsId = release.comicsId;
+					var number = release.number;
+					var item = this.getComicsById(comicsId);
+					item.releases.push(release);
+				}
+				lastsRemovedRelease = [];
 			}
 		},
 		//
@@ -236,8 +247,6 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 					this.comics.splice(idx, 1);
 				}
 			}, this);
-
-			//console.log(lastsRemoved);
 		},
 		//
 		undoRemove: function() {
