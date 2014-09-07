@@ -315,12 +315,14 @@
 }
 
 /* Release */
-.item-release { }
-
-.item-release .item-content {
+.item-release {
 	padding: 8px 49px 8px 16px;
 }
 
-.item-release .item-content .button {
+.item-release .button {
 	top: 14px;
+}
+
+.item-release.selected {
+	background-color: #E8EDF3;
 }

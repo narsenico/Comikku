@@ -19,8 +19,8 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('$comicsData', ['$q', '$filter', '$datex', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
-function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification) {
+.factory('$comicsData', ['$q', '$filter', '$datex', '$utils', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
+function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotification) {
 	console.log("new $comicsData");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
@@ -126,6 +126,7 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 		//
 		getComicsById: function(id) {
 			//console.log("getComicsById", id)
+			//TODO cache comics in una mappa con id come chiave
 			if (id == "new") {
 				return this.newComics({id: 'new'});
 			} else {
@@ -149,6 +150,18 @@ function ($q, $filter, $datex, $cordovaDevice, $file, $cordovaLocalNotification)
 	  		return _.findWhere(item.releases, { number: parseInt(id) }) || this.newRelease({ comicsId: item.id });
 		  }
 		},
+		//ritorna le uscite per gli elementi in parametro ordinate per data
+		getReleases: function(items) {
+			var releases = [];
+			angular.forEach(items || this.comics, function(item) {
+				//console.log(item)
+				$utils.arrayAddRange(releases, item.releases);
+			});
+			return _.sortBy(releases, function(rel) {
+				return rel.date || rel.number;
+			});
+		},
+		//
 		isReleaseUnique: function(item, release) {
 			return _.find(item.releases, function(rel) { return rel.number == release.number; }) == undefined;
 		},

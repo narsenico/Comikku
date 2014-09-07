@@ -45,106 +45,107 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, $undoPopup, $timeout, $comicsData, $settings) {
-  $scope.entry = null;
-  $scope.releases = [];
-  $scope.purchasedVisible = $settings.filters.releases.purchasedVisible;
-  $scope.period = $settings.filters.releases.period; //week, month, everytime
+//see releases-ctrl.js
+// .controller('ReleasesEntryCtrl', function($scope, $stateParams, $location, $filter, $datex, $toast, $undoPopup, $timeout, $comicsData, $settings) {
+//   $scope.entry = null;
+//   $scope.releases = [];
+//   $scope.purchasedVisible = $settings.filters.releases.purchasedVisible;
+//   $scope.period = $settings.filters.releases.period; //week, month, everytime
 
-  //apre te template per l'editing dell'uscita
-  $scope.showAddRelease = function(item) {
-    $location.path("/app/release/" + item.id + "/new").replace();
-  };
-  //
-  $scope.removeRelease = function(rel) {
-    $comicsData.removeRelease(rel.entry, rel.release);
-    $comicsData.save();
-    //console.log("remove ", rel.index, $scope.releases)
-    $scope.releases.splice(rel.index, 1);
+//   //apre te template per l'editing dell'uscita
+//   $scope.showAddRelease = function(item) {
+//     $location.path("/app/release/" + item.id + "/new").replace();
+//   };
+//   //
+//   $scope.removeRelease = function(rel) {
+//     $comicsData.removeRelease(rel.entry, rel.release);
+//     $comicsData.save();
+//     //console.log("remove ", rel.index, $scope.releases)
+//     $scope.releases.splice(rel.index, 1);
 
-    $timeout(function() {
-      $undoPopup.show({title: "Release removed", timeout: "long"}).then(function(res) {
-        if (res == 'ok') {
-          $comicsData.undoRemoveRelease();
-          $comicsData.save();
-          $scope.changeFilter($scope.purchasedVisible, $scope.period);
-        }
-      });
-    }, 250);
-  };
-  //
-  $scope.setPurchased = function(rel, value) {
-    rel.release.purchased = value;
-    $comicsData.save();
+//     $timeout(function() {
+//       $undoPopup.show({title: "Release removed", timeout: "long"}).then(function(res) {
+//         if (res == 'ok') {
+//           $comicsData.undoRemoveRelease();
+//           $comicsData.save();
+//           $scope.changeFilter($scope.purchasedVisible, $scope.period);
+//         }
+//       });
+//     }, 250);
+//   };
+//   //
+//   $scope.setPurchased = function(rel, value) {
+//     rel.release.purchased = value;
+//     $comicsData.save();
 
-    $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
-  };
-  //
-  $scope.changeFilter = function(purchasedVisible, period) {
-    $scope.purchasedVisible = $settings.filters.releases.purchasedVisible = purchasedVisible;
-    $scope.period = $settings.filters.releases.period = period;
-    $scope.filterInfo = "";
+//     $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
+//   };
+//   //
+//   $scope.changeFilter = function(purchasedVisible, period) {
+//     $scope.purchasedVisible = $settings.filters.releases.purchasedVisible = purchasedVisible;
+//     $scope.period = $settings.filters.releases.period = period;
+//     $scope.filterInfo = "";
 
-    var arr;
-    if ($stateParams.comicsId == null) {
-      arr = $comicsData.comics;
-    } else {
-      //uscite di un fumetto
-      $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
-      arr = [ $scope.entry ];
-    }
+//     var arr;
+//     if ($stateParams.comicsId == null) {
+//       arr = $comicsData.comics;
+//     } else {
+//       //uscite di un fumetto
+//       $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
+//       arr = [ $scope.entry ];
+//     }
 
-    //calcolo il range delle date in base a period
-    var dtFrom, dtTo;
-    var today = new Date();
-    var toastMsg, toastMsgEmpty;
-    if (period == 'week') {
-      dtFrom = $filter('date')($datex.firstDayOfWeek(today), 'yyyy-MM-dd');
-      dtTo = $filter('date')($datex.lastDayOfWeek(today), 'yyyy-MM-dd');
-      toastMsg = "This Week's Releases";
-      toastMsgEmpty = "No releases this week";
-    } else if (period == 'month') {
-      dtFrom = $filter('date')($datex.firstDayOfMonth(today), 'yyyy-MM-dd');
-      dtTo = $filter('date')($datex.lastDayOfMonth(today), 'yyyy-MM-dd');
-      toastMsg = "This Month's Releases";
-      toastMsgEmpty = "No releases this month";
-    } else {
-      toastMsg = "All releases";
-      toastMsgEmpty = "No releases";
-    }
+//     //calcolo il range delle date in base a period
+//     var dtFrom, dtTo;
+//     var today = new Date();
+//     var toastMsg, toastMsgEmpty;
+//     if (period == 'week') {
+//       dtFrom = $filter('date')($datex.firstDayOfWeek(today), 'yyyy-MM-dd');
+//       dtTo = $filter('date')($datex.lastDayOfWeek(today), 'yyyy-MM-dd');
+//       toastMsg = "This Week's Releases";
+//       toastMsgEmpty = "No releases this week";
+//     } else if (period == 'month') {
+//       dtFrom = $filter('date')($datex.firstDayOfMonth(today), 'yyyy-MM-dd');
+//       dtTo = $filter('date')($datex.lastDayOfMonth(today), 'yyyy-MM-dd');
+//       toastMsg = "This Month's Releases";
+//       toastMsgEmpty = "No releases this month";
+//     } else {
+//       toastMsg = "All releases";
+//       toastMsgEmpty = "No releases";
+//     }
 
-    var tot = 0;
-    $scope.releases = [];
-    for (var ii=0; ii<arr.length; ii++) {
-      tot += arr[ii].releases.length;
-      angular.forEach(arr[ii].releases, function(v, k) {
-        //console.log(arr[ii].name, v.date, dtFrom, dtTo)
+//     var tot = 0;
+//     $scope.releases = [];
+//     for (var ii=0; ii<arr.length; ii++) {
+//       tot += arr[ii].releases.length;
+//       angular.forEach(arr[ii].releases, function(v, k) {
+//         //console.log(arr[ii].name, v.date, dtFrom, dtTo)
 
-        if ($scope.purchasedVisible || v.purchased != 'T') {
-          if (!dtFrom || v.date >= dtFrom) {
-            if (!dtTo || v.date <= dtTo) {
-              $scope.releases.push( { entry: arr[ii], release: v, index: k } );
-            }
-          }
-        }
-      });
-    }
+//         if ($scope.purchasedVisible || v.purchased != 'T') {
+//           if (!dtFrom || v.date >= dtFrom) {
+//             if (!dtTo || v.date <= dtTo) {
+//               $scope.releases.push( { entry: arr[ii], release: v, index: k } );
+//             }
+//           }
+//         }
+//       });
+//     }
 
-    $scope.filterInfo = _.str.sprintf("%s results out of %s", $scope.releases.length, tot);
+//     $scope.filterInfo = _.str.sprintf("%s results out of %s", $scope.releases.length, tot);
 
-    // if ($scope.releases.length > 0)
-    //   $toast.show(toastMsg);
-    // else
-    //   $toast.show(toastMsgEmpty);
-  };
-  //
-  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
-  $scope.isExpired = function(release) {
-    return release.date && release.date < today;
-  }
+//     // if ($scope.releases.length > 0)
+//     //   $toast.show(toastMsg);
+//     // else
+//     //   $toast.show(toastMsgEmpty);
+//   };
+//   //
+//   var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+//   $scope.isExpired = function(release) {
+//     return release.date && release.date < today;
+//   }
 
-  $scope.changeFilter($scope.purchasedVisible, $scope.period);
-})
+//   $scope.changeFilter($scope.purchasedVisible, $scope.period);
+// })
 .controller('ReleaseEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, $comicsData, $settings) {
   $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
   //originale
@@ -298,8 +299,15 @@ angular.module('starter.controllers', ['starter.services'])
     // $comicsData.update( $comicsData.newComics( { id: "new", name: "Naruto", publisher: "Planet Manga" } ) );
     // $comicsData.update( $comicsData.newComics( { id: "new", name: "Dragonero", publisher: "Bonelli" } ) );
     // $comicsData.update( $comicsData.newComics( { id: "new", name: "Gli incredibili X-Men", publisher: "Marvel Italia" } ) );
-    for (var ii=1; ii<=100; ii++)
-      $comicsData.update( $comicsData.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } ) );
+    var dd = new Date();
+    for (var ii=1; ii<=100; ii++) {
+      var cc = $comicsData.newComics( { id: "new", name: "Comics " + ii, publisher: "Fake" } );
+      $comicsData.update(cc);
+      var rr = $comicsData.newRelease( { comicsId: cc.id, number: 1, date: $filter('date')(dd, 'yyyy-MM-dd') } );
+      $comicsData.updateRelease(cc, rr);
+
+      dd.setDate(dd.getDate() + 1);
+    }
     $comicsData.save();
     $toast.show($comicsData.comics.length + " fake comics created");
   };

@@ -29,6 +29,7 @@ var TOAST_TPL =
 IonicModule
 .factory('$utils', function() {
   return {
+    //
     indexFindWhere: function(arr, filter) {
       var found = false;
       for (var ii=0; ii<arr.length; ii++) {
@@ -41,6 +42,19 @@ IonicModule
         if (found) return ii;
       }
       return -1;
+    },
+    //
+    arrayAddRange: function(dst, src, from, len) {
+      if (_.isArray(src)) {
+        var start = from || 0;
+        var end = start + Math.min(src.length, len || src.length);
+        for (var ii=start; ii<end; ii++) {
+          dst.push(src[ii]);
+        }
+      } else {
+        dst.push(src);
+      }
+      return dst;
     }
   };
 });

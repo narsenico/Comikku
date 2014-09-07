@@ -1,16 +1,22 @@
-<ion-view title="{{entry == null ? 'Releases' : entry.name}}">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
-  <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-plus-round" ng-click="showAddRelease(entry)" ng-show="entry"></button>
-  </ion-nav-buttons>
-  <ion-header-bar class="bar-subheader filter-info">
-    <h1 class="title">{{filterInfo}}</h1>
-  </ion-header-bar>
-  <ion-content class="has-header has-footer" has-bouncing="true">
+<ion-view>
+  <!-- header default -->
+  <header class="bar bar-header bar-energized title" ng-show="currentBar=='title'">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <h1 class="title">{{entry == null ? 'Releases' : entry.name}}</h1>
+    <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
+  </header>
+  <!-- barra delle opzioni, visibile solo se la barra di navigazione viene nascosta -->
+  <header class="bar bar-header bar-options title" ng-show="currentBar=='options'">
+    <!-- <button menu-toggle="left" class="button button-icon icon ion-navicon"></button> -->
+    <button class="button button-icon icon ion-ios7-arrow-down" ng-click="showHeaderBar()"></button>
+    <div class="buttons header-options">
+      <button class="button button-icon icon ion-compose" ng-disabled="!canEdit" ng-click="editReleaseEntry()"></button>
+      <button class="button button-icon icon ion-android-trash button-badged" ng-click="removeReleaseEntry()" title="{{selectedReleases.length}}"></button>
+    </div>
+  </header>
+  <ion-content class="has-header custom-header" has-bouncing="false">
     <ion-list can-swipe="true">
-      <ion-item class="item item-release rmm-button-right release" ng-repeat="rel in releases | orderBy:'release.date'">
+      <!-- <ion-item class="item item-release rmm-button-right release" ng-repeat="rel in releases | orderBy:'release.date'">
         <h2><i class="icon ion-ios7-filing-outline" ng-show="rel.entry.reserved=='T'"></i> {{rel.entry.name}}</h2>
         <span><b>#{{rel.release.number}}</b> {{rel.release.date | date : 'EEE, dd MMM'}} <i class="icon ion-ios7-timer-outline" ng-show="isExpired(rel.release)"></i></span>
         
@@ -25,14 +31,20 @@
                            ng-click="removeRelease(rel)">
           Del
         </ion-option-button>
+      </ion-item> -->
+      <ion-item class="item" ng-repeat="(date, releases) in groups">
+      {{date | date}}
+        <ion-item class="item item-release rmm-button-right release"
+          on-hold="selectRelease(release)"
+          ng-click="clickRelease(release)"
+          ng-class="{selected: isSelected(release)}"
+          ng-repeat="release in releases">
+          <h2>{{getComicsById(release.comicsId).name}}</h2>
+          <span><b>#{{release.number}}</b> {{release.date | date : 'EEE, dd MMM'}} <i class="icon ion-ios7-timer-outline" ng-show="isExpired(release)"></i></span>
+          <button class="button ion-bag" ng-show="release.purchased != 'T'" ng-click="setPurchased(release, 'T')"></button>
+          <button class="button button-positive ion-bag" ng-show="release.purchased == 'T'" ng-click="setPurchased(release, 'F')"></button>
+        </ion-item>
       </ion-item>
     </ion-list>
   </ion-content>
-  <div class="bar bar-footer">
-    <div class="button-bar">
-      <a class="button" ng-click="changeFilter(purchasedVisible, 'everytime')" ng-class="{'button-positive': period=='everytime'}">All</a>
-      <a class="button" ng-click="changeFilter(purchasedVisible, 'week')" ng-class="{'button-positive': period=='week'}">This week</a>
-      <a class="button" ng-click="changeFilter(purchasedVisible, 'month')" ng-class="{'button-positive': period=='month'}">This month</a>
-    </div>
-  </div>
 </ion-view>
