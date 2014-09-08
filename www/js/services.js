@@ -270,7 +270,14 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 
 					angular.forEach(
 						_.filter(_.keys(this.comics[ii]), function(v) { return _.str.startsWith(v, '$$') }), 
-						function(key) { delete this.comics[ii][key]; }, this)
+						function(key) { delete this.comics[ii][key]; }, this);
+
+					for (var jj=0; jj<this.comics[ii].releases.length; jj++) {
+						angular.forEach(_.filter(_.keys(this.comics[ii].releases[jj]), function(v1) { return _.str.startsWith(v1, '$$') }), function(key1) {
+							delete this.comics[ii].releases[jj][key1];
+						}, this);
+					}
+					
 				}
 			}
 		},

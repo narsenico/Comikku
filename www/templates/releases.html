@@ -10,13 +10,15 @@
     <!-- <button menu-toggle="left" class="button button-icon icon ion-navicon"></button> -->
     <button class="button button-icon icon ion-ios7-arrow-down" ng-click="showHeaderBar()"></button>
     <div class="buttons header-options">
-      <button class="button button-icon icon ion-compose" ng-disabled="!canEdit" ng-click="editReleaseEntry()"></button>
+      <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editReleaseEntry()"></button>
+      <button class="button button-icon icon ion-ios7-briefcase" ng-click="setPurchased(null, 'T')"></button>
+      <button class="button button-icon icon ion-ios7-briefcase-outline" ng-click="setPurchased(null, 'F')"></button>
       <button class="button button-icon icon ion-android-trash button-badged" ng-click="removeReleaseEntry()" title="{{selectedReleases.length}}"></button>
     </div>
   </header>
   <ion-content class="has-header custom-header" has-bouncing="false">
     <ion-list can-swipe="true">
-      <ion-item class="item item-release-group" ng-repeat="(grp, releases) in groups">
+      <!-- <ion-item class="item item-release-group" ng-repeat="(grp, releases) in groups">
         <div>{{grp}}</div>
         <ion-item class="item item-release rmm-button-right release"
           on-hold="selectRelease(release)"
@@ -28,7 +30,30 @@
           <button class="button ion-bag" ng-show="currentBar=='title' && release.purchased != 'T'" ng-click="setPurchased(release, 'T')"></button>
           <button class="button button-positive ion-bag" ng-show="currentBar=='title' && release.purchased == 'T'" ng-click="setPurchased(release, 'F')"></button>
         </ion-item>
+      </ion-item> -->
+
+      <ion-item class="item item-release" ng-repeat="item in items">
+        <!-- se non ha comicsId è l'intestazione del gruppo -->
+        <ion-item ng-if="!item.comicsId" class="item group">{{item}}</ion-item>
+        <!-- se ha comicsId è una release -->
+        <ion-item ng-if="item.comicsId"
+          class="item rmm-button-right release"
+          on-hold="selectRelease(item)"
+          ng-click="clickRelease(item)"
+          ng-class="{selected: isSelected(item)}">
+          <div class="number">{{item.number}}</div>
+          <div class="title">{{getComicsById(item.comicsId).name}}</div>
+          <div class="date">{{item.date | date : 'EEE, dd MMM'}}</div>
+          <div class="icons">
+            <i class="icon ion-ios7-bell expired" ng-show="isExpired(item)"></i>
+            <i class="icon ion-ios7-briefcase purchased" ng-show="item.purchased == 'T'"></i>
+          </div>
+<!--           <span><b>#{{item.number}}</b> {{item.date | date : 'EEE, dd MMM'}} <i class="icon ion-ios7-timer-outline" ng-show="isExpired(item)"></i></span>
+          <button class="button ion-bag" ng-show="currentBar=='title' && item.purchased != 'T'" ng-click="setPurchased(item, 'T')"></button>
+          <button class="button button-positive ion-bag" ng-show="currentBar=='title' && item.purchased == 'T'" ng-click="setPurchased(item, 'F')"></button> -->
+        </ion-item>
       </ion-item>
+
     </ion-list>
   </ion-content>
 </ion-view>

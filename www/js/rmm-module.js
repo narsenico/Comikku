@@ -340,19 +340,19 @@ IonicModule
     },
     firstDayOfWeek: function(date) {
       if (!date) date = new Date();
-      var dd = new Date(date);
+      var dd = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       dd.setDate(date.getDate() - this.getDay(date));
       return dd;
     },
     lastDayOfWeek: function(date) {
       if (!date) date = new Date();
-      var dd = new Date(date);
+      var dd = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       dd.setDate(date.getDate() - this.getDay(date) + 6);
       return dd;
     },
     firstDayOfMonth: function(date) {
       if (!date) date = new Date();
-      var dd = new Date(date);
+      var dd = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       dd.setDate(1);
       return dd;
     },

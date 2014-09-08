@@ -15,29 +15,36 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
     	[($scope.entry = $comicsData.getComicsById($stateParams.comicsId))]);
 
-    //TODO BUG su smartphone non si vede luscita senza data (quando è da sola)
-
-    //elimino quelle con data inferiore a startTime
-    if ($scope.entry == null) {
-	    for (var ii=0; ii<rels.length; ii++) {
-	    	if (rels[ii].date >= $scope.startDate) {
-	    		rels.splice(0, ii);
-	    		break;
-	    	}
-	    }
-	  }
-
     //TODO raggruppare per settimana/mese dalla settimana/mese corrente
     //	oppure senza gruppo, dal giorno corrente
     var grps = _.groupBy(rels, function(rel) {
     	if (rel.date) {
-	    	return  $filter('date')( $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd')), 'EEE, dd MMM');
+	    	return  $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
     	} else {
     		return 'zzz';
     	}
     });
 
-    $scope.groups = grps;
+    //creo un array che contiene sia le intestazioni del gruppo che i dati per non essere costretto
+    //	ad utilzzare ng-repeat innestati
+    var items = [];
+    var grpKeys = _.keys(grps).sort();
+    for (var ii=0; ii<grpKeys.length; ii++) {
+    	//console.log(grpKeys[ii], $scope.startDate, grpKeys[ii] >= $scope.startDate)
+
+    	if (grpKeys[ii] == 'zzz') {
+    		items.push('Whish list')
+    	} else if ($scope.entry != null || grpKeys[ii] >= $scope.startDate) {
+    		items.push($filter('date')(grpKeys[ii], 'EEE, dd MMM'));
+    	} else {
+    		continue;
+    	}
+
+    	var grp = grps[grpKeys[ii]];
+    	$utils.arrayAddRange(items, grp);
+    }
+
+    $scope.items = items;
   };
 
 	//comics selezionato (se arrivo dal menu laterale, sarà sempre null)
@@ -51,7 +58,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	//
 	$scope.selectedReleases = [];
 	//
-	$scope.startDate = $filter('date')($datex.firstDayOfWeek(), 'yyyy-MM-dd');
+	$scope.startDate = $datex.firstDayOfWeek().getTime();
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
@@ -65,7 +72,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   };
   //
   $scope.removeReleaseEntry = function() {
-
+  	console.log($scope.selectedReleases)
 		if (!_.isEmpty($scope.selectedReleases)) {
 			$comicsData.removeReleases($scope.selectedReleases);
 			$comicsData.save();
@@ -86,10 +93,17 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   };
   //
   $scope.setPurchased = function(release, value) {
-    release.purchased = value;
-    $comicsData.save();
-
-    $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
+  	if (release) {
+	    release.purchased = value;
+	    $comicsData.save();
+	    $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
+	  } else {
+	  	angular.forEach($scope.selectedReleases, function(release) {
+	  		release.purchased = value;
+	  	});
+	  	$comicsData.save();
+			$toast.show(value == 'T' ? "Releases purchased" : "Purchase canceled");
+	  }
   };
   //
   $scope.getComicsById = function(comicsId) {
@@ -105,7 +119,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 		if ($scope.currentBar == 'options') {
 			$scope.selectRelease(release);
 		} else {
-			//todo
+			$scope.setPurchased(release, release.purchased == 'T' ? 'F' : 'T');
 		}
 	};
 	//

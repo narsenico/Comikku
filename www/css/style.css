@@ -120,6 +120,12 @@
 	color: #fff;
 	margin-left: -125px;
 }
+.undo-container {
+	left: 0;
+	right: 0;
+	width: 100%;
+	margin-left: 0;
+}
 .toast-container {
 	text-align: center;
 }
@@ -183,7 +189,7 @@
 }
 .toast-container.bottom {
 	top: initial;
-	bottom: 60px;
+	bottom: 20px;
 }
 .toast-container.top {
 	top: 60px;
@@ -258,10 +264,7 @@
 	position: absolute;
 	right: 16px;
 	top: 9px;
-	/* bottom: 10px; */
 	min-width: 50px;
-	/*border: solid 1px #66CC33;*/
-	/* border-radius: 4px; */
 	color: #444;
 }
 
@@ -273,24 +276,24 @@
 	height: 0;
 	border-top: 6px solid transparent;
 	border-bottom: 6px solid transparent;
-	border-right: 6px solid #66CC33;
+	border-right: 6px solid #99CC00;
 	content: '';
 }
 
 .best-release.expired:after {
-	border-right-color: #EF4E3A;
+	border-right-color: #FF4444;
 }
 
 .best-release .number {
 	font-size: 1.2em;
 	text-align: center;
 	line-height: 25px;
-	background-color: #66CC33;
+	background-color: #99CC00;
 	border-radius: 2px 2px 0 0;
 }
 
 .best-release.expired .number {
-	background-color: #EF4E3A;
+	background-color: #FF4444;
 	color: #fff;
 }
 
@@ -315,27 +318,64 @@
 }
 
 /* Release */
-.item-release-group {
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 0;
-	padding-top: 0;
-}
-
-.item-release-group>div {
-	padding-top: 16px;
-	padding-left: 16px;
-	border-bottom: solid 2px #33B5E5;
-}
-
 .item-release {
+	padding: 0;
+}
+
+.item-release .group {
+	border-bottom: solid 2px #33B5E5;
+	font-weight: bold;
+	color: #33B5E5;
+	padding-left: 8px;
+	padding-bottom: 8px;
+}
+
+.item-release .release {
 	padding: 8px 49px 8px 16px;
 }
 
-.item-release .button {
-	top: 14px;
+.item-release .release.selected {
+	background-color: #EEEEEE;
 }
 
-.item-release.selected {
-	background-color: #EEEEEE;
+.item-release .release .number {
+	display: inline-block;
+	font-size: 1.35em;
+	width: 40px;
+	line-height: 40px;
+	background-color: #F3F2F2;
+	text-align: center;
+	border-radius: 4px;
+	margin-right: 8px;
+}
+
+.item-release .release .date {
+	display: inline-block;
+	position: absolute;
+	right: 8px;
+	top: 4px;
+	font-size: 0.7em;
+}
+
+.item-release .release .title {
+	display: inline-block;
+}
+
+.item-release .release .icons {
+	position: absolute;
+	right: 8px;
+	bottom: 8px;
+}
+
+.item-release .release .icons>.icon {
+	font-size: 1.3em;
+	padding: 0 5px;
+}
+
+.item-release .release .icons>.icon.purchased {
+	color: #669900;
+}
+
+.item-release .release .icons>.icon.expired {
+	color: #CC0000;
 }
