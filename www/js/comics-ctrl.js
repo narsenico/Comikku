@@ -179,7 +179,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
       $scope.best = $scope.comics.bestRelease;
       var today = $filter('date')(new Date(), 'yyyy-MM-dd');
-      $scope.expired = $scope.best.date && $scope.best.date < today;
+      $scope.expired = $scope.best.date && $scope.best.date <= today;
     }],
     templateUrl: 'templates/bestRelease.html'
   };

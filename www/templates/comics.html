@@ -35,9 +35,7 @@
           on-hold="selectItem(item)"
           ng-click="clickItem(item)" 
           ng-class="{selected: isSelected(item.id)}"
-          ng-repeat="item in comics track by item.id"
-          > 
-          <!-- href="#/app/releases/{{item.id}}"> -->
+          ng-repeat="item in comics track by item.id"> 
 
         <div>
           <span class="comics-title"><i class="icon ion-ios7-filing-outline" bo-if="item.reserved=='T'"></i> {{item.name}}</span>
@@ -47,19 +45,6 @@
         </div>
 
         <best-release comics="item" bo-if="item.bestRelease.number"></best-release>
-
-        <!-- <ion-option-button class="button button-energized icon ion-plus-round"
-                           ng-click="showAddRelease(item)">
-          Add
-        </ion-option-button>
-        <ion-option-button class="button button-positive icon ion-edit"
-                           ng-click="editComicsEntry(item)">
-          Edit
-        </ion-option-button>
-        <ion-option-button class="button button-assertive icon ion-trash-a"
-                           ng-click="removeComicsEntry(item)">
-          Del
-        </ion-option-button> -->
       </ion-item>
     </ion-list>
     <ion-infinite-scroll

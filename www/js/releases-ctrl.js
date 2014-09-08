@@ -33,7 +33,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     	//console.log(grpKeys[ii], $scope.startDate, grpKeys[ii] >= $scope.startDate)
 
     	if (grpKeys[ii] == 'zzz') {
-    		items.push('Whish list')
+    		items.push('Wish list')
     	} else if ($scope.entry != null || grpKeys[ii] >= $scope.startDate) {
     		items.push($filter('date')(grpKeys[ii], 'EEE, dd MMM'));
     	} else {
@@ -159,7 +159,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   //
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');
   $scope.isExpired = function(release) {
-    return release.date && release.date < today;
+    return release.date && release.date <= today;
   }
   //
   applyFilter();

@@ -333,9 +333,9 @@ angular.module('starter.controllers', ['starter.services'])
     //   template: window.localStorage.getItem('USER_comics')
     // });
 
-    // $undoPopup.show({title: "Comics delted", timeout: "long"}).then(function(res) {
-    //   console.log(res)
-    // });
+    $undoPopup.show({title: "Comics delted", timeout: 0}).then(function(res) {
+      console.log(res)
+    });
 
     //$toast.show("This week");
 
