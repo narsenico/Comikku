@@ -58,6 +58,16 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
       }
     })
 
+    .state('app.wishlist', {
+      url: "/wishlist",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/releases.html",
+          controller: 'ReleasesEntryCtrl'
+        }
+      }
+    })    
+
     .state('app.comics', {
       url: "/comics",
       views: {
