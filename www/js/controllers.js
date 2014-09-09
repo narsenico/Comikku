@@ -187,8 +187,8 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.reset();
 })
 
-.controller('OptionsCtrl', function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $cordovaDevice, 
-  $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, $comicsData, $settings) {
+.controller('OptionsCtrl', function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
+  $cordovaDevice, $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, $comicsData, $settings) {
   //
   $scope.version = null;
   $scope.lastBackup = 'not found';
@@ -199,6 +199,7 @@ angular.module('starter.controllers', ['starter.services'])
       $scope.version = version;
     });
   }
+
   //
   $scope.userOptions = $settings.userOptions;
   //console.log($scope.userOptions)
@@ -206,6 +207,24 @@ angular.module('starter.controllers', ['starter.services'])
     $datex.weekStartMonday = $scope.userOptions.weekStartMonday == 'T';
     $settings.save();    
   };
+  //
+  $scope.chooseWeekStart = function() {
+    $scope.weekStartPopup = $ionicPopup.show({
+      title: 'Week starting day',
+      templateUrl: 'weekStartMonday.html',
+      scope: $scope,
+      buttons: [{
+        text: 'Cancel',
+        type: 'button-default',
+        onTap: function(e) { return false; }
+      }]
+    });
+    $scope.weekStartPopup.then(function(res) {
+      if (res) {
+        $scope.optionsChanged();
+      }
+    });
+  }; 
   //
   $scope.resetOptions = function() {
     $ionicPopup.confirm({
@@ -291,7 +310,6 @@ angular.module('starter.controllers', ['starter.services'])
   //
   $scope.readLastBackup();
 
-
   //DEBUG
   //
   $scope.fakeEntries = function() {
@@ -333,9 +351,9 @@ angular.module('starter.controllers', ['starter.services'])
     //   template: window.localStorage.getItem('USER_comics')
     // });
 
-    $undoPopup.show({title: "Comics delted", timeout: 0}).then(function(res) {
-      console.log(res)
-    });
+    // $undoPopup.show({title: "Comics delted", timeout: 0}).then(function(res) {
+    //   console.log(res)
+    // });
 
     //$toast.show("This week");
 
