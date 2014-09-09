@@ -94,7 +94,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 			$timeout(function() {
 			  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
-			      $comicsData.undoRemove();
+			      $scope.selectedComics = $comicsData.undoRemove() || [];
+			      $scope.canEdit = ($scope.selectedComics.length == 1);
 			      $comicsData.save();
 			      applyFilter();
 			    }

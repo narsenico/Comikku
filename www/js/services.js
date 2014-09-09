@@ -200,8 +200,11 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 					var item = this.getComicsById(comicsId);
 					item.releases.push(release);
 				}
+				var cp = lastsRemovedRelease;
 				lastsRemovedRelease = [];
+				return cp;
 			}
+			return null;
 		},
 		//
 		getBestRelease: function(item) {
@@ -251,12 +254,16 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 		//
 		undoRemove: function() {
 			if (lastsRemoved != null && lastsRemoved.length > 0) {
+				var cp = [];
 				for (var ii=lastsRemoved.length-1; ii>=0; ii--) {
 					var lr = lastsRemoved[ii];
 					this.comics.splice(lr[0], 0, lr[1]);
+					cp.push(lr[1]);
 				}
 				lastsRemoved = [];
+				return cp;
 			}
+			return null;
 		},
 		//
 		clear: function() {

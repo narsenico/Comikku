@@ -83,7 +83,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 			$timeout(function() {
 			  $undoPopup.show({title: "Releases removed", timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
-			      $comicsData.undoRemoveReleases();
+			      $scope.selectedReleases = $comicsData.undoRemoveReleases() || [];
+			      $scope.canEdit = ($scope.selectedReleases.length == 1);
 			      $comicsData.save();
 			      applyFilter();
 			    }
