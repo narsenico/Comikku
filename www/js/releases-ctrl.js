@@ -194,4 +194,16 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	//deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() { $scope._deregisterBackButton && $scope._deregisterBackButton(); });
 
-}]);
+}])
+.directive('comicsRelease', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      release: '='
+    },
+    controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
+    	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);
+    }],
+    templateUrl: 'templates/comicsRelease.html'
+  };
+});
