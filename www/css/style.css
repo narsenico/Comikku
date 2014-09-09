@@ -38,10 +38,37 @@
 	right: 5px;
 	bottom: 5px;
 }
+.bar .header-options>.button {
+	margin: 0 10px;
+}
+.bar .header-options>.button-icon:before {
+	font-size: 30px;
+}
+
+.bar.title {
+	background-color: #f0b840;
+	border-bottom: solid 3px #d39211;
+	box-shadow: 0 1px 3px #C3BBBB;
+}
+.bar.title button,
+.bar.title button:hover,
+.bar.title .button,
+.bar.title .button:hover,
+.bar.title h1,
+.bar.title .title {
+		color: #FFFFFF;
+}
 
 .bar.bar-header.bar-options {
-	background-color: #DDDDDD;
-	border-bottom: solid 2px #6397EB;
+	background-color: #FFFFFF;
+	border-bottom: solid 3px #33B5E5;
+	box-shadow: 0 1px 3px #C3BBBB;
+}
+.bar.bar-header.bar-options .button {
+	color: #666666;
+}
+.bar.bar-header.bar-options>.button:first-child {
+	border-right: solid 1px #ddd;
 }
 
 .custom-header {
@@ -50,6 +77,19 @@
 
 .item-menu-big>.item-content {
 	font-size: 1.2em;
+}
+
+.option-value {
+	margin-bottom: 0;
+}
+
+.item {
+	border-color: #F8F8F8;
+}
+
+.item.activated {
+	background-color: #8AD5F0;
+	border-color: #F8F8F8;
 }
 
 /* compatibilità pulsante a destra con pulsanti opzioni item */
@@ -219,7 +259,7 @@
 	display: block;
 	font-size: 0.8em;
 	font-weight: normal;
-	color: #B7B7B7;
+	color: #6F6F6F;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -245,7 +285,7 @@
 }
 
 .item-comics.selected {
-	background-color: #EEEEEE;
+	background-color: #CFE9F3;
 }
 
 .best-release {
@@ -269,7 +309,7 @@
 }
 
 .best-release.expired:after {
-	border-right-color: #FF4444;
+	border-right-color: #CC0000;
 }
 
 .best-release .number {
@@ -281,7 +321,7 @@
 }
 
 .best-release.expired .number {
-	background-color: #FF4444;
+	background-color: #CC0000;
 	color: #fff;
 }
 
@@ -323,7 +363,7 @@
 }
 
 .item-release .release.selected {
-	background-color: #EEEEEE;
+	background-color: #CFE9F3;
 }
 
 .item-release .release .number {

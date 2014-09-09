@@ -202,7 +202,9 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
       release: '='
     },
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
+  	  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
     	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);
+		  $scope.expired = ($scope.release.date && $scope.release.date <= today);
     }],
     templateUrl: 'templates/comicsRelease.html'
   };
