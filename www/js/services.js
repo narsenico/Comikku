@@ -382,7 +382,7 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 	var def = {
 		debugMode: 'F',
 		comicsCompactMode: 'F',
-		comicsSearchPublisher: 'F',
+		comicsSearchPublisher: 'T',
 		autoFillReleaseNumber: 'T',
 		comicsOrderBy: 'bestRelease',
 		comicsOrderByDesc: 'F',
