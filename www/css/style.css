@@ -59,6 +59,17 @@
 		color: #FFFFFF;
 }
 
+.menu .bar-header {
+	border-bottom: solid 3px #CACACA;
+	box-shadow: 0 1px 3px #C3BBBB;	
+}
+
+.menu .item.item-menu-big .item-content .icon {
+	min-width: 25px;
+	display: inline-block;
+	text-align: center;
+}
+
 .bar.bar-header.bar-options {
 	background-color: #FFFFFF;
 	border-bottom: solid 3px #33B5E5;
@@ -312,6 +323,14 @@
 	border-right-color: #CC0000;
 }
 
+.best-release.expired.near:after {
+	border-right-color: #FF8800;
+}
+
+.best-release.wishlist:after {
+	border-right-color: #9933CC;
+}
+
 .best-release .number {
 	font-size: 1.2em;
 	text-align: center;
@@ -322,6 +341,16 @@
 
 .best-release.expired .number {
 	background-color: #CC0000;
+	color: #fff;
+}
+
+.best-release.expired.near .number {
+	background-color: #FF8800;
+	color: #fff;
+}
+
+.best-release.wishlist .number {
+	background-color: #9933CC;
 	color: #fff;
 }
 
@@ -369,8 +398,8 @@
 .item-release .release .number {
 	display: inline-block;
 	font-size: 1.35em;
-	width: 40px;
-	line-height: 40px;
+	width: 45px;
+	line-height: 45px;
 	background-color: #F3F2F2;
 	border: solid 1px #F3F2F2;
 	text-align: center;
@@ -380,6 +409,17 @@
 .item-release .release.purchased .number {
 	background-color: transparent;
 	color: #ACACAC;	
+}
+.item-release .release:not(.purchased) .number.expired {
+	background-color: #CC0000;
+	color: #FFFFFF;
+}
+.item-release .release:not(.purchased) .number.expired.near {
+	background-color: #FF8800;
+}
+.item-release .release:not(.purchased) .number.wishlist {
+	background-color: #9933CC;
+	color: #FFFFFF;
 }
 
 .item-release .release .date {
@@ -418,4 +458,11 @@
 
 .item-release .release .icons>.icon.expired {
 	color: #CC0000;
+}
+
+.item-release .release .icons>.icon.expired {
+	color: #CC0000;
+}
+.item-release .release .icons>.icon.expired.near {
+	color: #FF8800;
 }

@@ -52,15 +52,19 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 
     	if (grpKeys[ii] == 'zzz') {
     		if ($scope.entry == null && !isWishlist) continue;
-				items.push('Wish list');
+				items.push({ label: 'Wish list' });
     	} else if (grpKeys[ii] == 'lll') {
     		if (!isWishlist) continue;
-				items.push('Losts');
+				items.push({ label: 'Losts' });
+			} else if (grpKeys[ii] == $scope.startDate) {
+				items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM'), current: true });
     	} else if ($scope.entry != null || grpKeys[ii] >= $scope.startDate) {
-    		items.push($filter('date')(grpKeys[ii], 'EEE, dd MMM'));
+    		items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM') });
     	} else {
     		continue;
     	}
+
+    	//console.log("***", grpKeys);
 
     	var grp = grps[grpKeys[ii]];
     	$utils.arrayAddRange(items, grp);
@@ -204,6 +208,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
   	  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
     	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);
+    	$scope.near = ($scope.release.date && $scope.release.date == today);
 		  $scope.expired = ($scope.release.date && $scope.release.date <= today);
     }],
     templateUrl: 'templates/comicsRelease.html'

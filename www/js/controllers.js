@@ -272,6 +272,7 @@ angular.module('starter.controllers', ['starter.services'])
       $comicsData.getLastBackup().then(function(result) {
         $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
       }, function(error) {
+        console.log('readLastBackup ' + JSON.stringify(error));
         $scope.lastBackup = 'not found';
       });
     }

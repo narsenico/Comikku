@@ -20,7 +20,7 @@
     <ion-list can-swipe="true">
       <ion-item class="item item-release" ng-repeat="item in items">
         <!-- se non ha comicsId è l'intestazione del gruppo -->
-        <ion-item ng-if="!item.comicsId" class="item group">{{item}}</ion-item>
+        <ion-item ng-if="!item.comicsId" class="item group">{{item.label}} <span class="item-note" ng-if="item.current">current</span></ion-item>
         <!-- se ha comicsId è una release -->
         <ion-item ng-if="item.comicsId"
           class="item rmm-button-right release"
