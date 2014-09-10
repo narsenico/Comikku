@@ -451,22 +451,27 @@ IonicModule
 
     var directory = cordova.file.externalDataDirectory;
     if (false) { //if device.platform.toLowerCase() == "android"
-      directory += "Android/data/it.amonshore.rmm/files";
+      directory += "Android/data/it.amonshore.comikku/files";
     }
+
+    console.log("getFileEntry: " + directory + file);
 
     var q = $q.defer();
     window.resolveLocalFileSystemURL(directory, 
       function(entry) {
+        console.log("resolve ok: " + JSON.stringify(entry));
         entry.getFile(file, {create: create || false}, 
           function(fileEntry) {
             q.resolve(fileEntry);
           },
           function(error) {
+            console.log("getFile err: " + JSON.stringify(error));
             q.reject(error);
           }
         );
       },
       function(error) {
+        console.log("resolve err: " + JSON.stringify(error));
         q.reject(error);
       }
     );
