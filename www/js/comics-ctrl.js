@@ -145,18 +145,19 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		//nascondo la barra di navigazione (e mostro quella delle opzioni) se c'è almeno un elemento selezionato
 		if ($scope.selectedComics.length == 0) {
 	    $scope.showHeaderBar();
-			$scope._deregisterBackButton && $scope._deregisterBackButton();
-  		$scope._deregisterBackButton = null;
+			// $scope._deregisterBackButton && $scope._deregisterBackButton();
+  	// 	$scope._deregisterBackButton = null;
 		} else {
 			$scope.canEdit = ($scope.selectedComics.length == 1);
 			if ($scope.currentBar != 'options') {
 				$scope.currentBar = 'options';
-				$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { 
-					$scope.showHeaderBar();
-					$scope.$apply(); //altrimenti non vengono aggiornati 
-					$scope._deregisterBackButton && $scope._deregisterBackButton();
-	    		$scope._deregisterBackButton = null;
-				}, 100);}
+				// $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { 
+				// 	$scope.showHeaderBar();
+				// 	$scope.$apply(); //altrimenti non vengono aggiornati 
+				// 	$scope._deregisterBackButton && $scope._deregisterBackButton();
+	   //  		$scope._deregisterBackButton = null;
+				// }, 100);
+			}
 		}
 	}
 	//
@@ -166,6 +167,16 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 
 	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
 	$timeout(function() { $ionicNavBarDelegate.showBar(false); }, 250);
+
+	//gestisco il back hw in base a quello che sto facendo
+	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
+		if ($scope.currentBar == 'options') {
+			$scope.showHeaderBar();
+			$scope.$apply(); //altrimenti non vengono aggiornati 
+		} else {
+			navigator.app.exitApp();
+		}
+	}, 100);
 
 	//deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() { $scope._deregisterBackButton && $scope._deregisterBackButton(); });

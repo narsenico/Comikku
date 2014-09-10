@@ -89,7 +89,7 @@ function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
 		options = extend({
 			scope: null,
 			title: 'Operation done',
-			text: '<i class="icon ion-reply"></i> CANCEL',
+			text: '<i class="icon ion-android-system-back"></i> CANCEL',
       timeout: 0 //nessun timeout
 		}, options || {});
 

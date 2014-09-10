@@ -103,6 +103,10 @@
 	border-color: #F8F8F8;
 }
 
+.button-icon.button.back-button:before {
+	font-size: 20px;
+}
+
 /* compatibilità pulsante a destra con pulsanti opzioni item */
 .rmm-button-right > .button,
 .rmm-button-right .item-content > .button {
