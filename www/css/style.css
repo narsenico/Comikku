@@ -302,7 +302,7 @@
 .best-release {
 	position: absolute;
 	right: 16px;
-	top: 9px;
+	top: 8px;
 	min-width: 50px;
 	color: #444;
 }
@@ -357,7 +357,7 @@
 .best-release .date {
 	font-size: 0.7em;
 	text-align: center;
-	line-height: 20px;
+	line-height: 22px;
 	background-color: #fff;
 	border-left: solid 1px #ddd;
 	border-right: solid 1px #ddd;
@@ -412,13 +412,17 @@
 }
 .item-release .release:not(.purchased) .number.expired {
 	background-color: #CC0000;
+	border-color: #CC0000;
 	color: #FFFFFF;
 }
 .item-release .release:not(.purchased) .number.expired.near {
 	background-color: #FF8800;
+	border-color: #FF8800;
+	color: #FFFFFF;
 }
 .item-release .release:not(.purchased) .number.wishlist {
 	background-color: #9933CC;
+	border-color: #9933CC;
 	color: #FFFFFF;
 }
 
@@ -471,4 +475,5 @@
 
 .about-list .item {
 	text-align: center;
+	border-width: 0;
 }

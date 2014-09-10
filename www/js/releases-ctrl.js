@@ -48,7 +48,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     //	ad utilzzare ng-repeat innestati
     var grpKeys = _.keys(grps).sort();
     for (var ii=0; ii<grpKeys.length; ii++) {
-    	//console.log(grpKeys[ii], $scope.startDate, grpKeys[ii] >= $scope.startDate)
+    	//console.log(grpKeys[ii], $scope.thisWeek, grpKeys[ii] >= $scope.thisWeek)
 
     	if (grpKeys[ii] == 'zzz') {
     		if ($scope.entry == null && !isWishlist) continue;
@@ -56,9 +56,11 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     	} else if (grpKeys[ii] == 'lll') {
     		if (!isWishlist) continue;
 				items.push({ label: 'Losts' });
-			} else if (grpKeys[ii] == $scope.startDate) {
-				items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM'), current: true });
-    	} else if ($scope.entry != null || grpKeys[ii] >= $scope.startDate) {
+			} else if (grpKeys[ii] == $scope.thisWeek) {
+				items.push({ label: 'This week' });
+			} else if (grpKeys[ii] == $scope.nextWeek) {
+				items.push({ label: 'Next week' });
+    	} else if ($scope.entry != null || grpKeys[ii] >= $scope.thisWeek) {
     		items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM') });
     	} else {
     		continue;
@@ -86,7 +88,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	//
 	$scope.selectedReleases = [];
 	//
-	$scope.startDate = $datex.firstDayOfWeek().getTime();
+	$scope.thisWeek = $datex.firstDayOfWeek().getTime();
+	$scope.nextWeek = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
 	//
 	$scope.title = isWishlist ? "Losts & Wish list" : ($scope.entry == null ? 'Releases' : $scope.entry.name);
 	console.log(isWishlist, $scope.entry == null, $scope.title)

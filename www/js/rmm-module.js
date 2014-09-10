@@ -365,6 +365,11 @@ IonicModule
     },
     getMax: function() {
       return new Date(9999, 11, 31);
+    },
+    addDays: function(date, days) {
+      var dd = new Date(date.getTime());
+      dd.setDate(dd.getDate() + days);
+      return dd;
     }
   };
   return $datex;
