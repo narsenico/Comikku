@@ -466,3 +466,9 @@
 .item-release .release .icons>.icon.expired.near {
 	color: #FF8800;
 }
+
+/** about **/
+
+.about-list .item {
+	text-align: center;
+}

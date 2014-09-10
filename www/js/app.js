@@ -95,6 +95,33 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
           controller: 'OptionsCtrl'
         }
       }
+    })
+    .state('app.settings', {
+      url: "/settings",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/settings.html",
+          controller: 'OptionsCtrl'
+        }
+      }
+    })
+    .state('app.about', {
+      url: "/about",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/about.html",
+          controller: 'OptionsCtrl'
+        }
+      }
+    })
+    .state('app.debug', {
+      url: "/debug",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/debug.html",
+          controller: 'OptionsCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/comics');
