@@ -51,7 +51,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     	//console.log(grpKeys[ii], $scope.startDate, grpKeys[ii] >= $scope.startDate)
 
     	if (grpKeys[ii] == 'zzz') {
-    		if (!isWishlist) continue;
+    		if ($scope.entry == null && !isWishlist) continue;
 				items.push('Wish list');
     	} else if (grpKeys[ii] == 'lll') {
     		if (!isWishlist) continue;
