@@ -1,7 +1,8 @@
 <ion-view>
   <!-- header default -->
   <header class="bar bar-header bar-energized title" ng-show="currentBar=='title'">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <button menu-toggle="left" class="button button-icon icon ion-navicon" ng-if="!entry"></button>
+    <button class="button button-icon back-button icon ion-android-arrow-back" ng-if="entry" ng-click="goBack()"></button>
     <h1 class="title">{{title}}</h1>
     <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
   </header>

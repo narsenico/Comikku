@@ -103,7 +103,8 @@
 	border-color: #F8F8F8;
 }
 
-.button-icon.button.back-button:before {
+.button-icon.button.back-button:before,
+.bar.bar-header.title.back-button:before {
 	font-size: 20px;
 }
 

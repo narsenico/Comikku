@@ -194,6 +194,10 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	$scope.isSelected = function(release) {
 		return $utils.indexFindWhere($scope.selectedReleases, {comicsId: release.comicsId, number: release.number}) >= 0;
 	};
+	//
+	$scope.goBack = function() {
+		$ionicNavBarDelegate.back();
+	};
   //
   applyFilter();
 	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
@@ -203,7 +207,9 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
 		if ($scope.currentBar == 'options') {
 			$scope.showHeaderBar();
-			$scope.$apply(); //altrimenti non vengono aggiornati 
+			$scope.$apply(); //altrimenti non vengono aggiornati
+		} else if ($scope.entry) {
+			$ionicNavBarDelegate.back();
 		} else {
 			navigator.app.exitApp();
 		}
