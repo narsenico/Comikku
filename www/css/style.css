@@ -60,7 +60,7 @@
 }
 
 .menu .bar-header {
-	border-bottom: solid 3px #CACACA;
+	border-bottom: solid 3px #6F6C6C;
 	box-shadow: 0 1px 3px #C3BBBB;	
 }
 
@@ -106,6 +106,12 @@
 .button-icon.button.back-button:before,
 .bar.bar-header.title.back-button:before {
 	font-size: 20px;
+}
+
+.bar.bar-header .title img {
+	vertical-align: middle;
+	margin-right: 7px;
+	padding-bottom: 4px;
 }
 
 /* compatibilità pulsante a destra con pulsanti opzioni item */
