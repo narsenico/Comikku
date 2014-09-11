@@ -10,6 +10,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	//se true mostro solo wishlist (senza data) e scadute, e non acquistate
 	var isWishlist = ($location.url() == '/app/wishlist');
   //
+  var today = $filter('date')(new Date(), 'yyyy-MM-dd');	
+  //
   var applyFilter = function() {
     var items = [];
 
@@ -19,8 +21,9 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     var grps;
 
     if (isWishlist) {
+
     	rels = _.filter(rels, function(rel) {
-    		return (rel.purchased != 'T' && (!rel.date || $scope.isExpired(rel)));
+    		return (rel.purchased != 'T' && (!rel.date || rel.date < today));
     	});
 
 	    grps = _.groupBy(rels, function(rel) {
@@ -50,32 +53,32 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     for (var ii=0; ii<grpKeys.length; ii++) {
     	//console.log(grpKeys[ii], $scope.thisWeek, grpKeys[ii] >= $scope.thisWeek)
 
+    	var grp = grps[grpKeys[ii]];
+
     	if (grpKeys[ii] == 'zzz') {
     		if ($scope.entry == null && !isWishlist) continue;
-				items.push({ label: 'Wish list' });
+				items.push({ label: 'Wish list', count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
     		if (!isWishlist) continue;
-				items.push({ label: 'Losts' });
+				items.push({ label: 'Losts', count: grp.length });
 			} else if (grpKeys[ii] == $scope.thisWeek) {
-				items.push({ label: 'This week' });
+				items.push({ label: 'This week', count: grp.length });
 			} else if (grpKeys[ii] == $scope.nextWeek) {
-				items.push({ label: 'Next week' });
+				items.push({ label: 'Next week', count: grp.length });
     	} else if ($scope.entry != null || grpKeys[ii] >= $scope.thisWeek) {
-    		items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM') });
+    		items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM'), count: grp.length });
     	} else {
     		continue;
     	}
 
     	//console.log("***", grpKeys);
 
-    	var grp = grps[grpKeys[ii]];
+    	
     	$utils.arrayAddRange(items, grp);
     }
 
     $scope.items = items;
   };
-  //
-  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
 
 	//comics selezionato (se arrivo dal menu laterale, sarà sempre null)
   $scope.entry = $stateParams.comicsId == null ? null : ($scope.entry = $comicsData.getComicsById($stateParams.comicsId));
@@ -92,7 +95,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	$scope.nextWeek = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
 	//
 	$scope.title = isWishlist ? "Losts & Wish list" : ($scope.entry == null ? 'Releases' : $scope.entry.name);
-	console.log(isWishlist, $scope.entry == null, $scope.title)
+	//console.log(isWishlist, $scope.entry == null, $scope.title)
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
@@ -106,7 +109,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   };
   //
   $scope.removeReleaseEntry = function() {
-  	console.log($scope.selectedReleases)
+  	//console.log($scope.selectedReleases)
 		if (!_.isEmpty($scope.selectedReleases)) {
 			$comicsData.removeReleases($scope.selectedReleases);
 			$comicsData.save();
@@ -191,10 +194,6 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	$scope.isSelected = function(release) {
 		return $utils.indexFindWhere($scope.selectedReleases, {comicsId: release.comicsId, number: release.number}) >= 0;
 	};
-  //
-  $scope.isExpired = function(release) {
-    return release.date && release.date <= today;
-  }
   //
   applyFilter();
 	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
