@@ -409,7 +409,7 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 			}
 		},
 		loadDefault: function() {
-			this.userOptions = def;
+			this.userOptions = angular.copy(def);
 		},
 		//
 		save: function() {
