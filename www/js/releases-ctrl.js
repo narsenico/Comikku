@@ -13,6 +13,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');	
   //
   var applyFilter = function() {
+  	console.log(new Date().getTime() + " applyFilter")
     var items = [];
 
     //estraggo tutt le releases
@@ -50,6 +51,9 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     //creo un array che contiene sia le intestazioni del gruppo che i dati per non essere costretto
     //	ad utilzzare ng-repeat innestati
     var grpKeys = _.keys(grps).sort();
+    //aggiungo una chiave _kk sequenziale ad ogni elemento (sia intestazione gruppo che release) per renderlo
+    //	univoco. usato come track da ngRepeat  
+    var kk = 0;
     for (var ii=0; ii<grpKeys.length; ii++) {
     	//console.log(grpKeys[ii], $scope.thisWeek, grpKeys[ii] >= $scope.thisWeek)
 
@@ -57,24 +61,21 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 
     	if (grpKeys[ii] == 'zzz') {
     		if ($scope.entry == null && !isWishlist) continue;
-				items.push({ label: 'Wish list', count: grp.length });
+				items.push({ _kk: kk++, label: 'Wish list', count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
     		if (!isWishlist) continue;
-				items.push({ label: 'Losts', count: grp.length });
+				items.push({ _kk: kk++, label: 'Losts', count: grp.length });
 			} else if (grpKeys[ii] == $scope.thisWeek) {
-				items.push({ label: 'This week', count: grp.length });
+				items.push({ _kk: kk++, label: 'This week', count: grp.length });
 			} else if (grpKeys[ii] == $scope.nextWeek) {
-				items.push({ label: 'Next week', count: grp.length });
+				items.push({ _kk: kk++, label: 'Next week', count: grp.length });
     	} else if ($scope.entry != null || grpKeys[ii] >= $scope.thisWeek) {
-    		items.push({ label: $filter('date')(grpKeys[ii], 'EEE, dd MMM'), count: grp.length });
+    		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], 'EEE, dd MMM'), count: grp.length });
     	} else {
     		continue;
     	}
 
-    	//console.log("***", grpKeys);
-
-    	
-    	$utils.arrayAddRange(items, grp);
+    	$utils.arrayAddRange(items, _.each(grp, function(rel) { rel._kk = kk++; }));
     }
 
     $scope.items = items;

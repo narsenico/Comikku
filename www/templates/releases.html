@@ -19,7 +19,7 @@
   </header>
   <ion-content class="has-header custom-header" has-bouncing="false">
     <ion-list can-swipe="true">
-      <ion-item class="item item-release" ng-repeat="item in items">
+      <ion-item class="item item-release" ng-repeat="item in items track by item._kk">
         <!-- se non ha comicsId è l'intestazione del gruppo -->
         <ion-item ng-if="!item.comicsId" class="item group">{{item.label}} <span class="item-note"># {{item.count}}</span></ion-item>
         <!-- se ha comicsId è una release -->
