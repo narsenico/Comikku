@@ -1,8 +1,8 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$utils', '$debounce', 
-	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings', 
-function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce, 
+	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', 
+	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings',
+function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, 
 	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
 	//recupero i dati già ordinati
 	var orderedComics = $comicsData.getComics($settings.userOptions.comicsOrderBy || 'name', $settings.userOptions.comicsOrderByDesc == 'T');
@@ -105,17 +105,17 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	};
 	//apre il template per l'editing
 	$scope.addComicsEntry = function() {
-		$location.path("/app/comics/new").replace();
+		$state.go('app.comics_editor', {comicsId: 'new'});
 	};
 	//apre il template per l'editing del fumetto
 	$scope.editComicsEntry = function(item) {
 		item = item || $scope.selectedComics[0];
-		$location.path("/app/comics/" + item.id).replace();
+		$state.go('app.comics_editor', {comicsId: item.id});
 	};
 	//apre te template per l'editing dell'uscita
 	$scope.showAddRelease = function(item) {
 		item = item || $scope.selectedComics[0];
-		$location.path("/app/release/" + item.id + "/new").replace();
+		$state.go('app.release_editor', {comicsId: item.id, releaseId: 'new'});
 	};
 	//
 	$scope.showHeaderBar = function() {
@@ -127,7 +127,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 		if ($scope.currentBar == 'options') {
 			$scope.selectItem(item);
 		} else {
-			$location.path("/app/releases/" + item.id).replace();
+			$state.go('app.releases_entry', {comicsId: item.id});
 		}
 	};
 	//
@@ -164,9 +164,6 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $debounce
 	$scope.isSelected = function(id) {
 		return $utils.indexFindWhere($scope.selectedComics, {id: id}) >= 0;
 	};
-
-	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
-	$timeout(function() { $ionicNavBarDelegate.showBar(false); }, 250);
 
 	//gestisco il back hw in base a quello che sto facendo
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {

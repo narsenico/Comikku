@@ -21,7 +21,7 @@ angular.module('starter.services', [])
 
 .factory('$comicsData', ['$q', '$filter', '$datex', '$utils', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
 function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotification) {
-	console.log("new $comicsData");
+	//console.log("new $comicsData");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
 	var lastsRemoved = [];
@@ -386,7 +386,8 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 		autoFillReleaseNumber: 'T',
 		comicsOrderBy: 'bestRelease',
 		comicsOrderByDesc: 'F',
-		weekStartMonday: 'F'
+		weekStartMonday: 'F',
+		startState: '/app/comics'
 	};
 
 	var filters = {

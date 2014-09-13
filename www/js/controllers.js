@@ -8,18 +8,6 @@ angular.module('starter.controllers', ['starter.services'])
   $comicsData.read("USER");
 })
 
-.directive('buttonHref', function($location) {
-  return {
-    restrict: 'A',
-    link: function(scope, elem, attr) {
-      elem.bind('click', function() {
-        $location.path(attr.buttonHref).replace();
-        scope.$apply();
-      });
-    }
-  };
-})
-
 .controller('ComicsEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, $comicsData) {
   //console.log($stateParams, $comicsData)
   $scope.periodicities = PERIODICITIES;
@@ -41,6 +29,10 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.isUnique = function(entry) {
     return $comicsData.normalizeComicsName($scope.master.name) == $comicsData.normalizeComicsName(entry.name) || 
       $comicsData.isComicsUnique(entry);
+  };
+  //
+  $scope.goBack = function() {
+    $ionicNavBarDelegate.back();
   };
   $scope.reset();
 })

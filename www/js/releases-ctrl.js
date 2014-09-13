@@ -1,19 +1,17 @@
 angular.module('starter.controllers')
 .controller('ReleasesEntryCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$location', '$undoPopup', '$utils', '$datex', '$toast', '$stateParams', 
+	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$datex', '$toast', '$stateParams', 
 	'$debounce', '$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$filter', '$comicsData', '$settings', 
 	'$dateParser',
-function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $toast, $stateParams, 
+function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toast, $stateParams, 
 	$debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, $comicsData, $settings,
 	$dateParser) {
 
-	//se true mostro solo wishlist (senza data) e scadute, e non acquistate
-	var isWishlist = ($location.url() == '/app/wishlist');
   //
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');	
   //
   var applyFilter = function() {
-  	console.log(new Date().getTime() + " applyFilter")
+  	//console.log(new Date().getTime() + " applyFilter")
     var items = [];
 
     //estraggo tutt le releases
@@ -21,7 +19,7 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     	[$scope.entry]);
     var grps;
 
-    if (isWishlist) {
+    if ($scope.isWishlist) {
 
     	rels = _.filter(rels, function(rel) {
     		return (rel.purchased != 'T' && (!rel.date || rel.date < today));
@@ -60,10 +58,10 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
     	var grp = grps[grpKeys[ii]];
 
     	if (grpKeys[ii] == 'zzz') {
-    		if ($scope.entry == null && !isWishlist) continue;
+    		if ($scope.entry == null && !$scope.isWishlist) continue;
 				items.push({ _kk: kk++, label: 'Wish list', count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
-    		if (!isWishlist) continue;
+    		if (!$scope.isWishlist) continue;
 				items.push({ _kk: kk++, label: 'Losts', count: grp.length });
 			} else if (grpKeys[ii] == $scope.thisWeek) {
 				items.push({ _kk: kk++, label: 'This week', count: grp.length });
@@ -85,6 +83,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
   $scope.entry = $stateParams.comicsId == null ? null : ($scope.entry = $comicsData.getComicsById($stateParams.comicsId));
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
+	//se true mostro solo wishlist (senza data) e scadute, e non acquistate
+	$scope.isWishlist = $state.is('app.wishlist');
 	//
 	$scope.currentBar = 'title';
 	//
@@ -94,19 +94,16 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	//
 	$scope.thisWeek = $datex.firstDayOfWeek().getTime();
 	$scope.nextWeek = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
-	//
-	$scope.title = isWishlist ? "Losts & Wish list" : ($scope.entry == null ? 'Releases' : $scope.entry.name);
-	//console.log(isWishlist, $scope.entry == null, $scope.title)
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
-    $location.path("/app/release/" + item.id + "/new").replace();
+    $state.go('app.release_editor', {comicsId: item.id, releaseId: 'new'});
   };
   //
   $scope.editReleaseEntry = function(release) {
   	release = release || $scope.selectedReleases[0];
 		var cid = $comicsData.getComicsById(release.comicsId).id;
-		$location.path("/app/release/" + cid + "/" + release.number).replace();
+		$state.go('app.release_editor', {comicsId: cid, releaseId: release.number});
   };
   //
   $scope.removeReleaseEntry = function() {
@@ -195,14 +192,8 @@ function($scope, $ionicModal, $timeout, $location, $undoPopup, $utils, $datex, $
 	$scope.isSelected = function(release) {
 		return $utils.indexFindWhere($scope.selectedReleases, {comicsId: release.comicsId, number: release.number}) >= 0;
 	};
-	//
-	$scope.goBack = function() {
-		$ionicNavBarDelegate.back();
-	};
   //
   applyFilter();
-	//aspetto un attimo prima di nascondere la barra originale altrimenti non funziona
-	$timeout(function() { $ionicNavBarDelegate.showBar(false); }, 250);
 	
 	//gestisco il back hw in base a quello che sto facendo
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {

@@ -32,7 +32,7 @@
 .bar .button.button-icon.rmm-search-button:before {
 	font-size: 20px;
 }
-.bar .header-options {
+/*.bar .header-options {
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -43,12 +43,13 @@
 }
 .bar .header-options>.button-icon:before {
 	font-size: 30px;
-}
+}*/
 
-.bar.title {
-	background-color: #f0b840;
-	border-bottom: solid 3px #d39211;
+/*.bar.bar-header.title {
+	border-bottom-style: solid;
+	border-bottom-width: 3px;
 	box-shadow: 0 1px 3px #C3BBBB;
+	background-image: none;
 }
 .bar.title button,
 .bar.title button:hover,
@@ -57,11 +58,42 @@
 .bar.title h1,
 .bar.title .title {
 		color: #FFFFFF;
-}
+}*/
 
-.menu .bar-header {
+/*.menu .bar-header {
 	border-bottom: solid 3px #6F6C6C;
 	box-shadow: 0 1px 3px #C3BBBB;	
+}*/
+
+.bar.bar-header {
+	box-shadow: 0 1px 3px #C3BBBB;
+	border-bottom-style: solid;
+	border-bottom-width: 3px;
+}
+
+.bar.bar-header.bar-options {
+	background-color: #FFFFFF;
+	border-bottom-color: #33B5E5;
+}
+.bar.bar-header.bar-options .button {
+	color: #666666;
+}
+.bar.bar-header.bar-options .button.hide-options {
+	border-right: solid 1px #ddd;
+}
+.bar.bar-options .button-badged:after {
+	content: attr(title);
+	position: absolute;
+	top: 6px;
+	right: -6px;
+	font-size: 0.5em;
+	color: #fff;
+}
+
+.bar.bar-header img.logo {
+	vertical-align: middle;
+	margin-right: 7px;
+	padding-bottom: 4px;
 }
 
 .menu .item.item-menu-big .item-content .icon {
@@ -70,7 +102,7 @@
 	text-align: center;
 }
 
-.bar.bar-header.bar-options {
+/*.bar.bar-header.bar-options {
 	background-color: #FFFFFF;
 	border-bottom: solid 3px #33B5E5;
 	box-shadow: 0 1px 3px #C3BBBB;
@@ -81,10 +113,10 @@
 .bar.bar-header.bar-options>.button:first-child {
 	border-right: solid 1px #ddd;
 }
-
-.custom-header {
+*/
+/*.custom-header {
 	top: 44px;
-}
+}*/
 
 .item-menu-big>.item-content {
 	font-size: 1.2em;
@@ -108,11 +140,11 @@
 	font-size: 20px;
 }
 
-.bar.bar-header .title img {
+/*.bar.bar-header .title img {
 	vertical-align: middle;
 	margin-right: 7px;
 	padding-bottom: 4px;
-}
+}*/
 
 /* compatibilità pulsante a destra con pulsanti opzioni item */
 .rmm-button-right > .button,
@@ -374,15 +406,6 @@
 	border-right: solid 1px #ddd;
 	border-bottom: solid 1px #ddd;
 	border-radius: 0 0 2px 2px;
-}
-
-.bar.bar-options .button-badged:after {
-	content: attr(title);
-	position: absolute;
-	top: 6px;
-	right: -6px;
-	font-size: 0.5em;
-	color: #fff;
 }
 
 /* Release */
