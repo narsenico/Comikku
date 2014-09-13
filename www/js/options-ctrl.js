@@ -2,10 +2,10 @@ angular.module('starter.controllers')
 .controller('OptionsCtrl', [
 	'$scope', '$q', '$datex', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
   '$cordovaDevice', '$cordovaFile', '$cordovaToast', '$file', '$cordovaLocalNotification', '$timeout', '$filter', 
-  '$comicsData', '$settings',
+  '$comicsData', '$settings', '$ionicNavBarDelegate',
 function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
   $cordovaDevice, $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, 
-  $comicsData, $settings) {
+  $comicsData, $settings, $ionicNavBarDelegate) {
   //
   $scope.version = null;
   $scope.lastBackup = 'not found';
@@ -142,6 +142,10 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
         });
       }
     });
+  };
+  //
+  $scope.goBack = function() {
+    $ionicNavBarDelegate.back();
   };
   //
   $scope.readLastBackup();

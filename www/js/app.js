@@ -140,3 +140,15 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
   $urlRouterProvider.otherwise($initOptionsProvider.defaultUrl);
 });
 
+angular.module('starter.controllers', ['starter.services'])
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $datex, $settings, $comicsData) {
+  //
+  $settings.load();
+  $datex.weekStartMonday = $settings.userOptions.weekStartMonday == 'T';
+  //leggo l'elenco dei fumetti (per utente USER)
+  $comicsData.read("USER");
+
+  //
+  $scope.uid = $comicsData.uid;
+  $scope.debugMode = ($settings.userOptions.debugMode == 'T');
+});

@@ -193,4 +193,33 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce,
     }],
     templateUrl: 'templates/bestRelease.html'
   };
-});
+})
+.controller('ComicsEditorCtrl', [
+'$scope', '$stateParams', '$ionicNavBarDelegate', '$comicsData',
+function($scope, $stateParams, $ionicNavBarDelegate, $comicsData) {
+  //console.log($stateParams, $comicsData)
+  $scope.periodicities = PERIODICITIES;
+  //originale
+  $scope.master = $comicsData.getComicsById($stateParams.comicsId);
+  //aggiorno l'originale e torno indietro
+  $scope.update = function(entry) {
+    angular.copy(entry, $scope.master);
+    $comicsData.update($scope.master);
+    $comicsData.save();
+    $ionicNavBarDelegate.back();
+  };
+  $scope.reset = function() {
+    $scope.entry = angular.copy($scope.master);
+  };
+  $scope.cancel = function() {
+    $ionicNavBarDelegate.back();
+  };
+  $scope.isUnique = function(entry) {
+    return $comicsData.normalizeComicsName($scope.master.name) == $comicsData.normalizeComicsName(entry.name) || 
+      $comicsData.isComicsUnique(entry);
+  };
+  $scope.goBack = function() {
+  	$ionicNavBarDelegate.back();
+  }
+  $scope.reset();
+}]);

@@ -2,8 +2,8 @@
 
   <ion-nav-bar class="bar bar-header bar-positive" ng-class="{'bar-calm': isWishlist, 'bar-options': currentBar=='options'}">
     <div class="buttons" ng-show="currentBar=='title'">
-      <ion-nav-back-button class="button-icon ion-android-arrow-back"></ion-nav-back-button>
-      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+      <button class="button-icon button back-button ion-android-arrow-back" ng-if="entry" ng-click="goBack()"></button>
+      <button menu-toggle="left" class="button button-icon icon ion-navicon" ng-if="!entry"></button>
     </div>
 
     <div class="buttons" ng-show="currentBar=='options'">

@@ -135,9 +135,24 @@
 	border-color: #F8F8F8;
 }
 
+.button-icon.button.back-button,
+.bar.bar-header.title.back-button {
+	background-image: url('../img/logo.png');
+	background-size: 32px;
+	background-position-x: right;
+	background-repeat: no-repeat;
+	min-width: 37px;
+	min-height: 31px;
+	line-height: 31px;
+}
+
 .button-icon.button.back-button:before,
 .bar.bar-header.title.back-button:before {
-	font-size: 20px;
+	font-size: 16px;
+	position: absolute;
+	top: 0;
+	left: -5px;
+	color: #575757;
 }
 
 /*.bar.bar-header .title img {
