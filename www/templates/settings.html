@@ -29,10 +29,17 @@
 					<p class="option-value" ng-show="userOptions.weekStartMonday == 'T'">Monday</p>
 					<p class="option-value" ng-show="userOptions.weekStartMonday != 'T'">Sunday</p>
 				</ion-item>
+				<ion-item class="item" ng-click="chooseDefaultUrl()">
+					App starts with
+					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/comics'">Comics</p>
+					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/releases'">Releases</p>
+					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/wishlist'">Losts &amp; Wish list</p>
+				</ion-item>
 				<!-- <ion-item class="item-input">
 					<span class="input-label">Reminder time</span>
 					<input type="time">
 				</ion-item> -->
+				<ion-item class="item item-divider">Data</ion-item>
 	  		<ion-item class="item" ng-click="deleteAllData()"><i class="icon ion-trash-a"></i> Delete all data</ion-item>
 	  		<ion-item class="item" ng-click="repairData()"><i class="icon ion-hammer"></i> Repair data</ion-item>
 	  		<ion-item class="item" ng-click="resetOptions()"><i class="icon ion-ios7-loop-strong"></i> Reset settings</ion-item>
@@ -47,5 +54,13 @@
 	<ion-list>
 		<ion-radio ng-model="userOptions.weekStartMonday" ng-value="'F'" ng-change="weekStartPopup.close('F')">Sunday</ion-radio>
 		<ion-radio ng-model="userOptions.weekStartMonday" ng-value="'T'" ng-change="weekStartPopup.close('T')">Monday</ion-radio>
+	</ion-list>
+</script>
+
+<script id="defaultUrl.html" type="text/ng-template">
+	<ion-list>
+		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/comics'" ng-change="defaultUrlPopup.close('/app/comics')">Comics</ion-radio>
+		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/releases'" ng-change="defaultUrlPopup.close('/app/releases')">Releases</ion-radio>
+		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/wishlist'" ng-change="defaultUrlPopup.close('/app/wishlist')">Losts &amp; Wish list</ion-radio>
 	</ion-list>
 </script>

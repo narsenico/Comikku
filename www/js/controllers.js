@@ -6,6 +6,10 @@ angular.module('starter.controllers', ['starter.services'])
   $datex.weekStartMonday = $settings.userOptions.weekStartMonday == 'T';
   //leggo l'elenco dei fumetti (per utente USER)
   $comicsData.read("USER");
+
+  //
+  $scope.uid = $comicsData.uid;
+  $scope.debugMode = ($settings.userOptions.debugMode == 'T');
 })
 
 .controller('ComicsEditorCtrl', function($scope, $stateParams, $ionicNavBarDelegate, $comicsData) {

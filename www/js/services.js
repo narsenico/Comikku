@@ -387,7 +387,7 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 		comicsOrderBy: 'bestRelease',
 		comicsOrderByDesc: 'F',
 		weekStartMonday: 'F',
-		startState: '/app/comics'
+		defaultUrl: '/app/comics'
 	};
 
 	var filters = {

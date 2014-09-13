@@ -41,7 +41,25 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
         $scope.optionsChanged();
       }
     });
-  }; 
+  };
+  //
+  $scope.chooseDefaultUrl = function() {
+    $scope.defaultUrlPopup = $ionicPopup.show({
+      title: 'App starts with',
+      templateUrl: 'defaultUrl.html',
+      scope: $scope,
+      buttons: [{
+        text: 'Cancel',
+        type: 'button-default',
+        onTap: function(e) { return false; }
+      }]
+    });
+    $scope.defaultUrlPopup.then(function(res) {
+      if (res) {
+        $scope.optionsChanged();
+      }
+    });
+  };
   //
   $scope.resetOptions = function() {
     $ionicPopup.confirm({

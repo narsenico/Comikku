@@ -20,7 +20,20 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.provider('$initOptions', function $initOptionsProvider() {
+  var str = window.localStorage.getItem("OPTIONS");
+  var settings = {};
+  if (str) {
+    angular.extend(settings, JSON.parse(str));
+  }
+
+  this.defaultUrl = settings.defaultUrl || '/app/comics';
+  this.$get = [function $initOptionsFactory() {
+    return new provme();
+  }];
+})
+
+.config(function($stateProvider, $urlRouterProvider, $initOptionsProvider) {
   $stateProvider
 
     .state('app', {
@@ -124,6 +137,6 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/comics');
+  $urlRouterProvider.otherwise($initOptionsProvider.defaultUrl);
 });
 
