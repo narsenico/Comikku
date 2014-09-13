@@ -39,11 +39,11 @@
 					<input type="time">
 				</ion-item> -->
 				<ion-item class="item item-divider">Data</ion-item>
+	  		<ion-item class="item" ng-click="backup()"><i class="icon ion-ios7-download-outline"></i> Backup data</ion-item>
+	  		<ion-item class="item" ng-click="restore()"><i class="icon ion-ios7-upload-outline"></i> Restore data<p>Last backup: {{lastBackup}}</p></ion-item>
 	  		<ion-item class="item" ng-click="deleteAllData()"><i class="icon ion-trash-a"></i> Delete all data</ion-item>
 	  		<ion-item class="item" ng-click="repairData()"><i class="icon ion-hammer"></i> Repair data</ion-item>
 	  		<ion-item class="item" ng-click="resetOptions()"><i class="icon ion-ios7-loop-strong"></i> Reset settings</ion-item>
-	  		<ion-item class="item" ng-click="backup()"><i class="icon ion-ios7-download-outline"></i> Backup data</ion-item>
-	  		<ion-item class="item" ng-click="restore()"><i class="icon ion-ios7-upload-outline"></i> Restore data<p>Last backup: {{lastBackup}}</p></ion-item>
 	  	</ion-list>
   	</form>
   </ion-content>

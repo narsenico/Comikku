@@ -1,11 +1,13 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', 
+	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', '$toast', 
 	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings',
-function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, 
+function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $toast,
 	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
+	var orderBy = $settings.userOptions.comicsOrderBy || 'name';
+	var orderByDesc = $settings.userOptions.comicsOrderByDesc == 'T';
 	//recupero i dati già ordinati
-	var orderedComics = $comicsData.getComics($settings.userOptions.comicsOrderBy || 'name', $settings.userOptions.comicsOrderByDesc == 'T');
+	var orderedComics = $comicsData.getComics(orderBy, orderByDesc);
 	//conterrà i dati filtrati (tramite campo di ricerca)
 	var filteredComics = orderedComics;
 	//indcia quanti dati caricare alla volta tramite infinite scroll
@@ -15,7 +17,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce,
 		//console.log("applyFilter");
 
 		if (_.isEmpty($scope.search)) {
-			filteredComics = orderedComics;	
+			filteredComics = orderedComics;
 		} else {
 			filteredComics = orderedComics.filter(function(item) {
 	      var bOk = false;
@@ -81,6 +83,22 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce,
       return item.series
     else
       return item.series + " - " + item.notes;
+	};
+	//
+	$scope.changeOrder = function() {
+
+		if (orderBy == 'bestRelease') {
+			orderBy = 'name';
+			orderByDesc = false;
+			$toast.show("Order by name");
+		} else if (orderBy == 'name') {
+			orderBy = 'bestRelease';
+			orderByDesc = false;
+			$toast.show("Order by best release");
+		}
+		
+		orderedComics = $comicsData.getComics(orderBy, orderByDesc);
+		applyFilter();
 	};
 	//funzione di rimozione elemento
 	$scope.removeComicsEntry = function() {

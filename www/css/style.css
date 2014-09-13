@@ -92,6 +92,9 @@
 
 .bar .title {
 	font-weight: bold;
+	left: 40px!important;
+	right: 100px!important;
+	text-align: left;	
 }
 
 .bar.bar-header img.logo {
