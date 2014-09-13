@@ -15,6 +15,7 @@
     </div>
 
     <div class="buttons pull-right" ng-show="currentBar=='options'">
+      <button class="button button-icon icon ion-plus" ng-show="canEdit" ng-click="showAddRelease()"></button>
       <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editReleaseEntry()"></button>
       <button class="button button-icon icon ion-ios7-briefcase" ng-click="setPurchased(null, 'T')"></button>
       <button class="button button-icon icon ion-ios7-briefcase-outline" ng-click="setPurchased(null, 'F')"></button>

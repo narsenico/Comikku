@@ -90,6 +90,10 @@
 	color: #fff;
 }
 
+.bar .title {
+	font-weight: bold;
+}
+
 .bar.bar-header img.logo {
 	vertical-align: middle;
 	margin-right: 7px;
@@ -136,8 +140,9 @@
 }
 
 .button-icon.button.back-button,
-.bar.bar-header.title.back-button {
-	background-image: url('../img/logo.png');
+.bar.bar-header.title.back-button,
+.button.button-icon.icon.ion-navicon {
+	background-image: url('../img/logo32.png');
 	background-size: 32px;
 	background-position-x: right;
 	background-repeat: no-repeat;
@@ -153,6 +158,15 @@
 	top: 0;
 	left: -5px;
 	color: #575757;
+}
+.button.button-icon.icon.ion-navicon:before {
+	line-height: 32px;
+	font-size: 41px;
+	position: absolute;
+	top: 0;
+	left: -24px;
+	/* color: #575757; */
+	/* font-weight: bold; */
 }
 
 /*.bar.bar-header .title img {

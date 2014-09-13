@@ -97,6 +97,10 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
+  	if (!item) {
+	  	var release = $scope.selectedReleases[0];
+			item = $comicsData.getComicsById(release.comicsId);
+		}
     $state.go('app.release_editor', {comicsId: item.id, releaseId: 'new'});
   };
   //
