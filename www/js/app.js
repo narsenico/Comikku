@@ -127,6 +127,15 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
         }
       }
     })
+    .state('app.backup', {
+      url: "/backup",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/backup.html",
+          controller: 'OptionsCtrl'
+        }
+      }
+    })
     .state('app.debug', {
       url: "/debug",
       views: {

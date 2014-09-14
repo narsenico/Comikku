@@ -474,6 +474,7 @@
 }
 .item-release .release.purchased .number {
 	background-color: transparent;
+	text-decoration: line-through;
 	color: #ACACAC;	
 }
 .item-release .release:not(.purchased) .number.expired {
@@ -507,7 +508,7 @@
 	display: inline-block;
 }
 .item-release .release.purchased .title {
-	/*text-decoration: line-through;*/
+	text-decoration: line-through;
 	color: #ACACAC;
 }
 

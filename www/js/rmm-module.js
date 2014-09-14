@@ -370,6 +370,23 @@ IonicModule
       var dd = new Date(date.getTime());
       dd.setDate(dd.getDate() + days);
       return dd;
+    },
+    addMonths: function(date, months) {
+      var dd = new Date(date.getTime());
+      dd.setMonth(dd.getMonth() + months);
+      return dd;
+    },
+    add: function(date, type, amount) {
+      var dd = new Date(date.getTime());
+      if (type == 'M')
+        dd.setMonth(dd.getMonth() + amount);
+      else if (type == 'Y')
+        dd.setFullYear(dd.getFullYear() + amount);
+      else if (type == 'd')
+        dd.setDate(dd.getDate() + amount);
+      else if (type == 'W')
+        dd.setDate(dd.getDate() + (amount * 7));
+      return dd;
     }
   };
   return $datex;

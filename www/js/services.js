@@ -86,9 +86,9 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 
 			if (orderBy == "bestRelease") {
 				var sorted = this.comics.sort(function(a, b) {
-					var res;
+					var res = 0;
 					if (a.bestRelease.date && b.bestRelease.date) {
-						res = a.bestRelease.date > b.bestRelease.date ? 1 : -1;
+						res = a.bestRelease.date.localeCompare(b.bestRelease.date);
 					} else if (a.bestRelease.date && !b.bestRelease.date) {
 						res = -1;
 					} else if (!a.bestRelease.date && b.bestRelease.date) {
@@ -99,9 +99,11 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 						res = -1;
 					} else if (!a.bestRelease.number && b.bestRelease.number) {
 						res = 1;
-					} else {
-						//res = a.name.toLowerCase() > b.name.toLowerCase() ? 1: -1;
-						res = a.lastUpdate > b.lastUpdate ? -1 : 1;
+					}
+					
+					if (res == 0) {
+						res = a.name.toLowerCase() > b.name.toLowerCase() ? 1: -1;
+						//res = a.lastUpdate > b.lastUpdate ? -1 : 1;
 					}
 
 					if (desc)
@@ -383,7 +385,7 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 		debugMode: 'F',
 		comicsCompactMode: 'F',
 		comicsSearchPublisher: 'T',
-		autoFillReleaseNumber: 'T',
+		autoFillReleaseData: 'T',
 		comicsOrderBy: 'bestRelease',
 		comicsOrderByDesc: 'F',
 		weekStartMonday: 'F',
