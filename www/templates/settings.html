@@ -33,6 +33,7 @@
 					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/comics'">Comics</p>
 					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/releases'">Releases</p>
 					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/wishlist'">Losts &amp; Wishlist</p>
+					<p class="option-value" ng-show="userOptions.defaultUrl == '/app/purchased'">Purchased</p>
 				</ion-item>
 				<!-- <ion-item class="item-input">
 					<span class="input-label">Reminder time</span>
@@ -59,5 +60,6 @@
 		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/comics'" ng-change="defaultUrlPopup.close('/app/comics')">Comics</ion-radio>
 		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/releases'" ng-change="defaultUrlPopup.close('/app/releases')">Releases</ion-radio>
 		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/wishlist'" ng-change="defaultUrlPopup.close('/app/wishlist')">Losts &amp; Wishlist</ion-radio>
+		<ion-radio ng-model="userOptions.defaultUrl" ng-value="'/app/purchased'" ng-change="defaultUrlPopup.close('/app/purchased')">Purchased</ion-radio>
 	</ion-list>
 </script>

@@ -33,6 +33,22 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	    	}
 	    });
 
+	  } else if ($scope.isPurchased) {
+
+    	rels = _.filter(rels, function(rel) {
+    		return (rel.purchased == 'T');
+    	});
+
+	    //TODO raggruppare per settimana/mese dalla settimana/mese corrente
+	    //	oppure senza gruppo, dal giorno corrente
+	    grps = _.groupBy(rels, function(rel) {
+	    	if (rel.date) {
+		    	return  $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
+	    	} else {
+	    		return 'zzz';
+	    	}
+	    });
+
     } else {
 
 	    //TODO raggruppare per settimana/mese dalla settimana/mese corrente
@@ -58,7 +74,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     	var grp = grps[grpKeys[ii]];
 
     	if (grpKeys[ii] == 'zzz') {
-    		if ($scope.entry == null && !$scope.isWishlist) continue;
+    		if ($scope.entry == null && !$scope.isWishlist && !$scope.isPurchased) continue;
 				items.push({ _kk: kk++, label: 'Wishlist', count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
     		if (!$scope.isWishlist) continue;
@@ -67,8 +83,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 				items.push({ _kk: kk++, label: 'This week', count: grp.length });
 			} else if (grpKeys[ii] == $scope.nextWeek) {
 				items.push({ _kk: kk++, label: 'Next week', count: grp.length });
-    	} else if ($scope.entry != null || grpKeys[ii] >= $scope.thisWeek) {
-    		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], 'EEE, dd MMM'), count: grp.length });
+    	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisWeek) {
+    		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], 'EEE, dd MMM yyyy'), count: grp.length });
     	} else {
     		continue;
     	}
@@ -86,11 +102,15 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	//se true mostro solo wishlist (senza data) e scadute, e non acquistate
 	$scope.isWishlist = $state.is('app.wishlist');
 	//
+	$scope.isPurchased = $state.is('app.purchased');
+	//
 	$scope.currentBar = 'title';
 	//
   $scope.releases = [];
 	//
 	$scope.selectedReleases = [];
+	//
+	$scope.title = ($scope.isPurchased ? 'Purchased' : ($scope.isWishlist ? 'Losts & Wishlist' : ($scope.entry ? $scope.entry.name : 'Releases')));
 	//
 	$scope.thisWeek = $datex.firstDayOfWeek().getTime();
 	$scope.nextWeek = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();

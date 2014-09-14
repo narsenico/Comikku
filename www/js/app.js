@@ -43,6 +43,25 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
       controller: 'AppCtrl'
     })
 
+    .state('app.comics', {
+      url: "/comics",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/comics.html",
+          controller: 'ComicsCtrl'
+        }
+      }
+    })
+    .state('app.comics_editor', {
+      url: "/comics/:comicsId",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/comicsEditor.html",
+          controller: 'ComicsEditorCtrl'
+        }
+      }
+    })
+
     .state('app.releases', {
       url: "/releases",
       views: {
@@ -79,23 +98,13 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
           controller: 'ReleasesEntryCtrl'
         }
       }
-    })    
-
-    .state('app.comics', {
-      url: "/comics",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/comics.html",
-          controller: 'ComicsCtrl'
-        }
-      }
     })
-    .state('app.comics_editor', {
-      url: "/comics/:comicsId",
+    .state('app.purchased', {
+      url: "/purchased",
       views: {
         'menuContent' :{
-          templateUrl: "templates/comicsEditor.html",
-          controller: 'ComicsEditorCtrl'
+          templateUrl: "templates/releases.html",
+          controller: 'ReleasesEntryCtrl'
         }
       }
     })
