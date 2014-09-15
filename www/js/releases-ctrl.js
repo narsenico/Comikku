@@ -7,8 +7,10 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	$debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, $comicsData, $settings,
 	$dateParser) {
 
+	//week, month, day (?)
+	var releaseGroupBy = $settings.userOptions.releaseGroupBy || 'week';
   //
-  var today = $filter('date')(new Date(), 'yyyy-MM-dd');	
+  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
   //
   var applyFilter = function() {
   	//console.log(new Date().getTime() + " applyFilter")
@@ -69,7 +71,6 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     //	univoco. usato come track da ngRepeat  
     var kk = 0;
     for (var ii=0; ii<grpKeys.length; ii++) {
-    	//console.log(grpKeys[ii], $scope.thisWeek, grpKeys[ii] >= $scope.thisWeek)
 
     	var grp = grps[grpKeys[ii]];
 
@@ -79,11 +80,11 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     	} else if (grpKeys[ii] == 'lll') {
     		if (!$scope.isWishlist) continue;
 				items.push({ _kk: kk++, label: 'Losts', count: grp.length });
-			} else if (grpKeys[ii] == $scope.thisWeek) {
+			} else if (grpKeys[ii] == $scope.thisPeriod) {
 				items.push({ _kk: kk++, label: 'This week', count: grp.length });
-			} else if (grpKeys[ii] == $scope.nextWeek) {
+			} else if (grpKeys[ii] == $scope.nextPeriod) {
 				items.push({ _kk: kk++, label: 'Next week', count: grp.length });
-    	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisWeek) {
+    	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisPeriod) {
     		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], 'EEE, dd MMM yyyy'), count: grp.length });
     	} else {
     		continue;
@@ -112,8 +113,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	//
 	$scope.title = ($scope.isPurchased ? 'Purchased' : ($scope.isWishlist ? 'Losts & Wishlist' : ($scope.entry ? $scope.entry.name : 'Releases')));
 	//
-	$scope.thisWeek = $datex.firstDayOfWeek().getTime();
-	$scope.nextWeek = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
+	$scope.thisPeriod = $datex.firstDayOfWeek().getTime();
+	$scope.nextPeriod = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {

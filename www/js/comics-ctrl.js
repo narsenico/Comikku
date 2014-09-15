@@ -92,10 +92,17 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 			orderByDesc = false;
 			$toast.show("Order by name");
 		} else if (orderBy == 'name') {
+		// 	orderBy = 'lastUpdate';
+		// 	orderByDesc = true;
+		// 	$toast.show("Order by last update");
+		// } else if (orderBy == 'lastUpdate') {
 			orderBy = 'bestRelease';
 			orderByDesc = false;
 			$toast.show("Order by best release");
 		}
+
+		$settings.userOptions.comicsOrderBy = orderBy;
+		$settings.userOptions.comicsOrderByDesc = (orderByDesc ? 'T' : 'F');
 		
 		orderedComics = $comicsData.getComics(orderBy, orderByDesc);
 		applyFilter();

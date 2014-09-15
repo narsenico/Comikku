@@ -77,7 +77,7 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 			var dbkey = this.uid + "_comics";
 			window.localStorage.setItem(dbkey, JSON.stringify( this.comics ));
 		},
-		//
+		//orderBy: bestRelease, namse, lastUpdate
 		getComics: function(orderBy, desc) {
 			//console.log("getComics", orderBy, desc);
 
@@ -120,6 +120,14 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 						return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
 				});
 				return (this.comics = sorted);
+			} else if (orderBy == "lastUpdate") {
+				var sorted = this.comics.sort(function(a, b) {
+					if (desc)
+						return a.lastUpdate > b.lastUpdate ? -1 : 1;
+					else
+						return a.lastUpdate > b.lastUpdate ? 1 : -1;
+				});
+				return (this.comics = sorted);				
 			} else {
 				console.log("getComics: orderBy not supported " + orderBy);
 				return this.comics;
@@ -189,6 +197,8 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 				if (idx > -1) {
 					lastsRemovedRelease.push(item.releases[idx]);
 					item.releases.splice(idx, 1);
+					//aggiorno ultima modifica
+					updated(item);
 				}
 			}, this);
 		},
@@ -389,7 +399,8 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 		comicsOrderBy: 'bestRelease',
 		comicsOrderByDesc: 'F',
 		weekStartMonday: 'F',
-		defaultUrl: '/app/comics'
+		defaultUrl: '/app/comics',
+		releaseGroupBy: 'week'
 	};
 
 	var filters = {
