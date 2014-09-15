@@ -7,6 +7,7 @@
 
     <div class="buttons" ng-show="currentBar=='options'">
       <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showHeaderBar()"></button>
+      <div class="info">{{selectedComics.length}}</div>
     </div>
 
     <div class="buttons pull-right" ng-show="currentBar=='title'">
@@ -17,7 +18,7 @@
     <div class="buttons pull-right" ng-show="currentBar=='options'">
       <button class="button button-icon icon ion-plus-round" ng-show="canEdit" ng-click="showAddRelease()"></button>
       <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editComicsEntry()"></button>
-      <button class="button button-icon icon ion-android-trash button-badged" ng-click="removeComicsEntry()" title="{{selectedComics.length}}"></button>
+      <button class="button button-icon icon ion-android-trash" ng-click="removeComicsEntry()"></button>
     </div>
 
   </ion-nav-bar>

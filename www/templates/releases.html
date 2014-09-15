@@ -8,6 +8,7 @@
 
     <div class="buttons" ng-show="currentBar=='options'">
       <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showHeaderBar()"></button>
+      <div class="info">{{selectedReleases.length}}</div>
     </div>    
 
     <div class="buttons pull-right" ng-show="currentBar=='title'">
@@ -19,7 +20,7 @@
       <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editReleaseEntry()"></button>
       <button class="button button-icon icon ion-ios7-briefcase" ng-click="setPurchased(null, 'T')"></button>
       <button class="button button-icon icon ion-ios7-briefcase-outline" ng-click="setPurchased(null, 'F')"></button>
-      <button class="button button-icon icon ion-android-trash button-badged" ng-click="removeReleaseEntry()" title="{{selectedReleases.length}}"></button>
+      <button class="button button-icon icon ion-android-trash" ng-click="removeReleaseEntry()"></button>
     </div>
   </ion-nav-bar>
 
