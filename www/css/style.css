@@ -319,6 +319,24 @@
 	bottom: initial;
 }
 
+/* popover menu */
+
+.popover-menu {
+	background-color: #EFEFEF;
+	margin-top: 5px!important;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.popover-menu .item-radio .item-content,
+.popover-menu .item-radio input:checked ~ .item-content {
+	background-color: #EFEFEF;
+}
+
+.popover-menu .item {
+	border-color: #DBDBDB;
+}
+
 /* Comics */
 .item-comics {
 	min-height: 64px;

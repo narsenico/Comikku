@@ -179,79 +179,24 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
     $scope.readLastBackup();
     $toast.show("Hello " + $scope.currentUser);
   };
+  //TEST POPOVER MENU
+  $ionicPopover.fromTemplateUrl('my-popover.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };  
   //
   $scope.test = function($event) {
 
-    // window.plugin.notification.local.add(
-    //   { id: 't001', message: 'test message', title: 'test title' }
-    // , function() { console.log("add ", arguments) } );
+    $scope.openPopover($event)
 
-    // $ionicPopup.alert({
-    //   title: 'Test',
-    //   template: window.localStorage.getItem('USER_comics')
-    // });
+    // try {
 
-    // $undoPopup.show({title: "Comics delted", timeout: 0}).then(function(res) {
-    //   console.log(res)
-    // });
-
-    //$toast.show("This week");
-
-    //$ionicPopover.fromTemplate('<ion-popover-view><ion-header-bar><h1 class="title">My Popover Title</h1></ion-header-bar><ion-content>content</ion-content></ion-popover-view>', { scope: $scope }).show($event);
-    try {
-      // $comicsData.backupDataToFile().then(function(result) {
-      //     console.log("bck res " + result);
-      //     $scope.testresult = result;
-      // }, function(err) {
-      //     console.log("bck err " + err);
-      //     $scope.testresult = err;
-      // });
-
-      // $comicsData.getLastBackup().then(function(result) {
-      //     console.log("bck res " + result);
-      //     $scope.testresult = result;
-      // }, function(err) {
-      //     console.log("bck err " + err);
-      //     $scope.testresult = err;
-      // });
-
-      //$cordovaToast.showShortBottom("test me");
-
-      // $file.readFileMetadata("backup.json").then(
-      //   function(metadata) {
-      //     console.log("rmd ok " + JSON.stringify(metadata));
-      //     $file.readFileAsText("backup.json").then(
-      //       function(result) {
-      //         console.log("text " + result);
-      //       },
-      //       function(error) {
-      //         console.log("read err " + error.code);
-      //       }
-      //     );
-      //   },
-      //   function(error) {
-      //     console.log("rmd err" + error.code);
-      //   }
-      // );
-
-      // $file.writeFile("test.json", "prova prova\nciao\n.").then(
-      //   function(result) {
-      //     console.log("wrt " + result);
-      //   },
-      //   function(error) {
-      //     console.log("wrt err" + error.code);
-      //   }
-      // );
-
-      //$comicsData.addNotification("2014-08-30");
-
-      // var q = $q.defer();
-      // $timeout(function() { q.resolve(true) }, 2000);
-      // $q.allSettled(q).then(function(res) {console.log(res);});
-      // console.log("sett");
-
-    } catch (e) {
-      console.log("TEST ERR" + e);
-    }
+    // } catch (e) {
+    //   console.log("TEST ERR" + e);
+    // }
   };
 }]);

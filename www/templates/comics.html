@@ -12,7 +12,7 @@
 
     <div class="buttons pull-right" ng-show="currentBar=='title'">
       <button class="button button-icon" ng-click="addComicsEntry()"><img src="img/bubble_add_32.png" width="32"></button>
-      <button class="button button-icon icon ion-android-sort" ng-click="changeOrder()"></button>
+      <button class="button button-icon icon ion-android-sort" ng-click="openOrderByPopover($event)"></button>
     </div>
 
     <div class="buttons pull-right" ng-show="currentBar=='options'">
@@ -62,3 +62,15 @@
       </ion-infinite-scroll>
   </ion-content>
 </ion-view>
+
+<script id="orderby-popover.html" type="text/ng-template">
+  <ion-popover-view class="popover-menu" style="height: 168px">
+    <ion-content>
+      <ion-list>
+        <ion-radio ng-model="orderBy" ng-value="'bestRelease'" ng-change="closeOrderByPopover('bestRelease', false)">Best release</ion-radio>
+        <ion-radio ng-model="orderBy" ng-value="'name'" ng-change="closeOrderByPopover('name', false)">Name</ion-radio>
+        <ion-radio ng-model="orderBy" ng-value="'lastUpdate'" ng-change="closeOrderByPopover('lastUpdate', true)">Last modified</ion-radio>
+      </ion-list>
+    </ion-content>
+  </ion-popover-view>
+</script>

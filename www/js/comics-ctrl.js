@@ -1,17 +1,21 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', '$toast', 
+	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', '$toast', '$ionicPopover',
 	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings',
-function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $toast,
+function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $toast, $ionicPopover,
 	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
-	var orderBy = $settings.userOptions.comicsOrderBy || 'name';
-	var orderByDesc = $settings.userOptions.comicsOrderByDesc == 'T';
 	//recupero i dati già ordinati
-	var orderedComics = $comicsData.getComics(orderBy, orderByDesc);
+	var orderedComics = null;
 	//conterrà i dati filtrati (tramite campo di ricerca)
-	var filteredComics = orderedComics;
+	var filteredComics = null;
 	//indcia quanti dati caricare alla volta tramite infinite scroll
 	var loadChunk = 20;
+	var changeOrder = function() {
+		filteredComics = orderedComics = $comicsData.getComics($scope.orderBy, $scope.orderByDesc);
+		$scope.totComics = filteredComics.length;
+		$settings.userOptions.comicsOrderBy = $scope.orderBy;
+		$settings.userOptions.comicsOrderByDesc = ($scope.orderByDesc ? 'T' : 'F');
+	};
 	//funzione di filtraggio dei dati (su orderedComics)
 	var applyFilter = function() {
 		//console.log("applyFilter");
@@ -35,11 +39,14 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
 	//
+	$scope.orderBy = $settings.userOptions.comicsOrderBy || 'name';
+	$scope.orderByDesc = $settings.userOptions.comicsOrderByDesc == 'T';
+	//
 	$scope.currentBar = 'title';
 	//conterrà i comics caricati poco alla volta tramite infirnite scroll
 	$scope.comics = [];
 	//
-	$scope.totComics = filteredComics.length;
+	$scope.totComics = 0;
 	//
 	$scope.selectedComics = [];
 	//indica è possibile editare l'elemento selezionato
@@ -62,7 +69,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 	});
 	//carico altri dati (da filteredComics)
 	$scope.loadMore = function() {
-		//console.log("loadMore");
+		console.log("loadMore");
 		
 		var from = $scope.comics.length;
 		var max = Math.min(from + loadChunk, filteredComics.length);
@@ -73,7 +80,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 	};
 	//
 	$scope.moreDataCanBeLoaded = function() {
-		return $scope.comics.length < filteredComics.length;
+		return $scope.comics && filteredComics && $scope.comics.length < filteredComics.length;
 	};
 	//
 	$scope.getComicsInfo = function(item) {
@@ -83,29 +90,6 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
       return item.series
     else
       return item.series + " - " + item.notes;
-	};
-	//
-	$scope.changeOrder = function() {
-
-		if (orderBy == 'bestRelease') {
-			orderBy = 'name';
-			orderByDesc = false;
-			$toast.show("Order by name");
-		} else if (orderBy == 'name') {
-		// 	orderBy = 'lastUpdate';
-		// 	orderByDesc = true;
-		// 	$toast.show("Order by last update");
-		// } else if (orderBy == 'lastUpdate') {
-			orderBy = 'bestRelease';
-			orderByDesc = false;
-			$toast.show("Order by best release");
-		}
-
-		$settings.userOptions.comicsOrderBy = orderBy;
-		$settings.userOptions.comicsOrderByDesc = (orderByDesc ? 'T' : 'F');
-		
-		orderedComics = $comicsData.getComics(orderBy, orderByDesc);
-		applyFilter();
 	};
 	//funzione di rimozione elemento
 	$scope.removeComicsEntry = function() {
@@ -189,7 +173,28 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 	$scope.isSelected = function(id) {
 		return $utils.indexFindWhere($scope.selectedComics, {id: id}) >= 0;
 	};
-
+	//
+	$scope.orderByPopover = null;
+	$scope.openOrderByPopover = function($event) {
+		if (!$scope.orderByPopover) {
+		  $ionicPopover.fromTemplateUrl('orderby-popover.html', {
+		    scope: $scope,
+		  }).then(function(popover) {
+		    $scope.orderByPopover = popover;
+		    $scope.orderByPopover.show($event);
+		  });
+		} else {
+			$scope.orderByPopover.show($event);
+		}
+	};
+	//
+	$scope.closeOrderByPopover = function(orderBy, orderByDesc) {
+		$scope.orderBy = orderBy;
+		$scope.orderByDesc = orderByDesc;
+		changeOrder();
+		applyFilter();
+		$scope.orderByPopover.hide();
+	};
 	//gestisco il back hw in base a quello che sto facendo
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
 		if ($scope.currentBar == 'options') {
@@ -200,8 +205,15 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 		}
 	}, 100);
 
+	//chiamo la prima volta le funzioni per l'ordinamento e il filtro (???)
+	changeOrder();
+	//applyFilter();
+
 	//deregistro l'evento sul back all'uscita
-	$scope.$on('$destroy', function() { $scope._deregisterBackButton && $scope._deregisterBackButton(); });
+	$scope.$on('$destroy', function() {
+		$scope.orderByPopover && $scope.orderByPopover.remove(); 
+		$scope._deregisterBackButton && $scope._deregisterBackButton(); 
+	});
 
 }])
 .directive('bestRelease', function() {
