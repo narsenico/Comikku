@@ -71,6 +71,10 @@
 	border-bottom-width: 3px;
 }
 
+.bar.bar-header .button.icon:before {
+	font-size: 24px;
+}
+
 .bar.bar-header.bar-options {
 	background-color: #FFFFFF;
 	border-bottom-color: #33B5E5;
@@ -136,6 +140,7 @@
 
 .item-menu-big>.item-content {
 	font-size: 1.2em;
+	color: #727272;
 }
 
 .option-value {
@@ -186,6 +191,11 @@
 	margin-right: 7px;
 	padding-bottom: 4px;
 }*/
+
+.text-wrap,
+.item .text-wrap {
+	white-space: normal;
+}
 
 /* compatibilità pulsante a destra con pulsanti opzioni item */
 .rmm-button-right > .button,

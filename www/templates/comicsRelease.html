@@ -3,5 +3,5 @@
 <div class="date">{{release.date | date : 'EEE, dd MMM'}}</div>
 <div class="icons">
 <i class="icon ion-ios7-briefcase purchased" ng-show="release.purchased == 'T'"></i>
-<i class="icon ion-ios7-bell expired" ng-class="{near: near}" ng-if="release.purchased != 'T' && expired"></i>
+<i class="icon ion-alert expired" ng-class="{near: near}" ng-if="release.purchased != 'T' && expired"></i>
 </div>

@@ -179,19 +179,19 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
     $scope.readLastBackup();
     $toast.show("Hello " + $scope.currentUser);
   };
-  //TEST POPOVER MENU
-  $ionicPopover.fromTemplateUrl('my-popover.html', {
-    scope: $scope,
-  }).then(function(popover) {
-    $scope.popover = popover;
-  });
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };  
+  // //TEST POPOVER MENU
+  // $ionicPopover.fromTemplateUrl('my-popover.html', {
+  //   scope: $scope,
+  // }).then(function(popover) {
+  //   $scope.popover = popover;
+  // });
+  // $scope.openPopover = function($event) {
+  //   $scope.popover.show($event);
+  // };  
   //
   $scope.test = function($event) {
 
-    $scope.openPopover($event)
+    // $scope.openPopover($event)
 
     // try {
 
