@@ -1,10 +1,10 @@
 angular.module('starter.controllers')
 .controller('OptionsCtrl', [
 	'$scope', '$q', '$datex', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
-  '$cordovaDevice', '$cordovaFile', '$cordovaToast', '$file', '$cordovaLocalNotification', '$timeout', '$filter', 
+  '$file', '$timeout', '$filter', 
   '$comicsData', '$settings', '$ionicNavBarDelegate',
 function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
-  $cordovaDevice, $cordovaFile, $cordovaToast, $file, $cordovaLocalNotification, $timeout, $filter, 
+  $file, $timeout, $filter, 
   $comicsData, $settings, $ionicNavBarDelegate) {
   //
   $scope.version = null;
@@ -27,7 +27,6 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.chooseWeekStart = function() {
     $scope.weekStartPopup = $ionicPopup.show({
-      title: 'Week starting day',
       templateUrl: 'weekStartMonday.html',
       scope: $scope,
       buttons: [{
@@ -45,7 +44,6 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.chooseDefaultUrl = function() {
     $scope.defaultUrlPopup = $ionicPopup.show({
-      title: 'App starts with',
       templateUrl: 'defaultUrl.html',
       scope: $scope,
       buttons: [{

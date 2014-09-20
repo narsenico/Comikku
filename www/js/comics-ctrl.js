@@ -69,7 +69,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 	});
 	//carico altri dati (da filteredComics)
 	$scope.loadMore = function() {
-		console.log("loadMore");
+		//console.log("loadMore");
 		
 		var from = $scope.comics.length;
 		var max = Math.min(from + loadChunk, filteredComics.length);

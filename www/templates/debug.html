@@ -14,9 +14,10 @@
 						</div>
 					</label>
 				</ion-item>
-	  		<ion-item class="item" ng-click="fakeEntries()" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
-	  		<ion-item class="item" ng-click="test($event)" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
-	  		<ion-item class="item" ng-click="switchUser()" ng-show="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Switch user <p>Current: {{currentUser}}</p></ion-item>
+	  		<ion-item class="item" ng-click="fakeEntries()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
+	  		<ion-item class="item" ng-click="test($event)" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
+	  		<ion-item class="item" ng-click="switchUser()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Switch user <p>Current: {{currentUser}}</p></ion-item>
+	  		<ion-item class="item" ng-click="repairData()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-hammer"></i> Repair data</ion-item>
 	  	</ion-list>
   	</form>
   </ion-content>

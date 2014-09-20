@@ -19,8 +19,8 @@ var PERIODICITIES = {
 
 angular.module('starter.services', [])
 
-.factory('$comicsData', ['$q', '$filter', '$datex', '$utils', '$cordovaDevice', '$file', '$cordovaLocalNotification', 
-function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotification) {
+.factory('$comicsData', ['$q', '$filter', '$datex', '$utils', '$file', 
+function ($q, $filter, $datex, $utils, $file) {
 	//console.log("new $comicsData");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };
@@ -347,43 +347,43 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 			return count;
 		},
 		//
-		addNotification: function(date) {
-			$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
-				var badge = 1;
-				if (scheduled) {
-					badge = this.countReleases(date);
-				}
-				//TODO alre proprietà impostare defaults in deviceready
-				//TODO ora da $settings
-				var dd = new Date(Date.parse(date + " 06:00:00"));
-				$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
-				.then(function(result) {
-					console.log("add notification " + dd + " " + badge);
-				});
-			});
-		},
+		// addNotification: function(date) {
+		// 	$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
+		// 		var badge = 1;
+		// 		if (scheduled) {
+		// 			badge = this.countReleases(date);
+		// 		}
+		// 		//TODO alre proprietà impostare defaults in deviceready
+		// 		//TODO ora da $settings
+		// 		var dd = new Date(Date.parse(date + " 06:00:00"));
+		// 		$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
+		// 		.then(function(result) {
+		// 			console.log("add notification " + dd + " " + badge);
+		// 		});
+		// 	});
+		// },
 		//
-		removeNotification: function(date) {
-			$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
-				if (scheduled) {
-					var badge = this.countReleases(date);
-					if (badge == 0) {
-						$cordovaLocalNotification.cancel(date)
-						.then(function(result) {
-							console.log("cancel notification " + dd);
-						});		
-					} else {
-						//TODO alre proprietà impostare defaults in deviceready
-						//TODO ora da $settings
-						var dd = new Date(Date.parse(date + " 06:00:00"));
-						$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
-						.then(function(result) {
-							console.log("add notification " + dd + " " + badge);
-						});
-					}
-				}
-			});
-		}		
+		// removeNotification: function(date) {
+		// 	$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
+		// 		if (scheduled) {
+		// 			var badge = this.countReleases(date);
+		// 			if (badge == 0) {
+		// 				$cordovaLocalNotification.cancel(date)
+		// 				.then(function(result) {
+		// 					console.log("cancel notification " + dd);
+		// 				});		
+		// 			} else {
+		// 				//TODO alre proprietà impostare defaults in deviceready
+		// 				//TODO ora da $settings
+		// 				var dd = new Date(Date.parse(date + " 06:00:00"));
+		// 				$cordovaLocalNotification.add({ id: date, date: dd, title: "Comikku", message: "Seams to be some releases today", badge: badge })
+		// 				.then(function(result) {
+		// 					console.log("add notification " + dd + " " + badge);
+		// 				});
+		// 			}
+		// 		}
+		// 	});
+		// }		
 	};
 
   return DB;

@@ -6,7 +6,7 @@
 }
 
 .rmm-required:after {
-	content: '*';
+	/*content: '*';*/
 	margin-left: 4px;
 }
 
