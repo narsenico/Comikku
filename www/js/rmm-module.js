@@ -1,5 +1,5 @@
 /**
- * Ionic Angula module: rmm
+ * Ionic Angular module: rmm
  * - $utils
  * - $undoPopup: Undo Popup (google way)
  *   promise return: 'ok', 'timeout', 'discarded'
