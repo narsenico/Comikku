@@ -13,6 +13,7 @@
 
     <div class="buttons pull-right" ng-show="currentBar=='title'">
       <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
+      <button class="button button-icon icon ion-android-more" ng-click="openGroupByPopover($event)" ng-if="!isWishlist"></button>
     </div>
 
     <div class="buttons pull-right" ng-show="currentBar=='options'">
@@ -51,3 +52,14 @@
     </ion-list>
   </ion-content>
 </ion-view>
+
+<script id="groupby-popover.html" type="text/ng-template">
+  <ion-popover-view class="popover-menu" style="height: 112px">
+    <ion-content>
+      <ion-list>
+        <ion-radio ng-model="groupBy" ng-value="'week'" ng-change="closeGroupByPopover('week')">Group by week</ion-radio>
+        <ion-radio ng-model="groupBy" ng-value="'month'" ng-change="closeGroupByPopover('month')">Group by month</ion-radio>
+      </ion-list>
+    </ion-content>
+  </ion-popover-view>
+</script>

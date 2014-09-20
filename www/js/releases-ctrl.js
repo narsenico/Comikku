@@ -1,16 +1,44 @@
 angular.module('starter.controllers')
 .controller('ReleasesEntryCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$datex', '$toast', '$stateParams', 
-	'$debounce', '$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$filter', '$comicsData', '$settings', 
-	'$dateParser',
-function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toast, $stateParams, 
-	$debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, $comicsData, $settings,
-	$dateParser) {
+	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$datex', '$toast', '$ionicPopover',
+	'$stateParams', '$debounce', '$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$filter', 
+	'$comicsData', '$settings', '$dateParser',
+function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toast, $ionicPopover, 
+	$stateParams, $debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, 
+	$comicsData, $settings, $dateParser) {
 
-	//week, month, day (?)
-	var releaseGroupBy = $settings.userOptions.releaseGroupBy || 'week';
   //
   var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+
+	//week, month
+	var lblThisTime = null;
+	var lblNextTime = null;
+	var grpDateFormat = null;
+	var funcName = null;
+	var kkPref = 0; //è necessario altrimenti ci sarebbere elementi con chiave uguale anche se con gruppo diverso
+		//e questo crea problemi a ionic durante l'aggiornamento della lista
+
+	var changeGroup = function() {
+		if ($scope.groupBy == 'week') { 
+			lblThisTime = 'This week';
+			lblNextTime = 'Next week';
+			grpDateFormat = 'EEE, dd MMM yyyy';
+			funcName = 'firstDayOfWeek';
+			kkPref = 0;
+			$scope.thisTime = $datex.firstDayOfWeek().getTime();
+			$scope.nextTime = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
+		} else if ($scope.groupBy == 'month') {
+			lblThisTime = 'This month';
+			lblNextTime = 'Next month';
+			grpDateFormat = 'MMMM yyyy';
+			funcName = 'firstDayOfMonth';
+			kkPref = 10000;
+			$scope.thisTime = $datex.firstDayOfMonth().getTime();
+			$scope.nextTime = $datex.addMonths($datex.firstDayOfMonth(), 1).getTime();
+		}
+		$settings.userOptions.releaseGroupBy = $scope.groupBy;
+	};
+
   //
   var applyFilter = function() {
   	//console.log(new Date().getTime() + " applyFilter")
@@ -45,7 +73,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	    //	oppure senza gruppo, dal giorno corrente
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
-		    	return  $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
+		    	return  $datex[funcName]($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
 	    	} else {
 	    		return 'zzz';
 	    	}
@@ -57,7 +85,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	    //	oppure senza gruppo, dal giorno corrente
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
-		    	return  $datex.firstDayOfWeek($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
+		    	return  $datex[funcName]($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
 	    	} else {
 	    		return 'zzz';
 	    	}
@@ -69,7 +97,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     var grpKeys = _.keys(grps).sort();
     //aggiungo una chiave _kk sequenziale ad ogni elemento (sia intestazione gruppo che release) per renderlo
     //	univoco. usato come track da ngRepeat  
-    var kk = 0;
+    var kk = kkPref;
     for (var ii=0; ii<grpKeys.length; ii++) {
 
     	var grp = grps[grpKeys[ii]];
@@ -80,12 +108,12 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     	} else if (grpKeys[ii] == 'lll') {
     		if (!$scope.isWishlist) continue;
 				items.push({ _kk: kk++, label: 'Losts', count: grp.length });
-			} else if (grpKeys[ii] == $scope.thisPeriod) {
-				items.push({ _kk: kk++, label: 'This week', count: grp.length });
-			} else if (grpKeys[ii] == $scope.nextPeriod) {
-				items.push({ _kk: kk++, label: 'Next week', count: grp.length });
-    	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisPeriod) {
-    		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], 'EEE, dd MMM yyyy'), count: grp.length });
+			} else if (grpKeys[ii] == $scope.thisTime) {
+				items.push({ _kk: kk++, label: lblThisTime, count: grp.length });
+			} else if (grpKeys[ii] == $scope.nextTime) {
+				items.push({ _kk: kk++, label: lblNextTime, count: grp.length });
+    	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisTime) {
+    		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], grpDateFormat), count: grp.length });
     	} else {
     		continue;
     	}
@@ -107,14 +135,13 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	//
 	$scope.currentBar = 'title';
 	//
-  $scope.releases = [];
-	//
 	$scope.selectedReleases = [];
 	//
 	$scope.title = ($scope.isPurchased ? 'Purchased' : ($scope.isWishlist ? 'Losts & Wishlist' : ($scope.entry ? $scope.entry.name : 'Releases')));
 	//
-	$scope.thisPeriod = $datex.firstDayOfWeek().getTime();
-	$scope.nextPeriod = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
+	$scope.groupBy = $settings.userOptions.releaseGroupBy || 'week';
+	$scope.thisTime = null;
+	$scope.nextTime = null;
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
@@ -221,7 +248,29 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
   $scope.goBack = function() {
     $ionicNavBarDelegate.back();
   };
+	//
+	$scope.groupByPopover = null;
+	$scope.openGroupByPopover = function($event) {
+		if (!$scope.groupByPopover) {
+		  $ionicPopover.fromTemplateUrl('groupby-popover.html', {
+		    scope: $scope,
+		  }).then(function(popover) {
+		    $scope.groupByPopover = popover;
+		    $scope.groupByPopover.show($event);
+		  });
+		} else {
+			$scope.groupByPopover.show($event);
+		}
+	};
+	//
+	$scope.closeGroupByPopover = function(groupBy) {
+		$scope.groupBy = groupBy;
+		changeGroup();
+		applyFilter();
+		$scope.groupByPopover.hide();
+	};
   //
+  changeGroup();
   applyFilter();
 	
 	//gestisco il back hw in base a quello che sto facendo
@@ -236,7 +285,11 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 		}
 	}, 100);
 	//deregistro l'evento sul back all'uscita
-	$scope.$on('$destroy', function() { $scope._deregisterBackButton && $scope._deregisterBackButton(); });
+	$scope.$on('$destroy', function() {
+		$scope.groupByPopover && $scope.groupByPopover.remove(); 
+		$scope._deregisterBackButton && $scope._deregisterBackButton();
+		$settings.save(); 
+	});
 
 }])
 .directive('comicsRelease', function() {
@@ -250,6 +303,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);
     	$scope.near = ($scope.release.date && $scope.release.date == today);
 		  $scope.expired = ($scope.release.date && $scope.release.date <= today);
+
+		  //console.log($scope.release.number, $scope.release.date, $scope.release.comicdId, $scope.comics.name)
     }],
     templateUrl: 'templates/comicsRelease.html'
   };

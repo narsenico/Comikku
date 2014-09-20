@@ -403,17 +403,9 @@ function ($q, $filter, $datex, $utils, $cordovaDevice, $file, $cordovaLocalNotif
 		releaseGroupBy: 'week'
 	};
 
-	var filters = {
-		releases: {
-			purchasedVisible: true,
-			period: 'week' 
-		}
-	}
-
 	//localstorage DB
 	var DB = {
 		//
-		filters: filters,
 		userOptions: angular.copy(def),
 		//
 		load: function() {

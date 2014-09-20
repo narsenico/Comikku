@@ -212,7 +212,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 	//deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() {
 		$scope.orderByPopover && $scope.orderByPopover.remove(); 
-		$scope._deregisterBackButton && $scope._deregisterBackButton(); 
+		$scope._deregisterBackButton && $scope._deregisterBackButton();
+		$settings.save();
 	});
 
 }])
