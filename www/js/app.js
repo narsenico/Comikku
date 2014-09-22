@@ -4,9 +4,10 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'ngAnimate', 'rmm', 'dateParser'])
+angular.module('starter', 
+  ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'ngAnimate', 'rmm', 'dateParser', 'pascalprecht.translate'])
 
-.run(function($ionicPlatform) {
+.run(['$ionicPlatform', function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -18,7 +19,7 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
       StatusBar.styleDefault();
     }
   });
-})
+}])
 
 .provider('$initOptions', function $initOptionsProvider() {
   var str = window.localStorage.getItem("OPTIONS");
@@ -33,7 +34,25 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
   }];
 })
 
-.config(function($stateProvider, $urlRouterProvider, $initOptionsProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider',
+function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider) {
+  //TODO caricare le stringhe da file esterni
+  $translateProvider.translations('en', {
+    // 'Comics': 'Comics'
+  })
+  .translations('it', {
+    "Comics": "Fumetti",
+    "Comics removed": "Fumetti rimossi",
+    "Releases": "Uscite",
+    "Losts & Wishlist": "Persi &amp; desiderati",
+    "Purchased": "Acquistati",
+    "Settings": "Impostazioni"
+  });
+  //TODO recuperare la lingua da settings
+  //$translateProvider.determinePreferredLanguage(); <- non funziona in ionic
+  $translateProvider.preferredLanguage('it');
+
+  //
   $stateProvider
 
     .state('app', {
@@ -156,7 +175,7 @@ angular.module('starter', ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'n
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise($initOptionsProvider.defaultUrl);
-});
+}]);
 
 angular.module('starter.controllers', ['starter.services'])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $datex, $settings, $comicsData) {
@@ -165,7 +184,6 @@ angular.module('starter.controllers', ['starter.services'])
   $datex.weekStartMonday = $settings.userOptions.weekStartMonday == 'T';
   //leggo l'elenco dei fumetti (per utente USER)
   $comicsData.read("USER");
-
   //
   $scope.uid = $comicsData.uid;
   $scope.debugMode = ($settings.userOptions.debugMode == 'T');

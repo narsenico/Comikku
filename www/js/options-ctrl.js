@@ -2,10 +2,10 @@ angular.module('starter.controllers')
 .controller('OptionsCtrl', [
 	'$scope', '$q', '$datex', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
   '$file', '$timeout', '$filter', 
-  '$comicsData', '$settings', '$ionicNavBarDelegate',
+  '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate',
 function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
   $file, $timeout, $filter, 
-  $comicsData, $settings, $ionicNavBarDelegate) {
+  $comicsData, $settings, $ionicNavBarDelegate, $translate) {
   //
   $scope.version = null;
   $scope.lastBackup = 'not found';
@@ -192,6 +192,8 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
     // $scope.openPopover($event)
 
     // try {
+      console.log("TR" +
+         $filter('translate')('COMICS_TITLE'));
 
     // } catch (e) {
     //   console.log("TEST ERR" + e);

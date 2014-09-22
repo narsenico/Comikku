@@ -1,8 +1,8 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', '$toast', '$ionicPopover',
+	'$scope', '$ionicModal', '$timeout', '$state', '$filter', '$undoPopup', '$utils', '$debounce', '$toast', '$ionicPopover',
 	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings',
-function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $toast, $ionicPopover,
+function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $debounce, $toast, $ionicPopover,
 	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
 	//recupero i dati già ordinati
 	var orderedComics = null;
@@ -101,7 +101,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 			applyFilter();
 
 			$timeout(function() {
-			  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
+			  $undoPopup.show({title: $filter('translate')("Comics removed"), timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
 			      $scope.selectedComics = $comicsData.undoRemove() || [];
 			      $scope.canEdit = ($scope.selectedComics.length == 1);
