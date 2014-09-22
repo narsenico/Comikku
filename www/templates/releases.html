@@ -1,4 +1,4 @@
-<ion-view title="{{currentBar == 'options' ? '' : title}}">
+<ion-view title="{{currentBar == 'options' ? '' : title | translate}}">
 
   <ion-nav-bar class="bar bar-header bar-positive" ng-class="{'bar-calm': isWishlist, 'bar-dark': isPurchased, 'bar-options': currentBar=='options'}">
     <div class="buttons" ng-show="currentBar=='title'">
@@ -57,8 +57,8 @@
   <ion-popover-view class="popover-menu" style="height: 112px">
     <ion-content>
       <ion-list>
-        <ion-radio ng-model="groupBy" ng-value="'week'" ng-change="closeGroupByPopover('week')">Group by week</ion-radio>
-        <ion-radio ng-model="groupBy" ng-value="'month'" ng-change="closeGroupByPopover('month')">Group by month</ion-radio>
+        <ion-radio ng-model="groupBy" ng-value="'week'" ng-change="closeGroupByPopover('week')"><span translate>Group by week</span></ion-radio>
+        <ion-radio ng-model="groupBy" ng-value="'month'" ng-change="closeGroupByPopover('month')"><span translate>Group by month</span></ion-radio>
       </ion-list>
     </ion-content>
   </ion-popover-view>

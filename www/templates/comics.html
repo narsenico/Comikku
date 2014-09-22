@@ -67,9 +67,8 @@
   <ion-popover-view class="popover-menu" style="height: 112px">
     <ion-content>
       <ion-list>
-        <ion-radio ng-model="orderBy" ng-value="'bestRelease'" ng-change="closeOrderByPopover('bestRelease', false)">Sort by release</ion-radio>
-        <ion-radio ng-model="orderBy" ng-value="'name'" ng-change="closeOrderByPopover('name', false)">Sort by name</ion-radio>
-        <!-- <ion-radio ng-model="orderBy" ng-value="'lastUpdate'" ng-change="closeOrderByPopover('lastUpdate', true)">Last modified</ion-radio> -->
+        <ion-radio ng-model="orderBy" ng-value="'bestRelease'" ng-change="closeOrderByPopover('bestRelease', false)"><span translate>Sort by release</span></ion-radio>
+        <ion-radio ng-model="orderBy" ng-value="'name'" ng-change="closeOrderByPopover('name', false)"><span translate>Sort by name</span></ion-radio>
       </ion-list>
     </ion-content>
   </ion-popover-view>

@@ -30,7 +30,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
       templateUrl: 'weekStartMonday.html',
       scope: $scope,
       buttons: [{
-        text: 'Cancel',
+        text: $filter('translate')('Cancel'),
         type: 'button-default',
         onTap: function(e) { return false; }
       }]
@@ -47,7 +47,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
       templateUrl: 'defaultUrl.html',
       scope: $scope,
       buttons: [{
-        text: 'Cancel',
+        text: $filter('translate')('Cancel'),
         type: 'button-default',
         onTap: function(e) { return false; }
       }]

@@ -20,16 +20,16 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 
 	var changeGroup = function() {
 		if ($scope.groupBy == 'week') { 
-			lblThisTime = 'This week';
-			lblNextTime = 'Next week';
+			lblThisTime = $filter('translate')('This week');
+			lblNextTime = $filter('translate')('Next week');
 			grpDateFormat = 'EEE, dd MMM yyyy';
 			funcName = 'firstDayOfWeek';
 			kkPref = 0;
 			$scope.thisTime = $datex.firstDayOfWeek().getTime();
 			$scope.nextTime = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
 		} else if ($scope.groupBy == 'month') {
-			lblThisTime = 'This month';
-			lblNextTime = 'Next month';
+			lblThisTime = $filter('translate')('This month');
+			lblNextTime = $filter('translate')('Next month');
 			grpDateFormat = 'MMMM yyyy';
 			funcName = 'firstDayOfMonth';
 			kkPref = 10000;
@@ -104,10 +104,10 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 
     	if (grpKeys[ii] == 'zzz') {
     		if ($scope.entry == null && !$scope.isWishlist && !$scope.isPurchased) continue;
-				items.push({ _kk: kk++, label: 'Wishlist', count: grp.length });
+				items.push({ _kk: kk++, label: $filter('translate')('Wishlist'), count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
     		if (!$scope.isWishlist) continue;
-				items.push({ _kk: kk++, label: 'Losts', count: grp.length });
+				items.push({ _kk: kk++, label: $filter('translate')('Losts'), count: grp.length });
 			} else if (grpKeys[ii] == $scope.thisTime) {
 				items.push({ _kk: kk++, label: lblThisTime, count: grp.length });
 			} else if (grpKeys[ii] == $scope.nextTime) {
@@ -168,7 +168,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 			applyFilter();
 
 			$timeout(function() {
-			  $undoPopup.show({title: "Releases removed", timeout: "long"}).then(function(res) {
+			  $undoPopup.show({title: $filter('translate')('Releases removed'),
+			  								text: '<i class="icon ion-android-system-back"></i> ' + $filter('translate')('CANCEL'),  
+			  								timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
 			      $scope.selectedReleases = $comicsData.undoRemoveReleases() || [];
 			      $scope.canEdit = ($scope.selectedReleases.length == 1);
@@ -184,13 +186,13 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
   	if (release) {
 	    release.purchased = value;
 	    $comicsData.save();
-	    $toast.show(value == 'T' ? "Release purchased" : "Purchase canceled");
+	    $toast.show($filter('translate')(value == 'T' ? "Release purchased" : "Purchase canceled"));
 	  } else {
 	  	angular.forEach($scope.selectedReleases, function(release) {
 	  		release.purchased = value;
 	  	});
 	  	$comicsData.save();
-			$toast.show(value == 'T' ? "Releases purchased" : "Purchase canceled");
+			$toast.show($filter('translate')(value == 'T' ? "Releases purchased" : "Purchase canceled"));
 	  }
   };
   //

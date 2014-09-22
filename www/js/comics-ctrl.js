@@ -101,7 +101,9 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 			applyFilter();
 
 			$timeout(function() {
-			  $undoPopup.show({title: $filter('translate')("Comics removed"), timeout: "long"}).then(function(res) {
+			  $undoPopup.show({title: $filter('translate')('Comics removed'), 
+			  									text: '<i class="icon ion-android-system-back"></i> ' + $filter('translate')('CANCEL'), 
+			  									timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
 			      $scope.selectedComics = $comicsData.undoRemove() || [];
 			      $scope.canEdit = ($scope.selectedComics.length == 1);
