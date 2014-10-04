@@ -8,7 +8,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $comicsData, $settings, $ionicNavBarDelegate, $translate) {
   //
   $scope.version = null;
-  $scope.lastBackup = 'not found';
+  $scope.lastBackup = $filter('translate')('not found');
   $scope.currentUser = $comicsData.uid;
   //
   if (window.cordova) {
@@ -61,8 +61,8 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.resetOptions = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Reset to default Settings?'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Reset to default Settings?')
     }).then(function(res) {
       if (res) {
         $settings.loadDefault();
@@ -75,20 +75,20 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.deleteAllData = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Delete all data?'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Delete all data?')
     }).then(function(res) {
       if (res) {
         $comicsData.clear();
         $comicsData.save();
-        $toast.show("Data deleted");
+        $toast.show($filter('translate')('Data deleted'));
       }
     });
   };
   //
   $scope.repairData = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
+      title: $filter('translate')('Confirm'),
       template: 'Repair data?'
     }).then(function(res) {
       if (res) {
@@ -106,20 +106,20 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
         $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
       }, function(error) {
         console.log('readLastBackup ' + JSON.stringify(error));
-        $scope.lastBackup = 'not found';
+        $scope.lastBackup = $filter('translate')('not found');
       });
     }
   };
   //
   $scope.backup = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Backup data? Previous backup will be overridden.'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Backup data? Previous backup will be overridden.')
     }).then(function(res) {
       if (res) {
         $comicsData.backupDataToFile().then(function(res) {
           $scope.readLastBackup();
-          $toast.show("Backup complete");
+          $toast.show($filter('translate')('Backup complete'));
         }, function(error) {
           $toast.show("Write error " + error.code);
         });
@@ -129,12 +129,12 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.restore = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Restore data from backup? Current data will be overridden.'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Restore data from backup? Current data will be overridden.')
     }).then(function(res) {
       if (res) {
         $comicsData.restoreDataFromFile().then(function(res) {
-          $toast.show("Restore complete");
+          $toast.show($filter('translate')('Restore complete'));
         }, function(error) {
           $toast.show("Read error " + error.code);
         });

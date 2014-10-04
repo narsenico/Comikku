@@ -93,9 +93,21 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "On start show": "All'avvio mostra",
     "Data": "Dati",
     "Delete all data": "Cancella tutti i dati",
-    "Reset settings": "Carica le impostazioni di default",
+    "Reset settings": "Ripristina le impostazioni di default",
     "Cancel": "Annulla",
-    "About": "Informazioni"
+    "About": "Informazioni",
+    "Backup data": "Esegui il backup dei dati",
+    "Restore data": "Ripristina i dati",
+    "Last backup:": "Ultimo backup:",
+    "not found": "non trovato",
+    "Backup data? Previous backup will be overridden.": "Eseguire il backup dei dati? Eventuali backup precedenti verranno sovrascritti.",
+    "Backup complete": "Backup completo",
+    "Restore data from backup? Current data will be overridden.": "Ripristinare i dati dal bakcup? I dati correnti verranno sovrascritti.",
+    "Restore complete": "Ripristino completato",
+    "Confirm": "Conferma",
+    "Delete all data?": "Eliminare tutti i dati?",
+    "Data deleted": "Dati eliminati",
+    "Reset to default Settings?": "Ripristinare le impostazioni di default?"
   });
   //TODO recuperare la lingua da settings
   //$translateProvider.determinePreferredLanguage(); <- non funziona in ionic
