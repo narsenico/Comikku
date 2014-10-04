@@ -107,7 +107,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Confirm": "Conferma",
     "Delete all data?": "Eliminare tutti i dati?",
     "Data deleted": "Dati eliminati",
-    "Reset to default Settings?": "Ripristinare le impostazioni di default?"
+    "Reset to default Settings?": "Ripristinare le impostazioni di default?",
+    "Cancel": "Annulla",
+    "OK": "OK"
   });
   //TODO recuperare la lingua da settings
   //$translateProvider.determinePreferredLanguage(); <- non funziona in ionic

@@ -62,7 +62,9 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.resetOptions = function() {
     $ionicPopup.confirm({
       title: $filter('translate')('Confirm'),
-      template: $filter('translate')('Reset to default Settings?')
+      template: $filter('translate')('Reset to default Settings?'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $settings.loadDefault();
@@ -76,7 +78,9 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.deleteAllData = function() {
     $ionicPopup.confirm({
       title: $filter('translate')('Confirm'),
-      template: $filter('translate')('Delete all data?')
+      template: $filter('translate')('Delete all data?'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $comicsData.clear();
@@ -114,7 +118,9 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.backup = function() {
     $ionicPopup.confirm({
       title: $filter('translate')('Confirm'),
-      template: $filter('translate')('Backup data? Previous backup will be overridden.')
+      template: $filter('translate')('Backup data? Previous backup will be overridden.'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $comicsData.backupDataToFile().then(function(res) {
@@ -130,7 +136,9 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.restore = function() {
     $ionicPopup.confirm({
       title: $filter('translate')('Confirm'),
-      template: $filter('translate')('Restore data from backup? Current data will be overridden.')
+      template: $filter('translate')('Restore data from backup? Current data will be overridden.'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $comicsData.restoreDataFromFile().then(function(res) {
