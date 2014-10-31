@@ -226,8 +226,9 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
       comics: '='
     },
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
+      var today = moment().format('YYYY-MM-DD');
       $scope.best = $scope.comics.bestRelease;
-      var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+      $scope.datestr = _.isEmpty($scope.best.date) ? '' : moment($scope.best.date).format('DD MMM');
       $scope.near = $scope.best.date && $scope.best.date == today;
       $scope.expired = $scope.best.date && $scope.best.date <= today;
     }],

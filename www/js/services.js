@@ -400,7 +400,8 @@ function ($q, $filter, $datex, $utils, $file) {
 		comicsOrderByDesc: 'F',
 		weekStartMonday: 'F',
 		defaultUrl: '/app/comics',
-		releaseGroupBy: 'week'
+		releaseGroupBy: 'week',
+		language: null //system
 	};
 
 	//localstorage DB

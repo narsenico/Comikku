@@ -10,6 +10,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.version = null;
   $scope.lastBackup = $filter('translate')('not found');
   $scope.currentUser = $comicsData.uid;
+  $scope.langinfo = 'moment: ' + moment.locale() + ' - translate: ' + $translate.use();
   //
   if (window.cordova) {
     window.cordova.getAppVersion(function (version) {
@@ -200,8 +201,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
     // $scope.openPopover($event)
 
     // try {
-      console.log("TR" +
-         $filter('translate')('COMICS_TITLE'));
+      console.log(window.cordova);
 
     // } catch (e) {
     //   console.log("TEST ERR" + e);

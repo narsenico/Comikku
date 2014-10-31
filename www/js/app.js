@@ -1,25 +1,11 @@
-// Ionic Starter App
+  // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', 
-  ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'ngAnimate', 'rmm', 'dateParser', 'pascalprecht.translate'])
-
-.run(['$ionicPlatform', function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
-}])
+  ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'ngAnimate', 'rmm', 'dateParser', 'pascalprecht.translate', 'tmh.dynamicLocale'])
 
 .provider('$initOptions', function $initOptionsProvider() {
   var str = window.localStorage.getItem("OPTIONS");
@@ -34,8 +20,11 @@ angular.module('starter',
   }];
 })
 
-.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider',
-function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider', 'tmhDynamicLocaleProvider',
+function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider, tmhDynamicLocaleProvider) {
+  //
+  tmhDynamicLocaleProvider.localeLocationPattern('js/angular-locale_{{locale}}.js');
+
   //TODO caricare le stringhe da file esterni
   $translateProvider.translations('en', {
     // 'Comics': 'Comics'
@@ -111,9 +100,11 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Cancel": "Annulla",
     "OK": "OK"
   });
-  //TODO recuperare la lingua da settings
-  //$translateProvider.determinePreferredLanguage(); <- non funziona in ionic
-  $translateProvider.preferredLanguage('it');
+
+  //imposto la lingua di default
+  $translateProvider.preferredLanguage("en");
+  $translateProvider.fallbackLanguage("en");
+  moment.locale('en');
 
   //
   $stateProvider
@@ -238,10 +229,38 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise($initOptionsProvider.defaultUrl);
+}])
+
+.run(['$ionicPlatform', '$translate', function($ionicPlatform, $translate) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+    //leggo la lingua di sistema e la uso in moment e $translate
+    if(typeof navigator.globalization !== "undefined") {
+      navigator.globalization.getPreferredLanguage(function(language) {
+        var lang = (language.value).split("-")[0];
+        moment.locale(lang);
+        $translate.use(lang).then(function(data) {
+          console.log("SUCCESS -> " + data);
+        }, function(error) {
+          console.log("ERROR -> " + error);
+        });
+      }, null);
+    }
+  });
 }]);
 
 angular.module('starter.controllers', ['starter.services'])
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $datex, $settings, $comicsData) {
+.controller('AppCtrl', 
+  function($scope, $ionicModal, $timeout, $datex, $settings, $comicsData, 
+    $translate, $ionicPlatform, tmhDynamicLocale) {
   //
   $settings.load();
   $datex.weekStartMonday = $settings.userOptions.weekStartMonday == 'T';
@@ -250,4 +269,31 @@ angular.module('starter.controllers', ['starter.services'])
   //
   $scope.uid = $comicsData.uid;
   $scope.debugMode = ($settings.userOptions.debugMode == 'T');
+
+  console.log("navigator.language " + navigator.language)
+
+  //TODO problema: tmhDynamicLocale carica il locale con un certo ritardo
+  //  a volte dopo che la prima pagina è stata caricata con il locale di default
+  //  è molto evidente se come prima pagina si imposta "uscite"
+
+  //vedere https://github.com/angular-ui/ui-router/wiki
+  // cercare resolve
+
+  // $ionicPlatform.ready(function() {
+  //   if ($settings.userOptions.language) {
+  //     console.log("set lang from settings " + $settings.userOptions.language);
+  //     $translate.use($settings.userOptions.language);
+  //     tmhDynamicLocale.set($settings.userOptions.language);      
+  //   } else if (navigator.language) {
+  //     var lang = navigator.language.toLowerCase();
+  //     console.log("set lang from system " + lang);
+  //     $translate.use(lang);
+  //     tmhDynamicLocale.set(lang).then(function() {
+  //       console.log("tmhDynamicLocale SET");
+  //     }, function() {  
+  //       console.log("tmhDynamicLocale SET ERR");
+  //     });
+  //   }
+  // });
+
 });

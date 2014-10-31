@@ -1,15 +1,14 @@
 angular.module('starter.controllers')
 .controller('ReleasesEntryCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$datex', '$toast', '$ionicPopover',
+	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$toast', '$ionicPopover',
 	'$stateParams', '$debounce', '$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$filter', 
 	'$comicsData', '$settings', '$dateParser',
-function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toast, $ionicPopover, 
+function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ionicPopover, 
 	$stateParams, $debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, 
 	$comicsData, $settings, $dateParser) {
 
   //
-  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
-
+  var today = moment().format('YYYY-MM-DD');
 	//week, month
 	var lblThisTime = null;
 	var lblNextTime = null;
@@ -22,19 +21,19 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 		if ($scope.groupBy == 'week') { 
 			lblThisTime = $filter('translate')('This week');
 			lblNextTime = $filter('translate')('Next week');
-			grpDateFormat = 'EEE, dd MMM yyyy';
-			funcName = 'firstDayOfWeek';
+			grpDateFormat = 'ddd, DD MMM YYYY';
+			funcName = 'week';
 			kkPref = 0;
-			$scope.thisTime = $datex.firstDayOfWeek().getTime();
-			$scope.nextTime = $datex.addDays($datex.firstDayOfWeek(), 7).getTime();
+			$scope.thisTime = moment().startOf('week').format('YYYY-MM-DD');
+			$scope.nextTime = moment($scope.thisTime).add(1, 'w').format('YYYY-MM-DD');
 		} else if ($scope.groupBy == 'month') {
 			lblThisTime = $filter('translate')('This month');
 			lblNextTime = $filter('translate')('Next month');
-			grpDateFormat = 'MMMM yyyy';
-			funcName = 'firstDayOfMonth';
+			grpDateFormat = 'MMMM YYYY';
+			funcName = 'month';
 			kkPref = 10000;
-			$scope.thisTime = $datex.firstDayOfMonth().getTime();
-			$scope.nextTime = $datex.addMonths($datex.firstDayOfMonth(), 1).getTime();
+			$scope.thisTime = moment().startOf('month').format('YYYY-MM-DD');
+			$scope.nextTime = moment($scope.thisTime).add(1, 'M').format('YYYY-MM-DD');
 		}
 		$settings.userOptions.releaseGroupBy = $scope.groupBy;
 	};
@@ -73,7 +72,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	    //	oppure senza gruppo, dal giorno corrente
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
-		    	return  $datex[funcName]($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
+		    	return moment(rel.date).startOf(funcName).format('YYYY-MM-DD');
 	    	} else {
 	    		return 'zzz';
 	    	}
@@ -85,7 +84,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 	    //	oppure senza gruppo, dal giorno corrente
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
-		    	return  $datex[funcName]($dateParser(rel.date, 'yyyy-MM-dd')).getTime();
+		    	return moment(rel.date).startOf(funcName).format('YYYY-MM-DD');
 	    	} else {
 	    		return 'zzz';
 	    	}
@@ -95,6 +94,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
     //creo un array che contiene sia le intestazioni del gruppo che i dati per non essere costretto
     //	ad utilzzare ng-repeat innestati
     var grpKeys = _.keys(grps).sort();
+
     //aggiungo una chiave _kk sequenziale ad ogni elemento (sia intestazione gruppo che release) per renderlo
     //	univoco. usato come track da ngRepeat  
     var kk = kkPref;
@@ -113,7 +113,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
 			} else if (grpKeys[ii] == $scope.nextTime) {
 				items.push({ _kk: kk++, label: lblNextTime, count: grp.length });
     	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisTime) {
-    		items.push({ _kk: kk++, label: $filter('date')(grpKeys[ii], grpDateFormat), count: grp.length });
+    		items.push({ _kk: kk++, label: moment(grpKeys[ii]).format(grpDateFormat), count: grp.length });
     	} else {
     		continue;
     	}
@@ -301,7 +301,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $datex, $toa
       release: '='
     },
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
-  	  var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+  	  var today = moment().format('YYYY-MM-DD');
+  	  $scope.datestr = _.isEmpty($scope.release.date) ? '' : moment($scope.release.date).format('ddd, DD MMM');
     	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);
     	$scope.near = ($scope.release.date && $scope.release.date == today);
 		  $scope.expired = ($scope.release.date && $scope.release.date <= today);
