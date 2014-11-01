@@ -8,19 +8,19 @@ function indexByKey(arr, value, property) {
 
 //TODO rivedere l'inglese
 var PERIODICITIES = {
-	"W1": "weekly",
-	"M1": "monthly",
-	"M2": "bimonthly",
-	"M3": "3-monthly",
-	"M4": "4-monthly",
-	"M6": "6-monthly",
+	"w1": "Weekly",
+	"M1": "Monthly",
+	"M2": "Every 2 months",
+	"M3": "Every 3 months",
+	"M4": "Every 4 months",
+	"M6": "Every 6 months",
 	"Y1": "Annual" 
 };
 
 angular.module('starter.services', [])
 
-.factory('$comicsData', ['$q', '$filter', '$datex', '$utils', '$file', 
-function ($q, $filter, $datex, $utils, $file) {
+.factory('$comicsData', ['$q', '$filter', '$utils', '$file', 
+function ($q, $filter, $utils, $file) {
 	//console.log("new $comicsData");
 
 	var updated = function(item) { item.lastUpdate = new Date().getTime(); };

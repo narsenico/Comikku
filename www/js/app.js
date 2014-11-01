@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', 
-  ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'ngAnimate', 'rmm', 'dateParser', 'pascalprecht.translate', 'tmh.dynamicLocale'])
+  ['ionic', 'pasvaz.bindonce', 'starter.controllers', 'ngAnimate', 'rmm', 'dateParser', 'pascalprecht.translate'])
 
 .provider('$initOptions', function $initOptionsProvider() {
   var str = window.localStorage.getItem("OPTIONS");
@@ -20,10 +20,8 @@ angular.module('starter',
   }];
 })
 
-.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider', 'tmhDynamicLocaleProvider',
-function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider, tmhDynamicLocaleProvider) {
-  //
-  tmhDynamicLocaleProvider.localeLocationPattern('js/angular-locale_{{locale}}.js');
+.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider',
+function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider) {
 
   //TODO caricare le stringhe da file esterni
   $translateProvider.translations('en', {
@@ -258,42 +256,15 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
 }]);
 
 angular.module('starter.controllers', ['starter.services'])
-.controller('AppCtrl', 
-  function($scope, $ionicModal, $timeout, $datex, $settings, $comicsData, 
-    $translate, $ionicPlatform, tmhDynamicLocale) {
+.controller('AppCtrl', [
+  '$scope', '$settings', '$comicsData',
+  function($scope, $settings, $comicsData) {
   //
   $settings.load();
-  $datex.weekStartMonday = $settings.userOptions.weekStartMonday == 'T';
+  moment.weekStartOnMonday($settings.userOptions.weekStartMonday == 'T');
   //leggo l'elenco dei fumetti (per utente USER)
   $comicsData.read("USER");
   //
   $scope.uid = $comicsData.uid;
   $scope.debugMode = ($settings.userOptions.debugMode == 'T');
-
-  console.log("navigator.language " + navigator.language)
-
-  //TODO problema: tmhDynamicLocale carica il locale con un certo ritardo
-  //  a volte dopo che la prima pagina è stata caricata con il locale di default
-  //  è molto evidente se come prima pagina si imposta "uscite"
-
-  //vedere https://github.com/angular-ui/ui-router/wiki
-  // cercare resolve
-
-  // $ionicPlatform.ready(function() {
-  //   if ($settings.userOptions.language) {
-  //     console.log("set lang from settings " + $settings.userOptions.language);
-  //     $translate.use($settings.userOptions.language);
-  //     tmhDynamicLocale.set($settings.userOptions.language);      
-  //   } else if (navigator.language) {
-  //     var lang = navigator.language.toLowerCase();
-  //     console.log("set lang from system " + lang);
-  //     $translate.use(lang);
-  //     tmhDynamicLocale.set(lang).then(function() {
-  //       console.log("tmhDynamicLocale SET");
-  //     }, function() {  
-  //       console.log("tmhDynamicLocale SET ERR");
-  //     });
-  //   }
-  // });
-
-});
+}]);

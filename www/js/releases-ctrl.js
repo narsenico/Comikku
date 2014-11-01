@@ -22,15 +22,15 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			lblThisTime = $filter('translate')('This week');
 			lblNextTime = $filter('translate')('Next week');
 			grpDateFormat = 'ddd, DD MMM YYYY';
-			funcName = 'week';
+			funcName = 'firstDayOfWeek';
 			kkPref = 0;
-			$scope.thisTime = moment().startOf('week').format('YYYY-MM-DD');
+			$scope.thisTime = moment().firstDayOfWeek().format('YYYY-MM-DD');
 			$scope.nextTime = moment($scope.thisTime).add(1, 'w').format('YYYY-MM-DD');
 		} else if ($scope.groupBy == 'month') {
 			lblThisTime = $filter('translate')('This month');
 			lblNextTime = $filter('translate')('Next month');
 			grpDateFormat = 'MMMM YYYY';
-			funcName = 'month';
+			funcName = 'firstDayOfMonth';
 			kkPref = 10000;
 			$scope.thisTime = moment().startOf('month').format('YYYY-MM-DD');
 			$scope.nextTime = moment($scope.thisTime).add(1, 'M').format('YYYY-MM-DD');
@@ -72,7 +72,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	    //	oppure senza gruppo, dal giorno corrente
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
-		    	return moment(rel.date).startOf(funcName).format('YYYY-MM-DD');
+		    	return moment(rel.date)[funcName]().format('YYYY-MM-DD');
 	    	} else {
 	    		return 'zzz';
 	    	}
@@ -84,7 +84,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	    //	oppure senza gruppo, dal giorno corrente
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
-		    	return moment(rel.date).startOf(funcName).format('YYYY-MM-DD');
+		    	return moment(rel.date)[funcName]().format('YYYY-MM-DD');
 	    	} else {
 	    		return 'zzz';
 	    	}
@@ -314,9 +314,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 })
 .controller('ReleaseEditorCtrl', [
 	'$scope', '$stateParams', '$ionicNavBarDelegate', '$comicsData', '$settings',
-	'$filter', '$dateParser', '$datex',
+	'$filter', '$dateParser',
 function($scope, $stateParams, $ionicNavBarDelegate, $comicsData, $settings,
-	$filter, $dateParser, $datex) {
+	$filter, $dateParser) {
   $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
   //originale
   $scope.master = $comicsData.getReleaseById($scope.entry, $stateParams.releaseId);
@@ -334,8 +334,7 @@ function($scope, $stateParams, $ionicNavBarDelegate, $comicsData, $settings,
 	      if (!_.isEmpty($scope.entry.periodicity) && maxrel.date) {
 	      	var type = $scope.entry.periodicity.charAt(0);
 	    		var amount = parseInt($scope.entry.periodicity.substr(1));
-	    		//console.log(type, amount)
-	    		$scope.master.date = $filter('date')( $datex.add( $dateParser(maxrel.date, 'yyyy-MM-dd'), type, amount ), 'yyyy-MM-dd');
+	    		$scope.master.date = moment(maxrel.date).add(amount, type).format('YYYY-MM-DD');
 	      }
 	    }
 	  }

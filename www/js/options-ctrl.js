@@ -1,9 +1,9 @@
 angular.module('starter.controllers')
 .controller('OptionsCtrl', [
-	'$scope', '$q', '$datex', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
+	'$scope', '$q', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
   '$file', '$timeout', '$filter', 
   '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate',
-function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
+function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
   $file, $timeout, $filter, 
   $comicsData, $settings, $ionicNavBarDelegate, $translate) {
   //
@@ -22,7 +22,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.userOptions = $settings.userOptions;
   //console.log($scope.userOptions)
   $scope.optionsChanged = function() {
-    $datex.weekStartMonday = $scope.userOptions.weekStartMonday == 'T';
+    moment.weekStartOnMonday($scope.userOptions.weekStartMonday == 'T');
     $settings.save();    
   };
   //
