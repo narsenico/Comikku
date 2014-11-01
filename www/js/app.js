@@ -100,8 +100,11 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
   });
 
   //imposto la lingua di default
-  $translateProvider.preferredLanguage("en");
-  $translateProvider.fallbackLanguage("en");
+  $translateProvider.preferredLanguage("en")
+    .fallbackLanguage("en")
+    .determinePreferredLanguage()
+    .useStorage('StorageService');
+  //
   moment.locale('en');
 
   //
@@ -230,6 +233,12 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
 }])
 
 .run(['$ionicPlatform', '$translate', function($ionicPlatform, $translate) {
+
+  //imposto la lingua a moment prima che parta cordova
+  //  visto che solitamente parte dopo il caricamento della prima pagina
+  moment.locale($translate.use());
+  console.log("Language moment " + moment.locale() + " translate " + $translate.use());
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
