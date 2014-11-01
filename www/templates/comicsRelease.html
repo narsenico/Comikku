@@ -1,6 +1,6 @@
 <div class="number" ng-class="{expired: expired, near: near, wishlist: !release.date}">{{release.number}}</div>
 <div class="title"><i class="icon ion-ios7-filing-outline" ng-if="comics.reserved=='T'"></i> {{comics.name}}</div>
-<div class="date">{{release.date | date : 'EEE, dd MMM'}}</div>
+<div class="date">{{datestr}}</div>
 <div class="icons">
 <i class="icon ion-ios7-briefcase purchased" ng-show="release.purchased == 'T'"></i>
 <i class="icon ion-alert expired" ng-class="{near: near}" ng-if="release.purchased != 'T' && expired"></i>

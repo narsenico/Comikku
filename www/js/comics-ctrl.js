@@ -1,8 +1,8 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
-	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$debounce', '$toast', '$ionicPopover',
+	'$scope', '$ionicModal', '$timeout', '$state', '$filter', '$undoPopup', '$utils', '$debounce', '$toast', '$ionicPopover',
 	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings',
-function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $toast, $ionicPopover,
+function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $debounce, $toast, $ionicPopover,
 	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
 	//recupero i dati già ordinati
 	var orderedComics = null;
@@ -101,7 +101,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
 			applyFilter();
 
 			$timeout(function() {
-			  $undoPopup.show({title: "Comics removed", timeout: "long"}).then(function(res) {
+			  $undoPopup.show({title: $filter('translate')('Comics removed'), 
+			  									text: '<i class="icon ion-android-system-back"></i> ' + $filter('translate')('CANCEL'), 
+			  									timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
 			      $scope.selectedComics = $comicsData.undoRemove() || [];
 			      $scope.canEdit = ($scope.selectedComics.length == 1);
@@ -224,8 +226,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $debounce, $
       comics: '='
     },
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
+      var today = moment().format('YYYY-MM-DD');
       $scope.best = $scope.comics.bestRelease;
-      var today = $filter('date')(new Date(), 'yyyy-MM-dd');
+      $scope.datestr = _.isEmpty($scope.best.date) ? '' : moment($scope.best.date).format('DD MMM');
       $scope.near = $scope.best.date && $scope.best.date == today;
       $scope.expired = $scope.best.date && $scope.best.date <= today;
     }],

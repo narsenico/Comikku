@@ -1,15 +1,16 @@
 angular.module('starter.controllers')
 .controller('OptionsCtrl', [
-	'$scope', '$q', '$datex', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
+	'$scope', '$q', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
   '$file', '$timeout', '$filter', 
-  '$comicsData', '$settings', '$ionicNavBarDelegate',
-function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
+  '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate',
+function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
   $file, $timeout, $filter, 
-  $comicsData, $settings, $ionicNavBarDelegate) {
+  $comicsData, $settings, $ionicNavBarDelegate, $translate) {
   //
   $scope.version = null;
-  $scope.lastBackup = 'not found';
+  $scope.lastBackup = $filter('translate')('not found');
   $scope.currentUser = $comicsData.uid;
+  $scope.langinfo = 'moment: ' + moment.locale() + ' - translate: ' + $translate.use();
   //
   if (window.cordova) {
     window.cordova.getAppVersion(function (version) {
@@ -21,7 +22,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   $scope.userOptions = $settings.userOptions;
   //console.log($scope.userOptions)
   $scope.optionsChanged = function() {
-    $datex.weekStartMonday = $scope.userOptions.weekStartMonday == 'T';
+    moment.weekStartOnMonday($scope.userOptions.weekStartMonday == 'T');
     $settings.save();    
   };
   //
@@ -30,7 +31,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
       templateUrl: 'weekStartMonday.html',
       scope: $scope,
       buttons: [{
-        text: 'Cancel',
+        text: $filter('translate')('Cancel'),
         type: 'button-default',
         onTap: function(e) { return false; }
       }]
@@ -47,7 +48,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
       templateUrl: 'defaultUrl.html',
       scope: $scope,
       buttons: [{
-        text: 'Cancel',
+        text: $filter('translate')('Cancel'),
         type: 'button-default',
         onTap: function(e) { return false; }
       }]
@@ -61,8 +62,10 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.resetOptions = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Reset to default Settings?'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Reset to default Settings?'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $settings.loadDefault();
@@ -75,20 +78,22 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.deleteAllData = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Delete all data?'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Delete all data?'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $comicsData.clear();
         $comicsData.save();
-        $toast.show("Data deleted");
+        $toast.show($filter('translate')('Data deleted'));
       }
     });
   };
   //
   $scope.repairData = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
+      title: $filter('translate')('Confirm'),
       template: 'Repair data?'
     }).then(function(res) {
       if (res) {
@@ -106,20 +111,22 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
         $scope.lastBackup = $filter('date')(result.modificationTime, 'medium');
       }, function(error) {
         console.log('readLastBackup ' + JSON.stringify(error));
-        $scope.lastBackup = 'not found';
+        $scope.lastBackup = $filter('translate')('not found');
       });
     }
   };
   //
   $scope.backup = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Backup data? Previous backup will be overridden.'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Backup data? Previous backup will be overridden.'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $comicsData.backupDataToFile().then(function(res) {
           $scope.readLastBackup();
-          $toast.show("Backup complete");
+          $toast.show($filter('translate')('Backup complete'));
         }, function(error) {
           $toast.show("Write error " + error.code);
         });
@@ -129,12 +136,14 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
   //
   $scope.restore = function() {
     $ionicPopup.confirm({
-      title: 'Confirm',
-      template: 'Restore data from backup? Current data will be overridden.'
+      title: $filter('translate')('Confirm'),
+      template: $filter('translate')('Restore data from backup? Current data will be overridden.'),
+      cancelText: $filter('translate')('Cancel'),
+      okText: $filter('translate')('OK')
     }).then(function(res) {
       if (res) {
         $comicsData.restoreDataFromFile().then(function(res) {
-          $toast.show("Restore complete");
+          $toast.show($filter('translate')('Restore complete'));
         }, function(error) {
           $toast.show("Read error " + error.code);
         });
@@ -192,6 +201,7 @@ function($scope, $q, $datex, $ionicPopup, $undoPopup, $toast, $ionicPopover, $io
     // $scope.openPopover($event)
 
     // try {
+      console.log(window.cordova);
 
     // } catch (e) {
     //   console.log("TEST ERR" + e);
