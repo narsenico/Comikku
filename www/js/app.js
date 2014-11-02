@@ -96,7 +96,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Data deleted": "Dati eliminati",
     "Reset to default Settings?": "Ripristinare le impostazioni di default?",
     "Cancel": "Annulla",
-    "OK": "OK"
+    "OK": "OK",
+    "Enabled": "Abilitata",
+    "Disabled": "Disabilitata"
   });
 
   //imposto la lingua di default

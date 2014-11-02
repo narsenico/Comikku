@@ -14,7 +14,7 @@
 						</div>
 					</label>
 				</ion-item> -->
-				<ion-item class="item item-toggle">
+				<!-- <ion-item class="item item-toggle">
 					<span translate>Auto fill release data</span>
 					<label class="toggle">
 						<input type="checkbox" ng-model="userOptions.autoFillReleaseData" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
@@ -22,6 +22,11 @@
 						<div class="handle"></div>
 						</div>
 					</label>
+				</ion-item> -->
+				<ion-item class="item" ng-click="chooseAutoFill()">
+					<span translate>Auto fill release data</span>
+					<p class="option-value" ng-show="userOptions.autoFillReleaseData == 'T'" translate>Enabled</p>
+					<p class="option-value" ng-show="userOptions.autoFillReleaseData != 'T'" translate>Disabled</p>
 				</ion-item>
 				<ion-item class="item" ng-click="chooseWeekStart()">
 					<span translate>Week start on</span>
@@ -46,6 +51,13 @@
   	</form>
   </ion-content>
 </ion-view>
+
+<script id="autoFillReleaseData.html" type="text/ng-template">
+	<ion-list>
+		<ion-radio ng-model="userOptions.autoFillReleaseData" ng-value="'F'" ng-change="autoFillPopup.close('F')"><span translate>Disabled</span></ion-radio>
+		<ion-radio ng-model="userOptions.autoFillReleaseData" ng-value="'T'" ng-change="autoFillPopup.close('T')"><span translate>Enabled</span></ion-radio>
+	</ion-list>
+</script>
 
 <script id="weekStartMonday.html" type="text/ng-template">
 	<ion-list>

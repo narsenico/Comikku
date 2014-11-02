@@ -26,6 +26,23 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
     $settings.save();    
   };
   //
+  $scope.chooseAutoFill = function() {
+    $scope.autoFillPopup = $ionicPopup.show({
+      templateUrl: 'autoFillReleaseData.html',
+      scope: $scope,
+      buttons: [{
+        text: $filter('translate')('Cancel'),
+        type: 'button-default',
+        onTap: function(e) { return false; }
+      }]
+    });
+    $scope.autoFillPopup.then(function(res) {
+      if (res) {
+        $scope.optionsChanged();
+      }
+    });
+  };
+  //
   $scope.chooseWeekStart = function() {
     $scope.weekStartPopup = $ionicPopup.show({
       templateUrl: 'weekStartMonday.html',
