@@ -75,6 +75,10 @@
 	font-size: 24px;
 }
 
+.bar.bar-header .button.icon.ion-android-more:before {
+	font-size: 18px;
+}
+
 .bar.bar-header.bar-options {
 	background-color: #FFFFFF;
 	border-bottom-color: #33B5E5;
