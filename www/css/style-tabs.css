@@ -1,0 +1,11 @@
+.tabs-fullwidth .tab-item { max-width: 100%; }
+
+.button.button-icon.logo {
+	background-image: url('../img/logo32.png');
+	background-size: 32px;
+	background-position-x: right;
+	background-repeat: no-repeat;
+	min-width: 37px;
+	min-height: 31px;
+	line-height: 31px;
+}

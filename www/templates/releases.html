@@ -3,7 +3,7 @@
   <ion-nav-bar class="bar bar-header bar-positive" ng-class="{'bar-calm': isWishlist, 'bar-dark': isPurchased, 'bar-options': currentBar=='options'}">
     <div class="buttons" ng-show="currentBar=='title'">
       <button class="button-icon button back-button ion-android-arrow-back" ng-if="entry" ng-click="goBack()"></button>
-      <button menu-toggle="left" class="button button-icon icon ion-navicon" ng-if="!entry"></button>
+      <button class="button button-icon logo" ng-if="!entry"></button>
     </div>
 
     <div class="buttons" ng-show="currentBar=='options'">
@@ -13,7 +13,7 @@
 
     <div class="buttons pull-right" ng-show="currentBar=='title'">
       <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
-      <button class="button button-icon icon ion-android-more" ng-click="openGroupByPopover($event)" ng-if="!isWishlist"></button>
+      <button class="button button-icon icon ion-android-more" ng-click="openMenuPopover($event)"></button>
     </div>
 
     <div class="buttons pull-right" ng-show="currentBar=='options'">
@@ -53,12 +53,18 @@
   </ion-content>
 </ion-view>
 
-<script id="groupby-popover.html" type="text/ng-template">
-  <ion-popover-view class="popover-menu" style="height: 112px">
+<script id="menu-popover.html" type="text/ng-template">
+  <ion-popover-view class="popover-menu" style="height: 333px">
     <ion-content>
       <ion-list>
-        <ion-radio ng-model="groupBy" ng-value="'week'" ng-change="closeGroupByPopover('week')"><span translate>Group by week</span></ion-radio>
-        <ion-radio ng-model="groupBy" ng-value="'month'" ng-change="closeGroupByPopover('month')"><span translate>Group by month</span></ion-radio>
+        <ion-radio ng-model="releaseView" name="releaseView" ng-value="'releases'" ng-change="closeMenuPopover(groupBy, 'releases')"><span translate>Releases</span></ion-radio>
+        <ion-radio ng-model="releaseView" name="releaseView" ng-value="'losts'" ng-change="closeMenuPopover(groupBy, 'losts')"><span translate>Losts</span></ion-radio>
+        <ion-radio ng-model="releaseView" name="releaseView" ng-value="'wishlist'" ng-change="closeMenuPopover(groupBy, 'wishlist')"><span translate>Wishlist</span></ion-radio>
+        <ion-radio ng-model="releaseView" name="releaseView" ng-value="'purchased'" ng-change="closeMenuPopover(groupBy, 'purchased')"><span translate>Purchased</span></ion-radio>
+      </ion-list>
+      <ion-list>
+        <ion-radio ng-model="groupBy" name="groupBy" ng-value="'week'" ng-change="closeMenuPopover('week', releaseView)"><span translate>Group by week</span></ion-radio>
+        <ion-radio ng-model="groupBy" name="groupBy" ng-value="'month'" ng-change="closeMenuPopover('month', releaseView)"><span translate>Group by month</span></ion-radio>
       </ion-list>
     </ion-content>
   </ion-popover-view>

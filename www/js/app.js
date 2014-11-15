@@ -115,14 +115,14 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app', {
       url: "/app",
       abstract: true,
-      templateUrl: "templates/menu.html",
+      templateUrl: "templates/tabs.html",
       controller: 'AppCtrl'
     })
 
     .state('app.comics', {
       url: "/comics",
       views: {
-        'menuContent' :{
+        'tab-comics' :{
           templateUrl: "templates/comics.html",
           controller: 'ComicsCtrl'
         }
@@ -131,7 +131,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.comics_editor', {
       url: "/comics/:comicsId",
       views: {
-        'menuContent' :{
+        'tab-comics' :{
           templateUrl: "templates/comicsEditor.html",
           controller: 'ComicsEditorCtrl'
         }
@@ -141,7 +141,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.releases', {
       url: "/releases",
       views: {
-        'menuContent' :{
+        'tab-releases' :{
           templateUrl: "templates/releases.html",
           controller: 'ReleasesEntryCtrl'
         }
@@ -150,7 +150,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.releases_entry', {
       url: "/releases/:comicsId",
       views: {
-        'menuContent' :{
+        'tab-releases' :{
           templateUrl: "templates/releases.html",
           controller: 'ReleasesEntryCtrl'
         }
@@ -159,28 +159,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.release_editor', {
       url: "/release/:comicsId/:releaseId",
       views: {
-        'menuContent' :{
+        'tab-releases' :{
           templateUrl: "templates/releaseEditor.html",
           controller: 'ReleaseEditorCtrl'
-        }
-      }
-    })
-
-    .state('app.wishlist', {
-      url: "/wishlist",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/releases.html",
-          controller: 'ReleasesEntryCtrl'
-        }
-      }
-    })
-    .state('app.purchased', {
-      url: "/purchased",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/releases.html",
-          controller: 'ReleasesEntryCtrl'
         }
       }
     })
@@ -188,7 +169,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.options', {
       url: "/options",
       views: {
-        'menuContent' :{
+        'tab-options' :{
           templateUrl: "templates/options.html",
           controller: 'OptionsCtrl'
         }
@@ -197,7 +178,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.settings', {
       url: "/settings",
       views: {
-        'menuContent' :{
+        'tab-options' :{
           templateUrl: "templates/settings.html",
           controller: 'OptionsCtrl'
         }
@@ -206,7 +187,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.about', {
       url: "/about",
       views: {
-        'menuContent' :{
+        'tab-options' :{
           templateUrl: "templates/about.html",
           controller: 'OptionsCtrl'
         }
@@ -215,7 +196,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.backup', {
       url: "/backup",
       views: {
-        'menuContent' :{
+        'tab-options' :{
           templateUrl: "templates/backup.html",
           controller: 'OptionsCtrl'
         }
@@ -224,7 +205,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .state('app.debug', {
       url: "/debug",
       views: {
-        'menuContent' :{
+        'tab-options' :{
           templateUrl: "templates/debug.html",
           controller: 'OptionsCtrl'
         }

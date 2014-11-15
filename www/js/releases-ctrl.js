@@ -40,7 +40,14 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 
   //
   var applyFilter = function() {
-  	//console.log(new Date().getTime() + " applyFilter")
+
+		//se true mostro solo wishlist (senza data) e scadute, e non acquistate
+		$scope.isWishlist = ($scope.releaseView == 'wishlist');
+		$scope.isPurchased = ($scope.releaseView == 'purchased');
+		$scope.title = ($scope.isPurchased ? 'Purchased' : ($scope.isWishlist ? 'Losts & Wishlist' : ($scope.entry ? $scope.entry.name : 'Releases')));
+
+		console.log($scope.isWishlist, $scope.isPurchased, $scope.title)
+
     var items = [];
 
     //estraggo tutt le releases
@@ -128,16 +135,16 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
   $scope.entry = $stateParams.comicsId == null ? null : ($scope.entry = $comicsData.getComicsById($stateParams.comicsId));
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
-	//se true mostro solo wishlist (senza data) e scadute, e non acquistate
-	$scope.isWishlist = $state.is('app.wishlist');
-	//
-	$scope.isPurchased = $state.is('app.purchased');
+	//vista: releases, losts, wishlist, purchased
+	$scope.releaseView = 'releases';
+	$scope.isWishlist = false;
+	$scope.isPurchased = false;
 	//
 	$scope.currentBar = 'title';
 	//
 	$scope.selectedReleases = [];
 	//
-	$scope.title = ($scope.isPurchased ? 'Purchased' : ($scope.isWishlist ? 'Losts & Wishlist' : ($scope.entry ? $scope.entry.name : 'Releases')));
+	$scope.title = null;
 	//
 	$scope.groupBy = $settings.userOptions.releaseGroupBy || 'week';
 	$scope.thisTime = null;
@@ -251,25 +258,26 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
     $ionicNavBarDelegate.back();
   };
 	//
-	$scope.groupByPopover = null;
-	$scope.openGroupByPopover = function($event) {
-		if (!$scope.groupByPopover) {
-		  $ionicPopover.fromTemplateUrl('groupby-popover.html', {
+	$scope.menuPopover = null;
+	$scope.openMenuPopover = function($event) {
+		if (!$scope.menuPopover) {
+		  $ionicPopover.fromTemplateUrl('menu-popover.html', {
 		    scope: $scope,
 		  }).then(function(popover) {
-		    $scope.groupByPopover = popover;
-		    $scope.groupByPopover.show($event);
+		    $scope.menuPopover = popover;
+		    $scope.menuPopover.show($event);
 		  });
 		} else {
-			$scope.groupByPopover.show($event);
+			$scope.menuPopover.show($event);
 		}
 	};
 	//
-	$scope.closeGroupByPopover = function(groupBy) {
+	$scope.closeMenuPopover = function(groupBy, releaseView) {
 		$scope.groupBy = groupBy;
+		$scope.releaseView = releaseView;
 		changeGroup();
 		applyFilter();
-		$scope.groupByPopover.hide();
+		$scope.menuPopover.hide();
 	};
   //
   changeGroup();
@@ -288,7 +296,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	}, 100);
 	//deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() {
-		$scope.groupByPopover && $scope.groupByPopover.remove(); 
+		$scope.menuPopover && $scope.menuPopover.remove(); 
 		$scope._deregisterBackButton && $scope._deregisterBackButton();
 		$settings.save(); 
 	});
