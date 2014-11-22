@@ -32,6 +32,9 @@
 .bar .button.button-icon.rmm-search-button:before {
 	font-size: 20px;
 }
+.bar .buttons > .button {
+	min-width: 36px;
+}
 /*.bar .header-options {
 	position: absolute;
 	top: 5px;
