@@ -9,3 +9,5 @@
 	min-height: 31px;
 	line-height: 31px;
 }
+
+.bar .buttons > .button { min-width: 36px; } 

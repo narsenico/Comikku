@@ -54,15 +54,15 @@
 </ion-view>
 
 <script id="menu-popover.html" type="text/ng-template">
-  <ion-popover-view class="popover-menu" style="height: 333px">
+  <ion-popover-view class="popover-menu" style="height: 113px">
     <ion-content>
       <ion-list>
+      <!--
         <ion-radio ng-model="releaseView" name="releaseView" ng-value="'releases'" ng-change="closeMenuPopover(groupBy, 'releases')"><span translate>Releases</span></ion-radio>
         <ion-radio ng-model="releaseView" name="releaseView" ng-value="'losts'" ng-change="closeMenuPopover(groupBy, 'losts')"><span translate>Losts</span></ion-radio>
         <ion-radio ng-model="releaseView" name="releaseView" ng-value="'wishlist'" ng-change="closeMenuPopover(groupBy, 'wishlist')"><span translate>Wishlist</span></ion-radio>
         <ion-radio ng-model="releaseView" name="releaseView" ng-value="'purchased'" ng-change="closeMenuPopover(groupBy, 'purchased')"><span translate>Purchased</span></ion-radio>
-      </ion-list>
-      <ion-list>
+        -->
         <ion-radio ng-model="groupBy" name="groupBy" ng-value="'week'" ng-change="closeMenuPopover('week', releaseView)"><span translate>Group by week</span></ion-radio>
         <ion-radio ng-model="groupBy" name="groupBy" ng-value="'month'" ng-change="closeMenuPopover('month', releaseView)"><span translate>Group by month</span></ion-radio>
       </ion-list>

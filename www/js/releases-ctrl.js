@@ -136,7 +136,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
 	//vista: releases, losts, wishlist, purchased
-	$scope.releaseView = 'releases';
+	$scope.releaseView = $state.current.url.substring(1) || 'releases';
 	$scope.isWishlist = false;
 	$scope.isPurchased = false;
 	//

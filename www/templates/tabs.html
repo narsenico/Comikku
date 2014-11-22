@@ -1,11 +1,23 @@
-<ion-tabs class="tabs-stable tabs-striped tabs-background-stable tabs-color-positive tabs-top tabs-fullwidth">
+<ion-tabs class="tabs-stable tabs-striped tabs-background-stable tabs-color-positive tabs-bottom tabs-fullwidth">
 
-  <ion-tab title="{{'Comics' | translate}}" href="#/app/comics">
+  <ion-tab title="{{'Comics' | translate}}" href="#/app/comics" icon="flaticon-bubble1">
     <ion-nav-view name="tab-comics"></ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="{{'Releases' | translate}}" href="#/app/releases">
+  <ion-tab title="{{'Releases' | translate}}" href="#/app/releases" icon="flaticon-small58">
     <ion-nav-view name="tab-releases"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="{{'Wishlist' | translate}}" href="#/app/wishlist" icon="flaticon-star105">
+    <ion-nav-view name="tab-wishlist"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="{{'Purchased' | translate}}" href="#/app/purchased" icon="ion-ios7-briefcase-outline">
+    <ion-nav-view name="tab-purchased"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="{{'Settings' | translate}}" href="#/app/options" icon="ion-ios7-settings-strong">
+    <ion-nav-view name="tab-options"></ion-nav-view>
   </ion-tab>
 
 </ion-tabs>

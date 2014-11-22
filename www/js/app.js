@@ -166,6 +166,25 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
       }
     })
 
+    .state('app.purchased', {
+      url: "/purchased",
+      views: {
+        'tab-purchased' :{
+          templateUrl: "templates/releases.html",
+          controller: 'ReleasesEntryCtrl'
+        }
+      }
+    })
+    .state('app.wishlist', {
+      url: "/wishlist",
+      views: {
+        'tab-wishlist' :{
+          templateUrl: "templates/releases.html",
+          controller: 'ReleasesEntryCtrl'
+        }
+      }
+    })
+
     .state('app.options', {
       url: "/options",
       views: {
