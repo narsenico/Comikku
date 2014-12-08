@@ -98,7 +98,8 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Cancel": "Annulla",
     "OK": "OK",
     "Enabled": "Abilitata",
-    "Disabled": "Disabilitata"
+    "Disabled": "Disabilitata",
+    "Ordered": "Ordinato"
   });
 
   //imposto la lingua di default

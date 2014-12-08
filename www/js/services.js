@@ -48,6 +48,8 @@ function ($q, $filter, $utils, $file) {
 		date: null,
 		price: null,
 		reminder: null, //null, 1
+		ordererd: "F",
+		notes: null,
 		purchased: "F"
 	}
 
