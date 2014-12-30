@@ -1,15 +1,13 @@
 <ion-view title="{{entry.id == 'new' ? 'New comics entry': 'Edit comics entry' | translate}}">
 
-	<ion-nav-bar class="bar bar-header bar-energized">
-    <button class="button-icon button back-button ion-android-arrow-back" ng-click="goBack()"></button>
-	</ion-nav-bar>
+  <!-- pulsanti barra di navigazione -->
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="data.form.$invalid || !isUnique(entry)"></button>
+  </ion-nav-buttons>
 
   <!-- content -->
   <ion-content class="has-header custom-header">
-    <form name="form" novalidate class="validation-form">
-		  <ion-nav-buttons side="right">
-		    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
-		  </ion-nav-buttons>
+    <form name="data.form" novalidate class="validation-form">
 		  <label class="item item-input item-key">
 		  	<span class="input-label rmm-required" translate> Name</span>
 		    <input type="text" placeholder="{{'comics title' | translate}}" ng-model="entry.name" required>
@@ -39,7 +37,7 @@
 		  <label class="item item-input">
 		  	<span class="input-label" translate> Reserved</span>
 			  <label class="toggle" style="float: right">
-	   			<input type="checkbox" ng-model="entry.reserved" ng-true-value="T">
+	   			<input type="checkbox" ng-model="entry.reserved" ng-true-value="'T'">
 	   			<div class="track">
 	     			<div class="handle"></div>
 	   			</div>

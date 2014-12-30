@@ -1,6 +1,6 @@
 <ion-view title="{{currentBar == 'options' ? '' : title | translate}}">
 
-  <ion-nav-bar class="bar bar-header bar-positive" ng-class="{'bar-calm': isWishlist, 'bar-dark': isPurchased, 'bar-options': currentBar=='options'}">
+<!--   <ion-nav-bar class="bar bar-header bar-positive" ng-class="{'bar-calm': isWishlist, 'bar-dark': isPurchased, 'bar-options': currentBar=='options'}">
     <div class="buttons" ng-show="currentBar=='title'">
       <button class="button-icon button back-button ion-android-arrow-back" ng-if="entry" ng-click="goBack()"></button>
       <button menu-toggle="left" class="button button-icon icon ion-navicon" ng-if="!entry"></button>
@@ -23,9 +23,28 @@
       <button class="button button-icon icon ion-ios7-briefcase-outline" ng-click="setPurchased(null, 'F')"></button>
       <button class="button button-icon icon ion-android-trash" ng-click="removeReleaseEntry()"></button>
     </div>
-  </ion-nav-bar>
+  </ion-nav-bar> -->
 
-  <ion-content class="has-header" has-bouncing="false">
+  <!-- pulsanti barra di navigazione -->
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
+    <button class="button button-icon icon ion-android-more" ng-click="openGroupByPopover($event)" ng-if="!isWishlist"></button>
+  </ion-nav-buttons>
+
+  <!-- barra secondaria, visibile quando quella primaria è nascosta -->
+  <ion-header-bar class="bar bar-header bar-options" ng-show="currentBar=='options'">
+    <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showNavBar()"></button>
+    <div class="info">{{selectedReleases.length}}</div>
+    <div class="buttons pull-right">
+      <button class="button button-icon icon ion-plus" ng-show="canEdit" ng-click="showAddRelease()"></button>
+      <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editReleaseEntry()"></button>
+      <button class="button button-icon icon ion-ios7-briefcase" ng-click="setPurchased(null, 'T')"></button>
+      <button class="button button-icon icon ion-ios7-briefcase-outline" ng-click="setPurchased(null, 'F')"></button>
+      <button class="button button-icon icon ion-android-trash" ng-click="removeReleaseEntry()"></button>
+    </div>
+  </ion-header-bar>
+
+  <ion-content class="has-header custom-header" has-bouncing="false">
     <ion-list can-swipe="true">
       <ion-item class="item item-release" ng-repeat="item in items track by item._kk">
         <!-- se non ha comicsId è l'intestazione del gruppo -->

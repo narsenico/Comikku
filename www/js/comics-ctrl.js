@@ -129,9 +129,14 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$state.go('app.release_editor', {comicsId: item.id, releaseId: 'new'});
 	};
 	//
-	$scope.showHeaderBar = function() {
+	$scope.showNavBar = function() {
 		$scope.selectedComics = [];
-		$scope.currentBar = 'title'
+		$scope.currentBar = 'title';
+		$ionicNavBarDelegate.showBar(true);
+	};
+	$scope.showOptionsBar = function() {
+		$scope.currentBar = 'options';
+		$ionicNavBarDelegate.showBar(false);
 	};
 	//
 	$scope.clickItem = function(item) {
@@ -155,15 +160,15 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 
 		//nascondo la barra di navigazione (e mostro quella delle opzioni) se c'è almeno un elemento selezionato
 		if ($scope.selectedComics.length == 0) {
-	    $scope.showHeaderBar();
+	    $scope.showNavBar();
 			// $scope._deregisterBackButton && $scope._deregisterBackButton();
   	// 	$scope._deregisterBackButton = null;
 		} else {
 			$scope.canEdit = ($scope.selectedComics.length == 1);
 			if ($scope.currentBar != 'options') {
-				$scope.currentBar = 'options';
+				$scope.showOptionsBar();
 				// $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { 
-				// 	$scope.showHeaderBar();
+				// 	$scope.showNavBar();
 				// 	$scope.$apply(); //altrimenti non vengono aggiornati 
 				// 	$scope._deregisterBackButton && $scope._deregisterBackButton();
 	   //  		$scope._deregisterBackButton = null;
@@ -200,7 +205,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	//gestisco il back hw in base a quello che sto facendo
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
 		if ($scope.currentBar == 'options') {
-			$scope.showHeaderBar();
+			$scope.showNavBar();
 			$scope.$apply(); //altrimenti non vengono aggiornati 
 		} else {
 			navigator.app.exitApp();
@@ -236,31 +241,33 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
   };
 })
 .controller('ComicsEditorCtrl', [
-'$scope', '$stateParams', '$ionicNavBarDelegate', '$comicsData',
-function($scope, $stateParams, $ionicNavBarDelegate, $comicsData) {
+'$scope', '$stateParams', '$ionicHistory', '$comicsData',
+function($scope, $stateParams, $ionicHistory, $comicsData) {
+	//usato per contenere la form in modo da poter accedere alla form anche all'esterno del tag <form>
+	$scope.data = {};
   //console.log($stateParams, $comicsData)
   $scope.periodicities = PERIODICITIES;
   //originale
   $scope.master = $comicsData.getComicsById($stateParams.comicsId);
   //aggiorno l'originale e torno indietro
   $scope.update = function(entry) {
-    angular.copy(entry, $scope.master);
-    $comicsData.update($scope.master);
-    $comicsData.save();
-    $ionicNavBarDelegate.back();
+	  angular.copy(entry, $scope.master);
+	  $comicsData.update($scope.master);
+	  $comicsData.save();
+	  $ionicHistory.goBack();
   };
   $scope.reset = function() {
     $scope.entry = angular.copy($scope.master);
   };
   $scope.cancel = function() {
-    $ionicNavBarDelegate.back();
+    $ionicHistory.goBack();
   };
   $scope.isUnique = function(entry) {
     return $comicsData.normalizeComicsName($scope.master.name) == $comicsData.normalizeComicsName(entry.name) || 
       $comicsData.isComicsUnique(entry);
   };
   $scope.goBack = function() {
-  	$ionicNavBarDelegate.back();
+  	$ionicHistory.goBack();
   }
   $scope.reset();
 }]);

@@ -68,6 +68,10 @@
 	box-shadow: 0 1px 3px #C3BBBB;	
 }*/
 
+.custom-header {
+	top: 44px;
+}
+
 .bar.bar-header {
 	box-shadow: 0 1px 3px #C3BBBB;
 	border-bottom-style: solid;

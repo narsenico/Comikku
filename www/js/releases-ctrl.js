@@ -200,9 +200,14 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
   	return $comicsData.getComicsById(comicsId);
   };
 	//
-	$scope.showHeaderBar = function() {
+	$scope.showNavBar = function() {
 		$scope.selectedReleases = [];
 		$scope.currentBar = 'title'
+		$ionicNavBarDelegate.showBar(true);
+	};
+	$scope.showOptionsBar = function() {
+		$scope.currentBar = 'options';
+		$ionicNavBarDelegate.showBar(false);
 	};
 	//
 	$scope.clickRelease = function(release) {
@@ -226,15 +231,15 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 
 		//nascondo la barra di navigazione (e mostro quella delle opzioni) se c'è almeno un elemento selezionato
 		if ($scope.selectedReleases.length == 0) {
-	    $scope.showHeaderBar();
+	    $scope.showNavBar();
 			// $scope._deregisterBackButton && $scope._deregisterBackButton();
   	// 	$scope._deregisterBackButton = null;
 		} else {
 			$scope.canEdit = ($scope.selectedReleases.length == 1);
 			if ($scope.currentBar != 'options') {
-				$scope.currentBar = 'options';
+				$scope.showOptionsBar();
 				// $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() { 
-				// 	$scope.showHeaderBar();
+				// 	$scope.showNavBar();
 				// 	$scope.$apply(); //altrimenti non vengono aggiornati 
 				// 	$scope._deregisterBackButton && $scope._deregisterBackButton();
 	   //  		$scope._deregisterBackButton = null;
@@ -278,7 +283,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//gestisco il back hw in base a quello che sto facendo
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
 		if ($scope.currentBar == 'options') {
-			$scope.showHeaderBar();
+			$scope.showNavBar();
 			$scope.$apply(); //altrimenti non vengono aggiornati
 		} else if ($scope.entry) {
 			$ionicNavBarDelegate.back();
@@ -313,9 +318,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
   };
 })
 .controller('ReleaseEditorCtrl', [
-	'$scope', '$stateParams', '$ionicNavBarDelegate', '$comicsData', '$settings',
+	'$scope', '$stateParams', '$ionicHistory', '$comicsData', '$settings',
 	'$filter', '$dateParser',
-function($scope, $stateParams, $ionicNavBarDelegate, $comicsData, $settings,
+function($scope, $stateParams, $ionicHistory, $comicsData, $settings,
 	$filter, $dateParser) {
   $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
   //originale
@@ -354,19 +359,19 @@ function($scope, $stateParams, $ionicNavBarDelegate, $comicsData, $settings,
     angular.copy(release, $scope.master);
     $comicsData.updateRelease($scope.entry, $scope.master);
     $comicsData.save();
-    $ionicNavBarDelegate.back();
+    $ionicHistory.goBack();
   };
   $scope.reset = function() {
     $scope.release = angular.copy($scope.master);
   };
   $scope.cancel = function() {
-    $ionicNavBarDelegate.back();
+    $ionicHistory.goBack();
   };
   $scope.isUnique = function(release) {
     return $stateParams.releaseId == release.number || $comicsData.isReleaseUnique($scope.entry, release);
   };
   $scope.goBack = function() {
-    $ionicNavBarDelegate.back();
+    $ionicHistory.goBack();
   };
   $scope.reset();
 }]);

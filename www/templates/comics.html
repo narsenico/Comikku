@@ -1,27 +1,21 @@
 <ion-view title="{{currentBar=='options' ? '' : 'Comics' | translate}}">
 
-  <ion-nav-bar class="bar bar-header bar-energized" ng-class="{'bar-options': currentBar=='options'}">
-    <div class="buttons" ng-show="currentBar=='title'">
-      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </div>
+  <!-- pulsanti barra di navigazione -->
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-document" ng-click="addComicsEntry()"></button>
+    <button class="button button-icon icon ion-android-more" ng-click="openOrderByPopover($event)"></button>
+  </ion-nav-buttons>
 
-    <div class="buttons" ng-show="currentBar=='options'">
-      <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showHeaderBar()"></button>
-      <div class="info">{{selectedComics.length}}</div>
-    </div>
-
-    <div class="buttons pull-right" ng-show="currentBar=='title'">
-      <button class="button button-icon icon ion-document" ng-click="addComicsEntry()"></button>
-      <button class="button button-icon icon ion-android-more" ng-click="openOrderByPopover($event)"></button>
-    </div>
-
-    <div class="buttons pull-right" ng-show="currentBar=='options'">
+  <!-- barra secondaria, visibile quando quella primaria è nascosta -->
+  <ion-header-bar class="bar bar-header bar-options" ng-show="currentBar=='options'">
+    <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showNavBar()"></button>
+    <div class="info">{{selectedComics.length}}</div>
+    <div class="buttons pull-right">
       <button class="button button-icon icon ion-plus-round" ng-show="canEdit" ng-click="showAddRelease()"></button>
       <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editComicsEntry()"></button>
       <button class="button button-icon icon ion-android-trash" ng-click="removeComicsEntry()"></button>
     </div>
-
-  </ion-nav-bar>
+  </ion-header-bar>
 
   <!-- search bar -->
   <!-- <header class="bar bar-header item-input-inset" ng-show="currentBar=='search'">
@@ -35,7 +29,7 @@
     </button>
   </header> -->
   <!-- content -->
-  <ion-content class="has-header" has-bouncing="false">
+  <ion-content class="has-header custom-header" has-bouncing="false">
     <!-- <ion-list can-swipe="true"> -->
     <ion-list>
         <ion-item bindonce class="item item-comics" 
