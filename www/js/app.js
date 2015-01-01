@@ -20,8 +20,8 @@ angular.module('starter',
   }];
 })
 
-.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider',
-function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider', '$ionicConfigProvider',
+function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider, $ionicConfigProvider) {
 
   //TODO caricare le stringhe da file esterni
   $translateProvider.translations('en', {
@@ -109,6 +109,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .useStorage('StorageService');
   //
   moment.locale('en');
+
+  //configuro il pulsante 'back' in modo che non mostri alcun testo (ma solo l'icona)
+  $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
   //
   $stateProvider
