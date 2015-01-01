@@ -595,3 +595,27 @@ IonicModule
     }
   }
 }]); // end of StorageService
+
+//direttiva per gestire nella maniera corretta la conversione in Date delle stringhe con un input[date]
+//  (nelle versioni precednti in angular input[date] era sempre gestito come una stringa mentre adesso come Date)
+IonicModule
+.directive( 'rmmInputDate', function() {
+    return {
+        restrict : 'A', //attributo (rmm-input-date)
+        require : ['?ngModel'], //richiede ngModel
+        priority : 100,
+        link : function( scope, element, attr, ngModel ) {
+          if ( attr.type === "date" ) {
+            var model = ngModel[0];
+            model.$parsers.push( function(value){
+              //console.log('value', value, moment.locale());
+              return moment(value).format('YYYY-MM-DD');
+            });
+            model.$formatters.push(function formatter(modelValue){
+              //console.log('modelValue', modelValue, moment.locale());
+              return moment(modelValue).toDate();
+            });
+          }
+        }
+    };
+} );
