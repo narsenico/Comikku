@@ -2,10 +2,10 @@ angular.module('starter.controllers')
 .controller('OptionsCtrl', [
 	'$scope', '$q', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
   '$file', '$timeout', '$filter', 
-  '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate',
+  '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate', '$ionicHistory',
 function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
   $file, $timeout, $filter, 
-  $comicsData, $settings, $ionicNavBarDelegate, $translate) {
+  $comicsData, $settings, $ionicNavBarDelegate, $translate, $ionicHistory) {
   //
   $scope.version = null;
   $scope.lastBackup = $filter('translate')('not found');
@@ -201,7 +201,13 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
       $comicsData.read("USER");
     $scope.currentUser = $comicsData.uid;
     $scope.readLastBackup();
+    $ionicHistory.clearCache();
     $toast.show("Hello " + $scope.currentUser);
+  };
+  //
+  $scope.clearCache = function() {
+    $ionicHistory.clearCache();
+    $toast.show("Cache cleared");
   };
   // //TEST POPOVER MENU
   // $ionicPopover.fromTemplateUrl('my-popover.html', {
@@ -218,7 +224,8 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
     // $scope.openPopover($event)
 
     // try {
-      console.log(window.cordova);
+      console.log($ionicHistory.viewHistory());
+      
 
     // } catch (e) {
     //   console.log("TEST ERR" + e);
