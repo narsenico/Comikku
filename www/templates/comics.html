@@ -45,7 +45,7 @@
           <span class="comics-notes" bo-if="debugMode">last upd {{item.lastUpdate}} best {{item.bestRelease.date}} id {{item.id}}</span>
         </div>
 
-        <best-release comics="item" bo-if="item.bestRelease.number"></best-release>
+        <best-release comics="item" ng-if="item.bestRelease.number"></best-release>
       </ion-item>
     </ion-list>
     <ion-infinite-scroll

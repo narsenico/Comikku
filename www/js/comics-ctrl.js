@@ -17,6 +17,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$settings.userOptions.comicsOrderByDesc = ($scope.orderByDesc ? 'T' : 'F');
 	};
 	//funzione di filtraggio dei dati (su orderedComics)
+	//TODO attenzione! questa funzione fa casino con infinite scroll etc, rivederla
 	var applyFilter = function() {
 		//console.log("applyFilter");
 
@@ -33,7 +34,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		}
 		$scope.comics = [];
 		$scope.totComics = filteredComics.length;
-		$scope.loadMore();
+		//$scope.loadMore(); -> non necessario
 		$ionicScrollDelegate.scrollTop();
 	};
 	//
@@ -69,17 +70,21 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	});
 	//carico altri dati (da filteredComics)
 	$scope.loadMore = function() {
-		//console.log("loadMore");
-		
 		var from = $scope.comics.length;
 		var max = Math.min(from + loadChunk, filteredComics.length);
+		console.log("loadMore", from, max);
 		if (from < max) {
 			$scope.comics = _.union($scope.comics, filteredComics.slice(from, max));
+			//console.log(" - ", $scope.comics.length);
 		}
-		$scope.$broadcast('scroll.infiniteScrollComplete');
+		//NB sembra ci sia un baco, con $scope.$apply è una pezza
+		$scope.$apply(function(){
+		    $scope.$broadcast('scroll.infiniteScrollComplete');
+		});
 	};
 	//
 	$scope.moreDataCanBeLoaded = function() {
+		//console.log('moreDataCanBeLoaded', $scope.comics.length, filteredComics.length);
 		return $scope.comics && filteredComics && $scope.comics.length < filteredComics.length;
 	};
 	//
@@ -212,8 +217,8 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		}
 	}, 100);
 
-	//chiamo la prima volta le funzioni per l'ordinamento e il filtro (???)
-	changeOrder();
+	////chiamo la prima volta le funzioni per l'ordinamento e il filtro (???)
+	//changeOrder();
 	//applyFilter();
 
 	//deregistro l'evento sul back all'uscita
@@ -222,6 +227,21 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$scope._deregisterBackButton && $scope._deregisterBackButton();
 		$settings.save();
 	});
+
+	//gestione eventi
+	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
+		//se sono stati modificati i dati devo aggiornare la vista
+		console.log('comics beforeEnter', $comicsData.needReload());
+		if ($scope.filteredComics == null || $comicsData.needReload()) {
+		  changeOrder();
+		  //applyFilter();
+	  }
+	});
+	$scope.$on('$ionicView.enter', function(scopes, states) {
+		//in ogni caso gestire gli elementi selezionati in precedenza
+		//	(attualmente l'effeto è che l'elemento è selezionato ma l'header è nello stato 'title')
+		$scope.showNavBar();
+	});	
 
 }])
 .directive('bestRelease', function() {
@@ -266,8 +286,5 @@ function($scope, $stateParams, $ionicHistory, $comicsData) {
     return $comicsData.normalizeComicsName($scope.master.name) == $comicsData.normalizeComicsName(entry.name) || 
       $comicsData.isComicsUnique(entry);
   };
-  $scope.goBack = function() {
-  	$ionicHistory.goBack();
-  }
   $scope.reset();
 }]);

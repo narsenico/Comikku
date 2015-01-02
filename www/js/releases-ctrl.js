@@ -252,10 +252,6 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		return $utils.indexFindWhere($scope.selectedReleases, {comicsId: release.comicsId, number: release.number}) >= 0;
 	};
 	//
-  $scope.goBack = function() {
-    $ionicNavBarDelegate.back();
-  };
-	//
 	$scope.groupByPopover = null;
 	$scope.openGroupByPopover = function($event) {
 		if (!$scope.groupByPopover) {
@@ -277,8 +273,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		$scope.groupByPopover.hide();
 	};
   //
-  changeGroup();
-  applyFilter();
+  // changeGroup();
+  // applyFilter();
 	
 	//gestisco il back hw in base a quello che sto facendo
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
@@ -296,6 +292,23 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		$scope.groupByPopover && $scope.groupByPopover.remove(); 
 		$scope._deregisterBackButton && $scope._deregisterBackButton();
 		$settings.save(); 
+	});
+
+	//console.log('releases-ctrl end')
+
+	//gestione eventi
+	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
+		//se sono stati modificati i dati devo aggiornare la vista
+		//console.log('releases beforeEnter', $comicsData.needReload());
+		if ($scope.items == undefined || $comicsData.needReload()) {
+		  changeGroup();
+		  applyFilter();
+	  }
+	});
+	$scope.$on('$ionicView.enter', function(scopes, states) {
+		//in ogni caso gestire gli elementi selezionati in precedenza
+		//	(attualmente l'effeto è che l'elemento è selezionato ma l'header è nello stato 'title')
+		$scope.showNavBar();
 	});
 
 }])
@@ -319,9 +332,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 })
 .controller('ReleaseEditorCtrl', [
 	'$scope', '$stateParams', '$ionicHistory', '$comicsData', '$settings',
-	'$filter', '$dateParser',
+	'$filter', '$dateParser', '$state',
 function($scope, $stateParams, $ionicHistory, $comicsData, $settings,
-	$filter, $dateParser) {
+	$filter, $dateParser, $state) {
   $scope.entry = $comicsData.getComicsById($stateParams.comicsId);
   //originale
   $scope.master = $comicsData.getReleaseById($scope.entry, $stateParams.releaseId);
@@ -360,6 +373,8 @@ function($scope, $stateParams, $ionicHistory, $comicsData, $settings,
     $comicsData.updateRelease($scope.entry, $scope.master);
     $comicsData.save();
     $ionicHistory.goBack();
+  	//console.log($ionicHistory.backView());
+    //$state.go($ionicHistory.backView().stateName, $ionicHistory.backView().stateParams, {'reload': true});
   };
   $scope.reset = function() {
     $scope.release = angular.copy($scope.master);
@@ -369,9 +384,6 @@ function($scope, $stateParams, $ionicHistory, $comicsData, $settings,
   };
   $scope.isUnique = function(release) {
     return $stateParams.releaseId == release.number || $comicsData.isReleaseUnique($scope.entry, release);
-  };
-  $scope.goBack = function() {
-    $ionicHistory.goBack();
   };
   $scope.reset();
 }]);
