@@ -12,6 +12,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	var loadChunk = 20;
 	var changeOrder = function() {
 		filteredComics = orderedComics = $comicsData.getComics($scope.orderBy, $scope.orderByDesc);
+		lastReadTime = new Date().getTime();
 		$scope.totComics = filteredComics.length;
 		$settings.userOptions.comicsOrderBy = $scope.orderBy;
 		$settings.userOptions.comicsOrderByDesc = ($scope.orderByDesc ? 'T' : 'F');
@@ -36,6 +37,11 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$scope.totComics = filteredComics.length;
 		//$scope.loadMore(); -> non necessario
 		$ionicScrollDelegate.scrollTop();
+	};
+	//
+	var lastReadTime = null;
+	var needReload = function() {
+		return filteredComics == null || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime);
 	};
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
@@ -231,10 +237,10 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	//gestione eventi
 	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
 		//se sono stati modificati i dati devo aggiornare la vista
-		console.log('comics beforeEnter', $comicsData.needReload());
-		if ($scope.filteredComics == null || $comicsData.needReload()) {
+		console.log('comics beforeEnter', needReload());
+		if (needReload()) {
 		  changeOrder();
-		  //applyFilter();
+		  applyFilter();
 	  }
 	});
 	$scope.$on('$ionicView.enter', function(scopes, states) {

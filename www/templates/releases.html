@@ -54,8 +54,7 @@
           class="item rmm-button-right release"
           ng-class="{purchased: item.purchased == 'T', selected: isSelected(item)}"
           on-hold="selectRelease(item)"
-          ng-click="clickRelease(item)"
-          ng-class="{selected: isSelected(item)}">
+          ng-click="clickRelease(item)">
           <!-- <div class="number">{{item.number}}</div>
           <div class="title">{{getComicsById(item.comicsId).name}}</div>
           <div class="date">{{item.date | date : 'EEE, dd MMM'}}</div>

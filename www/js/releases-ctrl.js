@@ -2,10 +2,10 @@ angular.module('starter.controllers')
 .controller('ReleasesEntryCtrl', [
 	'$scope', '$ionicModal', '$timeout', '$state', '$undoPopup', '$utils', '$toast', '$ionicPopover',
 	'$stateParams', '$debounce', '$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$filter', 
-	'$comicsData', '$settings', '$dateParser',
+	'$comicsData', '$settings', '$dateParser', '$templateCache', '$ionicHistory',
 function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ionicPopover, 
 	$stateParams, $debounce, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $filter, 
-	$comicsData, $settings, $dateParser) {
+	$comicsData, $settings, $dateParser, $templateCache, $ionicHistory) {
 
   //
   var today = moment().format('YYYY-MM-DD');
@@ -16,6 +16,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	var funcName = null;
 	var kkPref = 0; //è necessario altrimenti ci sarebbere elementi con chiave uguale anche se con gruppo diverso
 		//e questo crea problemi a ionic durante l'aggiornamento della lista
+		//NB per evitare che il sistema di cache non aggiorni l'elemento della lista assegno a kkPref un numero random
+		//	che verrà aggiornato solo se la lista cambia
 
 	var changeGroup = function() {
 		if ($scope.groupBy == 'week') { 
@@ -23,7 +25,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			lblNextTime = $filter('translate')('Next week');
 			grpDateFormat = 'ddd, DD MMM YYYY';
 			funcName = 'firstDayOfWeek';
-			kkPref = 0;
+			kkPref = parseInt(Math.random() * 10000);
 			$scope.thisTime = moment().firstDayOfWeek().format('YYYY-MM-DD');
 			$scope.nextTime = moment($scope.thisTime).add(1, 'w').format('YYYY-MM-DD');
 		} else if ($scope.groupBy == 'month') {
@@ -31,7 +33,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			lblNextTime = $filter('translate')('Next month');
 			grpDateFormat = 'MMMM YYYY';
 			funcName = 'firstDayOfMonth';
-			kkPref = 10000;
+			kkPref = parseInt(Math.random() * 10000);
 			$scope.thisTime = moment().startOf('month').format('YYYY-MM-DD');
 			$scope.nextTime = moment($scope.thisTime).add(1, 'M').format('YYYY-MM-DD');
 		}
@@ -46,6 +48,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
     //estraggo tutt le releases
     var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
     	[$scope.entry]);
+		lastReadTime = new Date().getTime();
     var grps;
 
     if ($scope.isWishlist) {
@@ -123,7 +126,11 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 
     $scope.items = items;
   };
-
+	//
+	var lastReadTime = null;
+	var needReload = function() {
+		return $scope.items == undefined || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime);
+	};
 	//comics selezionato (se arrivo dal menu laterale, sarà sempre null)
   $scope.entry = $stateParams.comicsId == null ? null : ($scope.entry = $comicsData.getComicsById($stateParams.comicsId));
 	//
@@ -280,9 +287,10 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
 		if ($scope.currentBar == 'options') {
 			$scope.showNavBar();
+			console.log( $undoPopup.hide() );
 			$scope.$apply(); //altrimenti non vengono aggiornati
 		} else if ($scope.entry) {
-			$ionicNavBarDelegate.back();
+			$ionicHistory.goBack();
 		} else {
 			navigator.app.exitApp();
 		}
@@ -299,8 +307,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//gestione eventi
 	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
 		//se sono stati modificati i dati devo aggiornare la vista
-		//console.log('releases beforeEnter', $comicsData.needReload());
-		if ($scope.items == undefined || $comicsData.needReload()) {
+		console.log('releases beforeEnter', needReload());
+		if (needReload()) {
 		  changeGroup();
 		  applyFilter();
 	  }
@@ -319,6 +327,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
       release: '='
     },
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
+    	console.log('comicsRelease')
   	  var today = moment().format('YYYY-MM-DD');
   	  $scope.datestr = _.isEmpty($scope.release.date) ? '' : moment($scope.release.date).format('ddd, DD MMM');
     	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);

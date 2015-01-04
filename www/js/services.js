@@ -59,10 +59,8 @@ function ($q, $filter, $utils, $file) {
 		uid: null,
 		comics: null,
 		lastSaveTime: null,
-		lastReadTime: null,
 		//
 		read: function(uid, refresh) {
-			this.lastReadTime = new Date().getTime();
 			//console.log(uid, refresh);
 			if (this.comics == null || uid != this.uid || refresh) {
 				var dbkey = uid + "_comics";
@@ -85,8 +83,6 @@ function ($q, $filter, $utils, $file) {
 		},
 		//orderBy: bestRelease, namse, lastUpdate
 		getComics: function(orderBy, desc) {
-			this.lastReadTime = new Date().getTime();
-
 			//provo ad aggiornare best release ogni volta che vengono richiesti i comics
 			this.refreshBestRelease(this.comics);
 
@@ -351,10 +347,6 @@ function ($q, $filter, $utils, $file) {
 				});
 			});
 			return count;
-		},
-		//
-		needReload: function() {
-			return (this.lastSaveTime != null && this.lastSaveTime > this.lastReadTime);
 		}
 		//,
 		// addNotification: function(date) {
