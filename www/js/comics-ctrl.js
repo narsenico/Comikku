@@ -120,6 +120,8 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 			      $scope.canEdit = ($scope.selectedComics.length == 1);
 			      $comicsData.save();
 			      applyFilter();
+			    } else if (res == 'back') {
+			    	$scope.showNavBar();
 			    }
 			  });
 			}, 250);

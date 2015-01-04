@@ -183,6 +183,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			      $scope.canEdit = ($scope.selectedReleases.length == 1);
 			      $comicsData.save();
 			      applyFilter();
+			    } else if (res == 'back') {
+			    	$scope.showNavBar();
 			    }
 			  });
 			}, 250);
@@ -287,7 +289,6 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
 		if ($scope.currentBar == 'options') {
 			$scope.showNavBar();
-			console.log( $undoPopup.hide() );
 			$scope.$apply(); //altrimenti non vengono aggiornati
 		} else if ($scope.entry) {
 			$ionicHistory.goBack();

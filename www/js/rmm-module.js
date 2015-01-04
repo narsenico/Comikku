@@ -75,7 +75,8 @@ IonicModule
   '$timeout',
   '$document',
   '$ionicGesture',
-function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
+  '$ionicPlatform',
+function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture, $ionicPlatform) {
 	
   var previousUndo = null;
 	var $undoPopup = {
@@ -172,7 +173,7 @@ function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
 	} //end createPopup
 
 	function onHardwareBackButton(e) {
-		//TODO risolvere se back premuto
+		previousUndo && previousUndo.responseDeferred.resolve('back');
 	} //end onHardwareBackButton
 
 	function showPopup(options) {
@@ -186,9 +187,14 @@ function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
     .then(function() { return popupPromise; })
     .then(function(popup) {
       previousUndo = popup;
+
+      $undoPopup._backButtonActionDone = $ionicPlatform.registerBackButtonAction(
+        onHardwareBackButton, 400);
+
       popup.show();
       return popup.responseDeferred.promise.then(function(result) {
         popup.remove();
+        ($undoPopup._backButtonActionDone || angular.noop)();
         return result;
       });
     });
