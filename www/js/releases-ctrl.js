@@ -213,10 +213,20 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		$scope.selectedReleases = [];
 		$scope.currentBar = 'title'
 		$ionicNavBarDelegate.showBar(true);
+		$scope._deregisterBackButton && $scope._deregisterBackButton();
+		$scope._deregisterBackButton = null;
 	};
 	$scope.showOptionsBar = function() {
 		$scope.currentBar = 'options';
 		$ionicNavBarDelegate.showBar(false);
+
+		$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
+			//console.log("[r] BACK BTN " + $state.current.name + " " + $ionicHistory.backTitle());
+			if ($scope.currentBar == 'options') {
+				$scope.showNavBar();
+				$scope.$apply(); //altrimenti non vengono aggiornati 
+			}
+		}, 400);
 	};
 	//
 	$scope.clickRelease = function(release) {
@@ -284,23 +294,26 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
   //
   // changeGroup();
   // applyFilter();
-	
-	//gestisco il back hw in base a quello che sto facendo
-	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
-		if ($scope.currentBar == 'options') {
-			$scope.showNavBar();
-			$scope.$apply(); //altrimenti non vengono aggiornati
-		} else if ($scope.entry) {
-			$ionicHistory.goBack();
-		} else {
-			navigator.app.exitApp();
-		}
-	}, 100);
-	//deregistro l'evento sul back all'uscita
+
+	//NB meglio registrare il back button ogni volta che si entra nella modalità opzioni
+	// //gestisco il back hw in base a quello che sto facendo
+	// $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
+	// 	if ($scope.currentBar == 'options') {
+	// 		$scope.showNavBar();
+	// 		$scope.$apply(); //altrimenti non vengono aggiornati
+	// 	} else if ($ionicHistory.backTitle()) {
+	// 		console.log("[r] BACK BTN " + $state.current.name + " " + $ionicHistory.backTitle());
+	// 		$ionicHistory.goBack();
+	// 	} else {
+	// 		console.log("[r] BACK BTN exit");
+	// 		navigator.app.exitApp();
+	// 	}
+	// }, 100);
+	////deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() {
 		$scope.groupByPopover && $scope.groupByPopover.remove(); 
-		$scope._deregisterBackButton && $scope._deregisterBackButton();
-		$settings.save(); 
+		//$scope._deregisterBackButton && $scope._deregisterBackButton(); -> gestito in beforeLeave
+		$settings.save();
 	});
 
 	//console.log('releases-ctrl end')
@@ -308,16 +321,19 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//gestione eventi
 	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
 		//se sono stati modificati i dati devo aggiornare la vista
-		console.log('releases beforeEnter', needReload());
+		//console.log('releases beforeEnter', needReload());
 		if (needReload()) {
 		  changeGroup();
 		  applyFilter();
 	  }
 	});
-	$scope.$on('$ionicView.enter', function(scopes, states) {
+	$scope.$on('$ionicView.afterEnter', function(scopes, states) {
 		//in ogni caso gestire gli elementi selezionati in precedenza
 		//	(attualmente l'effeto è che l'elemento è selezionato ma l'header è nello stato 'title')
 		$scope.showNavBar();
+	});
+	$scope.$on('$ionicView.beforeLeave', function(scopes, states) {
+		$scope._deregisterBackButton && $scope._deregisterBackButton();
 	});
 
 }])
@@ -328,7 +344,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
       release: '='
     },
     controller: ['$scope', '$filter', '$comicsData', function($scope, $filter, $comicsData) {
-    	console.log('comicsRelease')
+    	//console.log('comicsRelease')
   	  var today = moment().format('YYYY-MM-DD');
   	  $scope.datestr = _.isEmpty($scope.release.date) ? '' : moment($scope.release.date).format('ddd, DD MMM');
     	$scope.comics = $comicsData.getComicsById($scope.release.comicsId);

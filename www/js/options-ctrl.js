@@ -168,10 +168,6 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
     });
   };
   //
-  $scope.goBack = function() {
-    $ionicNavBarDelegate.back();
-  };
-  //
   $scope.readLastBackup();
 
   //DEBUG

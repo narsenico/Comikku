@@ -234,16 +234,18 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
         }
       }
     });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise($initOptionsProvider.defaultUrl);
 }])
 
-.run(['$ionicPlatform', '$translate', function($ionicPlatform, $translate) {
+.run(['$ionicPlatform', '$translate', '$state', '$ionicHistory', '$settings',
+function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
 
   //imposto la lingua a moment prima che parta cordova
   //  visto che solitamente parte dopo il caricamento della prima pagina
   moment.locale($translate.use());
-  console.log("Language moment " + moment.locale() + " translate " + $translate.use());
+  //console.log("Language moment " + moment.locale() + " translate " + $translate.use());
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -260,14 +262,27 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
       navigator.globalization.getPreferredLanguage(function(language) {
         var lang = (language.value).split("-")[0];
         moment.locale(lang);
-        $translate.use(lang).then(function(data) {
+        $translate.use(lang)/*.then(function(data) {
           console.log("SUCCESS -> " + data);
         }, function(error) {
           console.log("ERROR -> " + error);
-        });
+        })*/;
       }, null);
     }
   });
+
+  $ionicPlatform.registerBackButtonAction(function(e) {
+    //console.log("BACK BTN " + $ionicHistory.currentView().url + " def " + $settings.userOptions.defaultUrl);
+    var backView = $ionicHistory.backView();
+    if (backView) {
+      backView.go();
+    // } else if ($ionicHistory.currentView().url != $settings.userOptions.defaultUrl) {
+    //   console.log("go to def view " + $settings.userOptions.defaultUrl);
+    //   $state.go();
+    } else {
+      ionic.Platform.exitApp();
+    }
+  }, 100);
 }]);
 
 angular.module('starter.controllers', ['starter.services'])

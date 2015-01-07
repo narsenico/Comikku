@@ -1,9 +1,9 @@
 angular.module('starter.controllers')
 .controller('ComicsCtrl', [
 	'$scope', '$ionicModal', '$timeout', '$state', '$filter', '$undoPopup', '$utils', '$debounce', '$toast', '$ionicPopover',
-	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings',
+	'$ionicScrollDelegate', '$ionicNavBarDelegate', '$ionicPlatform', '$comicsData', '$settings', '$ionicHistory',
 function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $debounce, $toast, $ionicPopover,
-	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings) {
+	$ionicScrollDelegate, $ionicNavBarDelegate, $ionicPlatform, $comicsData, $settings, $ionicHistory) {
 	//recupero i dati già ordinati
 	var orderedComics = null;
 	//conterrà i dati filtrati (tramite campo di ricerca)
@@ -78,7 +78,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	$scope.loadMore = function() {
 		var from = $scope.comics.length;
 		var max = Math.min(from + loadChunk, filteredComics.length);
-		console.log("loadMore", from, max);
+		//console.log("loadMore", from, max);
 		if (from < max) {
 			$scope.comics = _.union($scope.comics, filteredComics.slice(from, max));
 			//console.log(" - ", $scope.comics.length);
@@ -146,10 +146,21 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$scope.selectedComics = [];
 		$scope.currentBar = 'title';
 		$ionicNavBarDelegate.showBar(true);
+		$scope._deregisterBackButton && $scope._deregisterBackButton();
+		$scope._deregisterBackButton = null;
 	};
 	$scope.showOptionsBar = function() {
 		$scope.currentBar = 'options';
 		$ionicNavBarDelegate.showBar(false);
+
+		$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
+			//console.log("[c] BACK BTN " + $state.current.name + " " + $ionicHistory.backTitle());
+			if ($scope.currentBar == 'options') {
+				$scope.showNavBar();
+				$scope.$apply(); //altrimenti non vengono aggiornati 
+			}
+		}, 400);
+
 	};
 	//
 	$scope.clickItem = function(item) {
@@ -215,40 +226,48 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		applyFilter();
 		$scope.orderByPopover.hide();
 	};
+	//NB meglio registrare il back button ogni volta che si entra nella modalità opzioni
 	//gestisco il back hw in base a quello che sto facendo
-	$scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
-		if ($scope.currentBar == 'options') {
-			$scope.showNavBar();
-			$scope.$apply(); //altrimenti non vengono aggiornati 
-		} else {
-			navigator.app.exitApp();
-		}
-	}, 100);
+	// $scope._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function() {
+	// 	if ($scope.currentBar == 'options') {
+	// 		$scope.showNavBar();
+	// 		$scope.$apply(); //altrimenti non vengono aggiornati 
+	// 	} else if ($ionicHistory.backTitle()) {
+	// 		console.log("[c] BACK BTN " + $state.current.name + " " + $ionicHistory.backTitle());
+	// 		$ionicHistory.goBack();
+	// 	} else {
+	// 		console.log("[c] BACK BTN exit");
+	// 		navigator.app.exitApp();
+	// 	}
+	// }, 100);
 
 	////chiamo la prima volta le funzioni per l'ordinamento e il filtro (???)
 	//changeOrder();
 	//applyFilter();
 
-	//deregistro l'evento sul back all'uscita
+	////deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() {
 		$scope.orderByPopover && $scope.orderByPopover.remove(); 
-		$scope._deregisterBackButton && $scope._deregisterBackButton();
+		//$scope._deregisterBackButton && $scope._deregisterBackButton(); -> gestito in beforeLeave
 		$settings.save();
 	});
 
 	//gestione eventi
 	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
 		//se sono stati modificati i dati devo aggiornare la vista
-		console.log('comics beforeEnter', needReload());
+		//console.log('comics beforeEnter', needReload());
 		if (needReload()) {
 		  changeOrder();
 		  applyFilter();
 	  }
 	});
-	$scope.$on('$ionicView.enter', function(scopes, states) {
+	$scope.$on('$ionicView.afterEnter', function(scopes, states) {
 		//in ogni caso gestire gli elementi selezionati in precedenza
 		//	(attualmente l'effeto è che l'elemento è selezionato ma l'header è nello stato 'title')
 		$scope.showNavBar();
+	});
+	$scope.$on('$ionicView.beforeLeave', function(scopes, states) {
+		$scope._deregisterBackButton && $scope._deregisterBackButton();
 	});	
 
 }])
