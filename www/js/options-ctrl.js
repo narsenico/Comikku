@@ -29,6 +29,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.chooseAutoFill = function() {
     $scope.autoFillPopup = $ionicPopup.show({
       templateUrl: 'autoFillReleaseData.html',
+      title: $filter('translate')('Auto fill release data'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
@@ -46,6 +47,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.chooseWeekStart = function() {
     $scope.weekStartPopup = $ionicPopup.show({
       templateUrl: 'weekStartMonday.html',
+      title: $filter('translate')('Week start on'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
@@ -63,6 +65,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.chooseDefaultUrl = function() {
     $scope.defaultUrlPopup = $ionicPopup.show({
       templateUrl: 'defaultUrl.html',
+      title: $filter('translate')('On start show'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
