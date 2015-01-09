@@ -288,8 +288,8 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
   };
 })
 .controller('ComicsEditorCtrl', [
-'$scope', '$stateParams', '$ionicHistory', '$comicsData',
-function($scope, $stateParams, $ionicHistory, $comicsData) {
+'$scope', '$stateParams', '$ionicHistory', '$comicsData', '$ionicPopup', '$filter',
+function($scope, $stateParams, $ionicHistory, $comicsData, $ionicPopup, $filter) {
 	//usato per contenere la form in modo da poter accedere alla form anche all'esterno del tag <form>
 	$scope.data = {};
   //console.log($stateParams, $comicsData)
@@ -312,6 +312,23 @@ function($scope, $stateParams, $ionicHistory, $comicsData) {
   $scope.isUnique = function(entry) {
     return $comicsData.normalizeComicsName($scope.master.name) == $comicsData.normalizeComicsName(entry.name) || 
       $comicsData.isComicsUnique(entry);
+  };
+	//
+  $scope.chooseComicsPeriodicity = function() {
+    $scope.comicsPeriodicityPopup = $ionicPopup.show({
+      templateUrl: 'comicsPeriodicity.html',
+      title: $filter('translate')('Comics periodicity'),
+      scope: $scope,
+      buttons: [{
+        text: $filter('translate')('Cancel'),
+        type: 'button-default',
+        onTap: function(e) { return false; }
+      }]
+    });
+  };
+  //
+  $scope.getPeriodicityDescr = function(periodicity) {
+  	return $filter('translate')(PERIODICITIES[periodicity]) || "";
   };
   $scope.reset();
 }]);

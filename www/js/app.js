@@ -45,6 +45,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Authors": "Autore",
     "Price": "Prezzo",
     "Periodicity": "Periodicit&agrave;",
+    "Comics periodicity": "Periodicit&agrave;",
     "Reserved": "Prenotato",
     "Notes": "Note",
     "comics title": "titolo",
@@ -99,7 +100,15 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "OK": "OK",
     "Enabled": "Abilitata",
     "Disabled": "Disabilitata",
-    "Ordered": "Ordinato"
+    "Ordered": "Ordinato",
+    "Periodicity.None": "Nessuna",
+    "Weekly": "Settimanale",
+    "Monthly": "Mensile",
+    "Every 2 months": "Ogni 2 mesi",
+    "Every 3 months": "Ogni 3 mesi",
+    "Every 4 months": "Ogni 4 mesi",
+    "Every 6 months": "Ogni 6 mesi",
+    "Annual": "Annuale" 
   });
 
   //imposto la lingua di default
