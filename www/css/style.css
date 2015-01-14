@@ -361,7 +361,7 @@
 /* Popup */
 
 .popup-container .popup {
-	width: 320px;
+	/*width: 320px;*/
 	background-color: #F5F5F5;
 	border-radius: 2px;
 }
@@ -534,8 +534,8 @@
 	padding-bottom: 8px;
 }
 
-.item-release .release {
-	padding: 8px 49px 8px 16px;
+/*.item-release .release {
+	padding: 8px;
 }
 
 .item-release .release.selected {
@@ -543,7 +543,6 @@
 }
 
 .item-release .release .number {
-	display: inline-block;
 	font-size: 1.35em;
 	width: 45px;
 	line-height: 45px;
@@ -552,6 +551,7 @@
 	text-align: center;
 	border-radius: 4px;
 	margin-right: 8px;
+	float: left;
 }
 .item-release .release.purchased .number {
 	background-color: transparent;
@@ -575,22 +575,46 @@
 }
 
 .item-release .release .date {
-	display: inline-block;
-	position: absolute;
-	right: 8px;
-	top: 4px;
 	font-size: 0.7em;
+	float: right;
 }
 .item-release .release.purchased .date {
 	color: #ACACAC;	
 }
 
 .item-release .release .title {
-	display: inline-block;
+	width: 45px;
+	background-color: #F3F2F2;
+	border: solid 1px #F3F2F2;
+	text-align: center;
+	border-radius: 4px;
+	margin-right: 8px;
+	float: left;
 }
 .item-release .release.purchased .title {
 	text-decoration: line-through;
 	color: #ACACAC;
+}
+
+.item-release .release .title .comics-title {
+	display: block;
+	font-size: 1.1em;
+	font-weight: normal;
+	color: #444;
+	margin-bottom: 2px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.item-release .release .title .comics-subtitle {
+	display: block;
+	font-size: 0.8em;
+	font-weight: normal;
+	color: #444;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .item-release .release .icons {
@@ -617,7 +641,103 @@
 }
 .item-release .release .icons>.icon.expired.near {
 	color: #FF8800;
+}*/
+
+.item-release>.release.flex {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: flex-start;
+	padding: 8px;
 }
+.item-release>.release.flex.selected {
+	background-color: #CFE9F3;
+}
+
+.item-release>.release.flex>div {
+	margin: auto;  /* Magic! */
+	padding: 0 6px;
+	overflow: hidden;
+}
+
+.item-release>.release.flex>.number {
+	flex: 1 6 45px;
+	order: 1;
+	line-height: 45px;
+	text-align: center;
+	font-size: 1.25em;
+	background-color: #E5E5E5;
+	color: #333;
+	border-radius: 50px;
+	max-width: 45px;
+	border: solid 1px #BEBABA;
+}
+.item-release>.release.flex.purchased>.number {
+	background-color: transparent;
+	color: #ACACAC;
+}
+.item-release>.release.flex:not(.purchased)>.number.expired {
+	background-color: #CC0000;
+	border-color: #CC0000;
+	color: #FFFFFF;
+}
+.item-release>.release.flex:not(.purchased)>.number.expired.near {
+	background-color: #FF8800;
+	border-color: #FF8800;
+	color: #FFFFFF;
+}
+.item-release>.release.flex:not(.purchased)>.number.wishlist {
+	background-color: #9933CC;
+	border-color: #9933CC;
+	color: #FFFFFF;
+}
+
+.item-release>.release.flex>.title {
+	flex: 3 1 50%;
+	order: 2;
+	line-height: 22px;
+	padding: 0px 10px;
+}
+.item-release>.release.flex>.title>h4 {
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 1em;	
+}
+.item-release>.release.flex>.title>p {
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: #7B7B7B;
+}
+.item-release>.release.flex.purchased>.title>h4 {
+	text-decoration: line-through;
+	color: #ACACAC;
+}
+.item-release>.release.flex.purchased>.title>p {
+	text-decoration: line-through;
+	color: #ACACAC;
+}
+
+.item-release>.release.flex>.flags {
+	flex: 1 6 70px;
+	order: 3;
+	text-align: right;
+}
+.item-release>.release.flex>.flags>.date {
+	font-size: 0.8em;
+}
+.item-release>.release.flex>.flags>.icon.purchased {
+	color: #669900;
+}
+.item-release>.release.flex>.flags>.icon.expired {
+	color: #CC0000;
+}
+
 
 /** about **/
 
