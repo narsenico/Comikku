@@ -1,54 +1,37 @@
-<ion-view title="{{currentBar == 'options' ? '' : title | translate}}">
+<ion-view title="{{title | translate}}">
 
-  <ion-nav-bar class="bar bar-header bar-positive" ng-class="{'bar-calm': isWishlist, 'bar-dark': isPurchased, 'bar-options': currentBar=='options'}">
-    <div class="buttons" ng-show="currentBar=='title'">
-      <button class="button-icon button back-button ion-android-arrow-back" ng-if="entry" ng-click="goBack()"></button>
-      <button menu-toggle="left" class="button button-icon icon ion-navicon" ng-if="!entry"></button>
-    </div>
+  <!-- pulsanti barra di navigazione -->
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
+    <button class="button button-icon icon ion-android-more" ng-click="openGroupByPopover($event)" ng-if="!isWishlist"></button>
+  </ion-nav-buttons>
 
-    <div class="buttons" ng-show="currentBar=='options'">
-      <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showHeaderBar()"></button>
-      <div class="info">{{selectedReleases.length}}</div>
-    </div>    
-
-    <div class="buttons pull-right" ng-show="currentBar=='title'">
-      <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
-      <button class="button button-icon icon ion-android-more" ng-click="openGroupByPopover($event)" ng-if="!isWishlist"></button>
-    </div>
-
-    <div class="buttons pull-right" ng-show="currentBar=='options'">
+  <!-- barra secondaria, visibile quando quella primaria è nascosta -->
+  <ion-header-bar class="bar bar-header bar-options" ng-show="currentBar=='options'">
+    <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showNavBar()"></button>
+    <div class="info">{{selectedReleases.length}}</div>
+    <div class="buttons pull-right">
       <button class="button button-icon icon ion-plus" ng-show="canEdit" ng-click="showAddRelease()"></button>
       <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editReleaseEntry()"></button>
       <button class="button button-icon icon ion-ios7-briefcase" ng-click="setPurchased(null, 'T')"></button>
       <button class="button button-icon icon ion-ios7-briefcase-outline" ng-click="setPurchased(null, 'F')"></button>
       <button class="button button-icon icon ion-android-trash" ng-click="removeReleaseEntry()"></button>
     </div>
-  </ion-nav-bar>
+  </ion-header-bar>
 
-  <ion-content class="has-header" has-bouncing="false">
+  <ion-content class="has-header custom-header" has-bouncing="false">
     <ion-list can-swipe="true">
       <ion-item class="item item-release" ng-repeat="item in items track by item._kk">
         <!-- se non ha comicsId è l'intestazione del gruppo -->
         <ion-item ng-if="!item.comicsId" class="item group">{{item.label}} <span class="item-note"># {{item.count}}</span></ion-item>
         <!-- se ha comicsId è una release -->
-        <ion-item ng-if="item.comicsId"
-          class="item rmm-button-right release"
+        <comics-release ng-if="item.comicsId"
+          class="item rmm-button-right release flex"
           ng-class="{purchased: item.purchased == 'T', selected: isSelected(item)}"
           on-hold="selectRelease(item)"
-          ng-click="clickRelease(item)"
-          ng-class="{selected: isSelected(item)}">
-          <!-- <div class="number">{{item.number}}</div>
-          <div class="title">{{getComicsById(item.comicsId).name}}</div>
-          <div class="date">{{item.date | date : 'EEE, dd MMM'}}</div>
-          <div class="icons">
-            <i class="icon ion-ios7-filing-outline" ng-show="getComicsById(item.comicsId).reserved=='T'"></i>
-            <i class="icon ion-ios7-briefcase purchased" ng-show="item.purchased == 'T'"></i>
-            <i class="icon ion-ios7-bell expired" ng-show="item.purchased != 'T' && isExpired(item)"></i>
-          </div> -->
-          <comics-release ng-if="item.comicsId" release="item"></comics-release>
-        </ion-item>
+          ng-click="clickRelease(item)" release="item">
+        </comics-release>
       </ion-item>
-
     </ion-list>
   </ion-content>
 </ion-view>

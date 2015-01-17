@@ -75,7 +75,8 @@ IonicModule
   '$timeout',
   '$document',
   '$ionicGesture',
-function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
+  '$ionicPlatform',
+function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture, $ionicPlatform) {
 	
   var previousUndo = null;
 	var $undoPopup = {
@@ -172,7 +173,7 @@ function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
 	} //end createPopup
 
 	function onHardwareBackButton(e) {
-		//TODO risolvere se back premuto
+		previousUndo && previousUndo.responseDeferred.resolve('back');
 	} //end onHardwareBackButton
 
 	function showPopup(options) {
@@ -186,9 +187,14 @@ function($ionicTemplateLoader, $q, $timeout, $document, $ionicGesture) {
     .then(function() { return popupPromise; })
     .then(function(popup) {
       previousUndo = popup;
+
+      $undoPopup._backButtonActionDone = $ionicPlatform.registerBackButtonAction(
+        onHardwareBackButton, 400);
+
       popup.show();
       return popup.responseDeferred.promise.then(function(result) {
         popup.remove();
+        ($undoPopup._backButtonActionDone || angular.noop)();
         return result;
       });
     });
@@ -595,3 +601,27 @@ IonicModule
     }
   }
 }]); // end of StorageService
+
+//direttiva per gestire nella maniera corretta la conversione in Date delle stringhe con un input[date]
+//  (nelle versioni precednti in angular input[date] era sempre gestito come una stringa mentre adesso come Date)
+IonicModule
+.directive( 'rmmInputDate', function() {
+    return {
+        restrict : 'A', //attributo (rmm-input-date)
+        require : ['?ngModel'], //richiede ngModel
+        priority : 100,
+        link : function( scope, element, attr, ngModel ) {
+          if ( attr.type === "date" ) {
+            var model = ngModel[0];
+            model.$parsers.push( function(value){
+              //console.log('value', value, moment.locale());
+              return moment(value).format('YYYY-MM-DD');
+            });
+            model.$formatters.push(function formatter(modelValue){
+              //console.log('modelValue', modelValue, moment.locale());
+              return moment(modelValue).toDate();
+            });
+          }
+        }
+    };
+} );

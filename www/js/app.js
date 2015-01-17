@@ -20,8 +20,8 @@ angular.module('starter',
   }];
 })
 
-.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider',
-function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider', '$ionicConfigProvider',
+function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider, $ionicConfigProvider) {
 
   //TODO caricare le stringhe da file esterni
   $translateProvider.translations('en', {
@@ -45,6 +45,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Authors": "Autore",
     "Price": "Prezzo",
     "Periodicity": "Periodicit&agrave;",
+    "Comics periodicity": "Periodicit&agrave;",
     "Reserved": "Prenotato",
     "Notes": "Note",
     "comics title": "titolo",
@@ -98,7 +99,16 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Cancel": "Annulla",
     "OK": "OK",
     "Enabled": "Abilitata",
-    "Disabled": "Disabilitata"
+    "Disabled": "Disabilitata",
+    "Ordered": "Ordinato",
+    "Periodicity.None": "Nessuna",
+    "Weekly": "Settimanale",
+    "Monthly": "Mensile",
+    "Every 2 months": "Ogni 2 mesi",
+    "Every 3 months": "Ogni 3 mesi",
+    "Every 4 months": "Ogni 4 mesi",
+    "Every 6 months": "Ogni 6 mesi",
+    "Annual": "Annuale" 
   });
 
   //imposto la lingua di default
@@ -108,6 +118,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     .useStorage('StorageService');
   //
   moment.locale('en');
+
+  //configuro il pulsante 'back' in modo che non mostri alcun testo (ma solo l'icona)
+  $ionicConfigProvider.backButton.text('').previousTitleText(false);
 
   //
   $stateProvider
@@ -230,16 +243,18 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
         }
       }
     });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise($initOptionsProvider.defaultUrl);
 }])
 
-.run(['$ionicPlatform', '$translate', function($ionicPlatform, $translate) {
+.run(['$ionicPlatform', '$translate', '$state', '$ionicHistory', '$settings',
+function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
 
   //imposto la lingua a moment prima che parta cordova
   //  visto che solitamente parte dopo il caricamento della prima pagina
   moment.locale($translate.use());
-  console.log("Language moment " + moment.locale() + " translate " + $translate.use());
+  //console.log("Language moment " + moment.locale() + " translate " + $translate.use());
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -256,14 +271,27 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
       navigator.globalization.getPreferredLanguage(function(language) {
         var lang = (language.value).split("-")[0];
         moment.locale(lang);
-        $translate.use(lang).then(function(data) {
+        $translate.use(lang)/*.then(function(data) {
           console.log("SUCCESS -> " + data);
         }, function(error) {
           console.log("ERROR -> " + error);
-        });
+        })*/;
       }, null);
     }
   });
+
+  $ionicPlatform.registerBackButtonAction(function(e) {
+    //console.log("BACK BTN " + $ionicHistory.currentView().url + " def " + $settings.userOptions.defaultUrl);
+    var backView = $ionicHistory.backView();
+    if (backView) {
+      backView.go();
+    // } else if ($ionicHistory.currentView().url != $settings.userOptions.defaultUrl) {
+    //   console.log("go to def view " + $settings.userOptions.defaultUrl);
+    //   $state.go();
+    } else {
+      ionic.Platform.exitApp();
+    }
+  }, 100);
 }]);
 
 angular.module('starter.controllers', ['starter.services'])

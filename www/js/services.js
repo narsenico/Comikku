@@ -48,6 +48,8 @@ function ($q, $filter, $utils, $file) {
 		date: null,
 		price: null,
 		reminder: null, //null, 1
+		ordererd: "F",
+		notes: null,
 		purchased: "F"
 	}
 
@@ -56,6 +58,7 @@ function ($q, $filter, $utils, $file) {
 		//
 		uid: null,
 		comics: null,
+		lastSaveTime: null,
 		//
 		read: function(uid, refresh) {
 			//console.log(uid, refresh);
@@ -74,13 +77,12 @@ function ($q, $filter, $utils, $file) {
 		},
 		//
 		save: function() {
+			this.lastSaveTime = new Date().getTime();
 			var dbkey = this.uid + "_comics";
 			window.localStorage.setItem(dbkey, JSON.stringify( this.comics ));
 		},
 		//orderBy: bestRelease, namse, lastUpdate
 		getComics: function(orderBy, desc) {
-			//console.log("getComics", orderBy, desc);
-
 			//provo ad aggiornare best release ogni volta che vengono richiesti i comics
 			this.refreshBestRelease(this.comics);
 
@@ -345,8 +347,8 @@ function ($q, $filter, $utils, $file) {
 				});
 			});
 			return count;
-		},
-		//
+		}
+		//,
 		// addNotification: function(date) {
 		// 	$cordovaLocalNotification.isScheduled(date, this).then(function(scheduled) {
 		// 		var badge = 1;

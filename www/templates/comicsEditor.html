@@ -1,15 +1,13 @@
 <ion-view title="{{entry.id == 'new' ? 'New comics entry': 'Edit comics entry' | translate}}">
 
-	<ion-nav-bar class="bar bar-header bar-energized">
-    <button class="button-icon button back-button ion-android-arrow-back" ng-click="goBack()"></button>
-	</ion-nav-bar>
+  <!-- pulsanti barra di navigazione -->
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="data.form.$invalid || !isUnique(entry)"></button>
+  </ion-nav-buttons>
 
   <!-- content -->
   <ion-content class="has-header custom-header">
-    <form name="form" novalidate class="validation-form">
-		  <ion-nav-buttons side="right">
-		    <button class="button button-icon icon ion-android-checkmark" ng-click="update(entry)" ng-disabled="form.$invalid || !isUnique(entry)"></button>
-		  </ion-nav-buttons>
+    <form name="data.form" novalidate class="validation-form">
 		  <label class="item item-input item-key">
 		  	<span class="input-label rmm-required" translate> Name</span>
 		    <input type="text" placeholder="{{'comics title' | translate}}" ng-model="entry.name" required>
@@ -30,16 +28,17 @@
 		    <span class="input-label" translate> Price</span>
 		    <input type="number" placeholder="{{'price' | translate}}" ng-model="entry.price" onfocus="this.select()">
 		  </label>
-		  <label class="item item-input item-select">
+		  <label class="item item-input" ng-click="chooseComicsPeriodicity()">
 		    <span class="input-label" translate> Periodicity</span>
-		    <select ng-model="entry.periodicity" ng-options="k as v for (k, v) in periodicities">
+<!-- 		    <select ng-model="entry.periodicity" ng-options="k as v for (k, v) in periodicities">
       		<option value=""></option>
-      	</select>
+      	</select> -->
+      	{{getPeriodicityDescr(entry.periodicity)}}
 		  </label>
 		  <label class="item item-input">
 		  	<span class="input-label" translate> Reserved</span>
 			  <label class="toggle" style="float: right">
-	   			<input type="checkbox" ng-model="entry.reserved" ng-true-value="T">
+	   			<input type="checkbox" ng-model="entry.reserved" ng-true-value="'T'">
 	   			<div class="track">
 	     			<div class="handle"></div>
 	   			</div>
@@ -56,3 +55,16 @@
     </form>
   </ion-content>
 </ion-view>
+
+<script id="comicsPeriodicity.html" type="text/ng-template">
+	<ion-list>
+		<ion-radio ng-model="entry.periodicity" ng-value="''" ng-change="comicsPeriodicityPopup.close('')"><span translate="Periodicity.None">None</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'w1'" ng-change="comicsPeriodicityPopup.close('w1')"><span translate>Weekly</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M1'" ng-change="comicsPeriodicityPopup.close('M1')"><span translate>Monthly</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M2'" ng-change="comicsPeriodicityPopup.close('M2')"><span translate>Every 2 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M3'" ng-change="comicsPeriodicityPopup.close('M3')"><span translate>Every 3 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M4'" ng-change="comicsPeriodicityPopup.close('M4')"><span translate>Every 4 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M6'" ng-change="comicsPeriodicityPopup.close('M6')"><span translate>Every 6 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'Y1'" ng-change="comicsPeriodicityPopup.close('Y1')"><span translate>Annual</span></ion-radio>
+	</ion-list>
+</script>

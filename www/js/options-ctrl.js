@@ -2,10 +2,10 @@ angular.module('starter.controllers')
 .controller('OptionsCtrl', [
 	'$scope', '$q', '$ionicPopup', '$undoPopup', '$toast', '$ionicPopover', '$ionicModal', 
   '$file', '$timeout', '$filter', 
-  '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate',
+  '$comicsData', '$settings', '$ionicNavBarDelegate', '$translate', '$ionicHistory',
 function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal, 
   $file, $timeout, $filter, 
-  $comicsData, $settings, $ionicNavBarDelegate, $translate) {
+  $comicsData, $settings, $ionicNavBarDelegate, $translate, $ionicHistory) {
   //
   $scope.version = null;
   $scope.lastBackup = $filter('translate')('not found');
@@ -29,6 +29,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.chooseAutoFill = function() {
     $scope.autoFillPopup = $ionicPopup.show({
       templateUrl: 'autoFillReleaseData.html',
+      title: $filter('translate')('Auto fill release data'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
@@ -46,6 +47,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.chooseWeekStart = function() {
     $scope.weekStartPopup = $ionicPopup.show({
       templateUrl: 'weekStartMonday.html',
+      title: $filter('translate')('Week start on'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
@@ -63,6 +65,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.chooseDefaultUrl = function() {
     $scope.defaultUrlPopup = $ionicPopup.show({
       templateUrl: 'defaultUrl.html',
+      title: $filter('translate')('On start show'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
@@ -168,10 +171,6 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
     });
   };
   //
-  $scope.goBack = function() {
-    $ionicNavBarDelegate.back();
-  };
-  //
   $scope.readLastBackup();
 
   //DEBUG
@@ -201,7 +200,13 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
       $comicsData.read("USER");
     $scope.currentUser = $comicsData.uid;
     $scope.readLastBackup();
+    $ionicHistory.clearCache();
     $toast.show("Hello " + $scope.currentUser);
+  };
+  //
+  $scope.clearCache = function() {
+    $ionicHistory.clearCache();
+    $toast.show("Cache cleared");
   };
   // //TEST POPOVER MENU
   // $ionicPopover.fromTemplateUrl('my-popover.html', {
@@ -218,7 +223,8 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
     // $scope.openPopover($event)
 
     // try {
-      console.log(window.cordova);
+      console.log($ionicHistory.viewHistory());
+      
 
     // } catch (e) {
     //   console.log("TEST ERR" + e);

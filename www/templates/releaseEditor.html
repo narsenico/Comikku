@@ -1,21 +1,19 @@
 <ion-view title="{{entry.name}}">
 
-	<ion-nav-bar class="bar bar-header bar-energized">
-    <button class="button-icon button back-button ion-android-arrow-back" ng-click="goBack()"></button>
-	</ion-nav-bar>
+  <!-- pulsanti barra di navigazione -->
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-android-checkmark" ng-click="update(release)" ng-disabled="data.form.$invalid || !isUnique(release)"></button>
+  </ion-nav-buttons>
 
   <ion-content class="has-header">
-    <form name="form" novalidate class="validation-form">
-		  <ion-nav-buttons side="right">
-		    <button class="button button-icon icon ion-android-checkmark" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)"></button>
-		  </ion-nav-buttons>
+    <form name="data.form" novalidate class="validation-form">
 		  <label class="item item-input item-key">
 		    <span class="input-label rmm-required" translate> Issue #</span>
 		    <input type="number" placeholder="{{'release number' | translate}}" ng-model="release.number" name="nNumber" min="1" required>
 		  </label>
 		  <label class="item item-input">
 		    <span class="input-label" translate> Date</span>
-		    <input type="date" name="rdate" ng-model="release.date" ng-required="release.reminder=='1'">
+		    <input type="date" name="rdate" ng-model="release.date" ng-required="release.reminder=='1'" rmm-input-date>
 		    <span class="rmm-required-message" ng-show="form.rdate.$error.required" translate>Release date is required with reminder checked!</span>
 		  </label>
 		  <label class="item item-input">
@@ -36,14 +34,27 @@
 		    <input type="time" placeholder="time" ng-model="release.reminderTime" ng-disabled="release.reminder!=1 || !release.date">
 		  </label> -->
 		  <label class="item item-input">
-		  	<span class="input-label" translate="Purchased.1"> Purchased</span>
+		  	<span class="input-label" translate> Ordered</span>
 			  <label class="toggle" style="float: right">
-	   			<input type="checkbox" ng-model="release.purchased" ng-true-value="T">
+	   			<input type="checkbox" ng-model="release.ordered" ng-true-value="'T'">
 	   			<div class="track">
 	     			<div class="handle"></div>
 	   			</div>
 				</label>
 			</label>
+			<label class="item item-input">
+		  	<span class="input-label" translate="Purchased.1"> Purchased</span>
+			  <label class="toggle" style="float: right">
+	   			<input type="checkbox" ng-model="release.purchased" ng-true-value="'T'">
+	   			<div class="track">
+	     			<div class="handle"></div>
+	   			</div>
+				</label>
+			</label>
+		  <label class="item item-input item-stacked-label">
+		    <span class="input-label" translate> Notes</span>
+		    <input type="text" placeholder="{{'notes' | translate}}" ng-model="release.notes">
+		  </label>
 		  <!-- <div class="content padding">
 				<button class="button button-block button-positive" ng-click="update(release)" ng-disabled="form.$invalid || !isUnique(release)">SAVE</button>
 			</div> -->
