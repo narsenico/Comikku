@@ -129,7 +129,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//
 	var lastReadTime = null;
 	var needReload = function() {
-		return $scope.items == undefined || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime);
+		return $scope.items == undefined || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime) || 
+			(!moment().isSame(moment(lastReadTime), 'days'));
 	};
 	//comics selezionato (se arrivo dal menu laterale, sarà sempre null)
   $scope.entry = $stateParams.comicsId == null ? null : ($scope.entry = $comicsData.getComicsById($stateParams.comicsId));
@@ -321,7 +322,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//gestione eventi
 	$scope.$on('$ionicView.beforeEnter', function(scopes, states) {
 		//se sono stati modificati i dati devo aggiornare la vista
-		//console.log('releases beforeEnter', needReload());
+		//console.log('releases beforeEnter', lastReadTime, needReload());
 		if (needReload()) {
 		  changeGroup();
 		  applyFilter();

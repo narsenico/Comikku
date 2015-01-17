@@ -41,7 +41,8 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	//
 	var lastReadTime = null;
 	var needReload = function() {
-		return filteredComics == null || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime);
+		return filteredComics == null || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime) || 
+			(!moment().isSame(moment(lastReadTime), 'days'));
 	};
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
