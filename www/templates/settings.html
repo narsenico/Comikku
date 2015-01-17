@@ -2,24 +2,6 @@
   <ion-content>
   	<form name="myForm">
 	  	<ion-list>
-				<!-- <ion-item class="item item-toggle">
-					Search also in publisher
-					<label class="toggle">
-						<input type="checkbox" ng-model="userOptions.comicsSearchPublisher" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
-						<div class="track">
-						<div class="handle"></div>
-						</div>
-					</label>
-				</ion-item> -->
-				<!-- <ion-item class="item item-toggle">
-					<span translate>Auto fill release data</span>
-					<label class="toggle">
-						<input type="checkbox" ng-model="userOptions.autoFillReleaseData" ng-true-value="T" ng-false-value="F" ng-change="optionsChanged()">
-						<div class="track">
-						<div class="handle"></div>
-						</div>
-					</label>
-				</ion-item> -->
 				<ion-item class="item" ng-click="chooseAutoFill()">
 					<span translate>Auto fill release data</span>
 					<p class="option-value" ng-show="userOptions.autoFillReleaseData == 'T'" translate>Enabled</p>
