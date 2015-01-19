@@ -289,6 +289,7 @@ function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
     //   console.log("go to def view " + $settings.userOptions.defaultUrl);
     //   $state.go();
     } else {
+      $settings.save();
       ionic.Platform.exitApp();
     }
   }, 100);
@@ -300,6 +301,7 @@ angular.module('starter.controllers', ['starter.services'])
   function($scope, $settings, $comicsData) {
   //
   $settings.load();
+  //console.log("   ---- LOAD " + JSON.stringify($settings.userOptions))
   moment.weekStartOnMonday($settings.userOptions.weekStartMonday == 'T');
   //leggo l'elenco dei fumetti (per utente USER)
   $comicsData.read("USER");

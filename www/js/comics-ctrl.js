@@ -47,7 +47,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	//
 	$scope.debugMode = $settings.userOptions.debugMode == 'T';
 	//
-	$scope.orderBy = $settings.userOptions.comicsOrderBy || 'name';
+	$scope.orderBy = $settings.userOptions.comicsOrderBy || 'bestRelease';
 	$scope.orderByDesc = $settings.userOptions.comicsOrderByDesc == 'T';
 	//
 	$scope.currentBar = 'title';
@@ -247,9 +247,11 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	//applyFilter();
 
 	////deregistro l'evento sul back all'uscita
-	$scope.$on('$destroy', function() {
+	//TODO non viene chiamata, può essere che ionic.Platform.exitApp()
+	$scope.$on('$ionicView.unloaded', function() {
 		$scope.orderByPopover && $scope.orderByPopover.remove(); 
 		//$scope._deregisterBackButton && $scope._deregisterBackButton(); -> gestito in beforeLeave
+		//console.log("   ---- SAVE " + JSON.stringify($settings.userOptions))
 		$settings.save();
 	});
 
