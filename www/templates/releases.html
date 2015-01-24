@@ -37,12 +37,10 @@
 </ion-view>
 
 <script id="groupby-popover.html" type="text/ng-template">
-  <ion-popover-view class="popover-menu" style="height: 112px">
-    <ion-content>
-      <ion-list>
-        <ion-radio ng-model="groupBy" ng-value="'week'" ng-change="closeGroupByPopover('week')"><span translate>Group by week</span></ion-radio>
-        <ion-radio ng-model="groupBy" ng-value="'month'" ng-change="closeGroupByPopover('month')"><span translate>Group by month</span></ion-radio>
-      </ion-list>
-    </ion-content>
+  <ion-popover-view class="popover-menu" style="height: 52px">
+    <ion-list>
+      <ion-item ng-if="groupBy !== 'week'" ng-click="closeGroupByPopover('week')"><span translate>Group by week</span></ion-item>
+      <ion-item ng-if="groupBy !== 'month'" ng-click="closeGroupByPopover('month')"><span translate>Group by month</span></ion-item>
+    </ion-list>
   </ion-popover-view>
 </script>

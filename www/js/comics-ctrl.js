@@ -221,11 +221,11 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	};
 	//
 	$scope.closeOrderByPopover = function(orderBy, orderByDesc) {
+		$scope.orderByPopover.hide();
 		$scope.orderBy = orderBy;
 		$scope.orderByDesc = orderByDesc;
 		changeOrder();
 		applyFilter();
-		$scope.orderByPopover.hide();
 	};
 	//NB meglio registrare il back button ogni volta che si entra nella modalità opzioni
 	//gestisco il back hw in base a quello che sto facendo

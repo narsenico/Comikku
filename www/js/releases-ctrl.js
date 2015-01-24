@@ -287,10 +287,10 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	};
 	//
 	$scope.closeGroupByPopover = function(groupBy) {
+		$scope.groupByPopover.hide();
 		$scope.groupBy = groupBy;
 		changeGroup();
 		applyFilter();
-		$scope.groupByPopover.hide();
 	};
   //
   // changeGroup();
