@@ -615,6 +615,8 @@ IonicModule
             var model = ngModel[0];
             model.$parsers.push( function(value){
               //console.log('value', value, moment.locale());
+              if (!value)
+                return '';
               return moment(value).format('YYYY-MM-DD');
             });
             model.$formatters.push(function formatter(modelValue){
