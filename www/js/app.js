@@ -84,7 +84,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Reset settings": "Ripristina le impostazioni di default",
     "Cancel": "Annulla",
     "About": "Informazioni",
-    "Backup data": "Esegui il backup dei dati",
+    "Backup data.1": "Esegui il backup dei dati",
     "Restore data": "Ripristina i dati",
     "Last backup:": "Ultimo backup:",
     "not found": "non trovato",
