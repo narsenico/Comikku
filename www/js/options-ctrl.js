@@ -23,7 +23,9 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   //console.log($scope.userOptions)
   $scope.optionsChanged = function() {
     moment.weekStartOnMonday($scope.userOptions.weekStartMonday == 'T');
-    $settings.save();    
+    $settings.save();
+    //salvo anche i dati per forzare il refresh delle view comics e relases
+    $comicsData.save();
   };
   //
   $scope.chooseAutoFill = function() {
