@@ -18,6 +18,9 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		//e questo crea problemi a ionic durante l'aggiornamento della lista
 		//NB per evitare che il sistema di cache non aggiorni l'elemento della lista assegno a kkPref un numero random
 		//	che verrà aggiornato solo se la lista cambia
+	//indcia quanti dati caricare alla volta tramite infinite scroll
+	var loadChunk = 20;
+	var items = [];
 
 	var changeGroup = function() {
 		if ($scope.groupBy == 'week') { 
@@ -43,7 +46,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
   //
   var applyFilter = function() {
   	//console.log(new Date().getTime() + " applyFilter")
-    var items = [];
+    var _items = [];
 
     //estraggo tutt le releases
     var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
@@ -107,31 +110,40 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 
     	if (grpKeys[ii] == 'zzz') {
     		if ($scope.entry == null && !$scope.isWishlist && !$scope.isPurchased) continue;
-				items.push({ _kk: kk++, label: $filter('translate')('Wishlist'), count: grp.length });
+				_items.push({ _kk: kk++, label: $filter('translate')('Wishlist'), count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
     		if (!$scope.isWishlist) continue;
-				items.push({ _kk: kk++, label: $filter('translate')('Losts'), count: grp.length });
+				_items.push({ _kk: kk++, label: $filter('translate')('Losts'), count: grp.length });
 			} else if (grpKeys[ii] == $scope.thisTime) {
-				items.push({ _kk: kk++, label: lblThisTime, count: grp.length });
+				_items.push({ _kk: kk++, label: lblThisTime, count: grp.length });
 			} else if (grpKeys[ii] == $scope.nextTime) {
-				items.push({ _kk: kk++, label: lblNextTime, count: grp.length });
+				_items.push({ _kk: kk++, label: lblNextTime, count: grp.length });
     	} else if ($scope.entry != null || $scope.isPurchased || grpKeys[ii] >= $scope.thisTime) {
-    		items.push({ _kk: kk++, label: moment(grpKeys[ii]).format(grpDateFormat), count: grp.length });
+    		_items.push({ _kk: kk++, label: moment(grpKeys[ii]).format(grpDateFormat), count: grp.length });
     	} else {
     		continue;
     	}
 
-    	$utils.arrayAddRange(items, _.each(grp, function(rel) { rel._kk = kk++; }));
+    	$utils.arrayAddRange(_items, _.each(grp, function(rel) { rel._kk = kk++; }));
     }
 
-    $scope.items = items;
+    items = _items;
+    //console.log("items", items.length)
+    $scope.releases = [];
+		$ionicScrollDelegate.scrollTop();
   };
 	//
 	var lastReadTime = null;
 	var needReload = function() {
-		return $scope.items == undefined || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime) || 
+		return items == undefined || ($comicsData.lastSaveTime != null && $comicsData.lastSaveTime > lastReadTime) || 
 			(!moment().isSame(moment(lastReadTime), 'days'));
 	};
+	//TODO da perfezionare, lo scroll deve avvenire dopo il caricamento dei (primi) dati altrimenti lo scroll non funziona
+	// var scrollPos = { left: 0, top: 0 };
+	// var scrollToLastPos = function() {
+	//   //console.log("scroll to ", scrollPos)
+	//   $timeout(function() { $ionicScrollDelegate.scrollTo(scrollPos.left, scrollPos.top, false); }, 100);		
+	// }
 	//comics selezionato (se arrivo dal menu laterale, sarà sempre null)
   $scope.entry = $stateParams.comicsId == null ? null : ($scope.entry = $comicsData.getComicsById($stateParams.comicsId));
 	//
@@ -150,6 +162,31 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	$scope.groupBy = $settings.userOptions.releaseGroupBy || 'week';
 	$scope.thisTime = null;
 	$scope.nextTime = null;
+
+
+	//
+	$scope.$on('stateChangeSuccess', function() {
+		$scope.loadMore();
+	});
+	//carico altri dati (da items)
+	$scope.loadMore = function() {
+		var from = $scope.releases.length;
+		var max = Math.min(from + loadChunk, items.length);
+		//console.log("loadMore", from, max);
+		if (from < max) {
+			$scope.releases = _.union($scope.releases, items.slice(from, max));
+			//console.log(" - ", $scope.releases.length);
+		}
+		//NB sembra ci sia un baco, con $scope.$apply è una pezza
+		$scope.$apply(function(){
+		    $scope.$broadcast('scroll.infiniteScrollComplete');
+		});
+	};
+	//
+	$scope.moreDataCanBeLoaded = function() {
+		//console.log('moreDataCanBeLoaded', $scope.releases.length, items.length);
+		return $scope.releases && items && $scope.releases.length < items.length;
+	};
 
   //apre te template per l'editing dell'uscita
   $scope.showAddRelease = function(item) {
@@ -174,6 +211,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			$scope.selectedReleases = [];
 			$scope.canEdit = false;
 			applyFilter();
+			// scrollToLastPos();
 
 			$timeout(function() {
 			  $undoPopup.show({title: $filter('translate')('Releases removed'),
@@ -184,6 +222,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			      $scope.canEdit = ($scope.selectedReleases.length == 1);
 			      $comicsData.save();
 			      applyFilter();
+			      // scrollToLastPos();
 			    } else if (res == 'back') {
 			    	$scope.showNavBar();
 			    }
@@ -255,6 +294,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			// $scope._deregisterBackButton && $scope._deregisterBackButton();
   	// 	$scope._deregisterBackButton = null;
 		} else {
+			//salvo la posizione dello scroll in modo da riposizionarmi in un secondo momento
+			//TODO scrollPos = $ionicScrollDelegate.getScrollPosition();
 			$scope.canEdit = ($scope.selectedReleases.length == 1);
 			if ($scope.currentBar != 'options') {
 				$scope.showOptionsBar();
