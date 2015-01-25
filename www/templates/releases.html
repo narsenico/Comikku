@@ -1,6 +1,6 @@
 <ion-view title="{{title | translate}}">
 
-  <!-- pulsanti barra di navigazione -->
+  <!-- pu\santi barra di navigazione -->
   <ion-nav-buttons side="secondary">
     <button class="button button-icon icon ion-plus-round" ng-if="entry" ng-click="showAddRelease(entry)"></button>
     <button class="button button-icon icon ion-android-more" ng-click="openGroupByPopover($event)" ng-if="!isWishlist"></button>
@@ -26,7 +26,7 @@
         <ion-item ng-if="!item.comicsId" class="item group">{{item.label}} <span class="item-note"># {{item.count}}</span></ion-item>
         <!-- se ha comicsId è una release -->
         <comics-release ng-if="item.comicsId"
-          class="item rmm-button-right release flex"
+          class="item rmm-button-right release"
           ng-class="{purchased: item.purchased == 'T', selected: isSelected(item)}"
           on-hold="selectRelease(item)"
           ng-click="clickRelease(item)" release="item">
