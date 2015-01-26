@@ -7,9 +7,12 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $file, $timeout, $filter, 
   $comicsData, $settings, $ionicNavBarDelegate, $translate, $ionicHistory) {
   //
+  //TODO caricare i dati in beforeExit
+  //
   $scope.version = null;
   $scope.lastBackup = $filter('translate')('not found');
   $scope.currentUser = $comicsData.uid;
+  $scope.debugMode = ($settings.userOptions.debugMode == 'T');
   $scope.langinfo = 'moment: ' + moment.locale() + ' - translate: ' + $translate.use();
   //
   if (window.cordova) {
@@ -140,8 +143,8 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   //
   $scope.backup = function() {
     $ionicPopup.confirm({
-      title: $filter('translate')('Confirm'),
-      template: $filter('translate')('Backup data? Previous backup will be overridden.'),
+      title: $filter('translate')('Backup'),
+      template: $filter('translate')('Previous backup will be overridden. Continue?'),
       cancelText: $filter('translate')('Cancel'),
       okText: $filter('translate')('OK')
     }).then(function(res) {
@@ -158,7 +161,7 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   //
   $scope.restore = function() {
     $ionicPopup.confirm({
-      title: $filter('translate')('Confirm'),
+      title: $filter('translate')('Restore'),
       template: $filter('translate')('Restore data from backup? Current data will be overridden.'),
       cancelText: $filter('translate')('Cancel'),
       okText: $filter('translate')('OK')

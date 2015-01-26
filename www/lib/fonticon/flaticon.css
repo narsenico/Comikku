@@ -13,22 +13,25 @@
 	font-family: Flaticon;
         font-size: 20px;
 font-style: normal;
-/*margin-left: 20px;*/
-}.flaticon-bubble1:before {
+margin-left: 20px;
+}.flaticon-purchased:before {
 	content: "\e000";
 }
-.flaticon-shopping6:before {
+.flaticon-npurchased:before {
 	content: "\e001";
 }
-.flaticon-shopping63:before {
+.flaticon-wishlist:before {
 	content: "\e002";
 }
-.flaticon-small58:before {
+.flaticon-comics:before {
 	content: "\e003";
 }
-.flaticon-sort27:before {
+.flaticon-download:before {
 	content: "\e004";
 }
-.flaticon-star105:before {
+.flaticon-releases:before {
 	content: "\e005";
+}
+.flaticon-upload:before {
+	content: "\e006";
 }
