@@ -77,17 +77,19 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	});
 	//carico altri dati (da filteredComics)
 	$scope.loadMore = function() {
-		var from = $scope.comics.length;
-		var max = Math.min(from + loadChunk, filteredComics.length);
-		//console.log("loadMore", from, max);
-		if (from < max) {
-			$scope.comics = _.union($scope.comics, filteredComics.slice(from, max));
-			//console.log(" - ", $scope.comics.length);
-		}
-		//NB sembra ci sia un baco, con $scope.$apply è una pezza
-		$scope.$apply(function(){
-		    $scope.$broadcast('scroll.infiniteScrollComplete');
-		});
+		$timeout(function() {
+			var from = $scope.comics.length;
+			var max = Math.min(from + loadChunk, filteredComics.length);
+			//console.log("loadMore", from, max);
+			if (from < max) {
+				$scope.comics = _.union($scope.comics, filteredComics.slice(from, max));
+				//console.log(" - ", $scope.comics.length);
+			}
+			//NB sembra ci sia un baco, con $scope.$apply è una pezza
+			$scope.$apply(function(){
+			    $scope.$broadcast('scroll.infiniteScrollComplete');
+			});
+		}, 100);
 	};
 	//
 	$scope.moreDataCanBeLoaded = function() {

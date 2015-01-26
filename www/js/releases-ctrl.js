@@ -170,17 +170,19 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	});
 	//carico altri dati (da items)
 	$scope.loadMore = function() {
-		var from = $scope.releases.length;
-		var max = Math.min(from + loadChunk, items.length);
-		//console.log("loadMore", from, max);
-		if (from < max) {
-			$scope.releases = _.union($scope.releases, items.slice(from, max));
-			//console.log(" - ", $scope.releases.length);
-		}
-		//NB sembra ci sia un baco, con $scope.$apply è una pezza
-		$scope.$apply(function(){
-		    $scope.$broadcast('scroll.infiniteScrollComplete');
-		});
+		$timeout(function() {
+			var from = $scope.releases.length;
+			var max = Math.min(from + loadChunk, items.length);
+			//console.log("loadMore", from, max);
+			if (from < max) {
+				$scope.releases = _.union($scope.releases, items.slice(from, max));
+				//console.log(" - ", $scope.releases.length);
+			}
+			//NB sembra ci sia un baco, con $scope.$apply è una pezza
+			$scope.$apply(function(){
+			    $scope.$broadcast('scroll.infiniteScrollComplete');
+			});
+		}, 100);
 	};
 	//
 	$scope.moreDataCanBeLoaded = function() {
