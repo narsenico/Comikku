@@ -403,7 +403,8 @@ function ($q, $filter, $utils, $file) {
 		weekStartMonday: 'F',
 		defaultUrl: '/app/comics',
 		releaseGroupBy: 'week',
-		language: null //system
+		language: null, //system
+		infiniteScrollChunk: 20
 	};
 
 	//localstorage DB

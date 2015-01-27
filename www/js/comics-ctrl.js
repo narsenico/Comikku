@@ -9,7 +9,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	//conterrà i dati filtrati (tramite campo di ricerca)
 	var filteredComics = null;
 	//indcia quanti dati caricare alla volta tramite infinite scroll
-	var loadChunk = 20;
+	var loadChunk = $settings.userOptions.infiniteScrollChunk;
 	var changeOrder = function() {
 		filteredComics = orderedComics = $comicsData.getComics($scope.orderBy, $scope.orderByDesc);
 		lastReadTime = new Date().getTime();
@@ -80,7 +80,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$timeout(function() {
 			var from = $scope.comics.length;
 			var max = Math.min(from + loadChunk, filteredComics.length);
-			//console.log("loadMore", from, max);
+			console.log("loadMore", from, max);
 			if (from < max) {
 				$scope.comics = _.union($scope.comics, filteredComics.slice(from, max));
 				//console.log(" - ", $scope.comics.length);
@@ -89,7 +89,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 			$scope.$apply(function(){
 			    $scope.$broadcast('scroll.infiniteScrollComplete');
 			});
-		}, 100);
+		}, 10);
 	};
 	//
 	$scope.moreDataCanBeLoaded = function() {

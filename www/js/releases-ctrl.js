@@ -19,7 +19,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		//NB per evitare che il sistema di cache non aggiorni l'elemento della lista assegno a kkPref un numero random
 		//	che verrà aggiornato solo se la lista cambia
 	//indcia quanti dati caricare alla volta tramite infinite scroll
-	var loadChunk = 20;
+	var loadChunk = $settings.userOptions.infiniteScrollChunk;
 	var items = [];
 
 	var changeGroup = function() {
@@ -182,7 +182,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			$scope.$apply(function(){
 			    $scope.$broadcast('scroll.infiniteScrollComplete');
 			});
-		}, 100);
+		}, 10);
 	};
 	//
 	$scope.moreDataCanBeLoaded = function() {
