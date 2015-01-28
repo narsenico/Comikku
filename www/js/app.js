@@ -33,6 +33,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Releases": "Uscite",
     "Losts & Wishlist": "Persi &amp; desiderati",
     "Purchased": "Acquistati",
+    "To buy": "Da acquistare",
     "Settings": "Impostazioni",
     "CANCEL": "ANNULLA",
     "Sort by release": "Ordina per uscita",
