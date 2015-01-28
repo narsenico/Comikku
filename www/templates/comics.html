@@ -2,18 +2,18 @@
 
   <!-- pulsanti barra di navigazione -->
   <ion-nav-buttons side="secondary">
-    <button class="button button-icon icon ion-document" ng-click="addComicsEntry()"></button>
-    <button class="button button-icon icon ion-android-more" ng-click="openOrderByPopover($event)"></button>
+    <button class="button button-icon icon ion-document" on-tap="addComicsEntry()"></button>
+    <button class="button button-icon icon ion-android-more" on-tap="openOrderByPopover($event)"></button>
   </ion-nav-buttons>
 
   <!-- barra secondaria, visibile quando quella primaria è nascosta -->
   <ion-header-bar class="bar bar-header bar-options" ng-show="currentBar=='options'">
-    <button class="button button-icon icon ion-ios7-arrow-down hide-options" ng-click="showNavBar()"></button>
+    <button class="button button-icon icon ion-ios7-arrow-down hide-options" on-tap="showNavBar()"></button>
     <div class="info">{{selectedComics.length}}</div>
     <div class="buttons pull-right">
-      <button class="button button-icon icon ion-plus-round" ng-show="canEdit" ng-click="showAddRelease()"></button>
-      <button class="button button-icon icon ion-compose" ng-show="canEdit" ng-click="editComicsEntry()"></button>
-      <button class="button button-icon icon ion-android-trash" ng-click="removeComicsEntry()"></button>
+      <button class="button button-icon icon ion-plus-round" ng-show="canEdit" on-tap="showAddRelease()"></button>
+      <button class="button button-icon icon ion-compose" ng-show="canEdit" on-tap="editComicsEntry()"></button>
+      <button class="button button-icon icon ion-android-trash" on-tap="removeComicsEntry()"></button>
     </div>
   </ion-header-bar>
 
@@ -25,7 +25,7 @@
     </label>
     <button ng-if="search.length"
       class="button button-icon ion-android-close clear-button rmm-search-button"
-      ng-click="clearSearch()">
+      on-tap="clearSearch()">
     </button>
   </header> -->
   <!-- content -->
@@ -34,7 +34,7 @@
     <ion-list>
         <ion-item bindonce class="item item-comics" 
           on-hold="selectItem(item)"
-          ng-click="clickItem(item)" 
+          on-tap="clickItem(item)" 
           ng-class="{selected: isSelected(item.id)}"
           ng-repeat="item in comics track by item.id"> 
 
@@ -45,7 +45,7 @@
           <span class="comics-notes" bo-if="debugMode">last upd {{item.lastUpdate}} best {{item.bestRelease.date}} id {{item.id}}</span>
         </div>
 
-        <best-release comics="item" ng-if="item.bestRelease.number"></best-release>
+        <best-release comics="item" bo-if="item.bestRelease.number"></best-release>
       </ion-item>
     </ion-list>
     <ion-infinite-scroll
@@ -60,8 +60,8 @@
 <script id="orderby-popover.html" type="text/ng-template">
   <ion-popover-view class="popover-menu" style="height: 52px">
     <ion-list>
-      <ion-item ng-if="orderBy !== 'bestRelease'" ng-click="closeOrderByPopover('bestRelease', false)"><span translate>Sort by release</span></ion-item>
-      <ion-item ng-if="orderBy !== 'name'" ng-click="closeOrderByPopover('name', false)"><span translate>Sort by name</span></ion-item>
+      <ion-item ng-if="orderBy !== 'bestRelease'" on-tap="closeOrderByPopover('bestRelease', false)"><span translate>Sort by release</span></ion-item>
+      <ion-item ng-if="orderBy !== 'name'" on-tap="closeOrderByPopover('name', false)"><span translate>Sort by name</span></ion-item>
     </ion-list>
   </ion-popover-view>
 </script>
