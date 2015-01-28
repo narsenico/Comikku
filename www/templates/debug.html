@@ -11,11 +11,11 @@
 						</div>
 					</label>
 				</ion-item>
-	  		<ion-item ng-click="fakeEntries()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
-	  		<ion-item ng-click="switchUser()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Switch user <p>Current: {{currentUser}}</p></ion-item>
-	  		<ion-item ng-click="clearCache()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-trash-a"></i> Clear cache</ion-item>
-	  		<ion-item ng-click="repairData()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-hammer"></i> Repair data</ion-item>
-	  		<ion-item ng-click="test($event)" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
+	  		<ion-item on-tap="fakeEntries()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Create fake entries</ion-item>
+	  		<ion-item on-tap="switchUser()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Switch user <p>Current: {{currentUser}}</p></ion-item>
+	  		<ion-item on-tap="clearCache()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-trash-a"></i> Clear cache</ion-item>
+	  		<ion-item on-tap="repairData()" ng-if="userOptions.debugMode=='T'"><i class="icon ion-hammer"></i> Repair data</ion-item>
+	  		<ion-item on-tap="test($event)" ng-if="userOptions.debugMode=='T'"><i class="icon ion-arrow-graph-down-right"></i> Test {{testresult}}</ion-item>
 	  		<label class="item item-input" ng-if="userOptions.debugMode=='T'"><span class="input-label">Infinite scroll chunk</span><input type="number" ng-model="userOptions.infiniteScrollChunk" ng-change="optionsChanged()"></label>
 	  	</ion-list>
   	</form>

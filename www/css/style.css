@@ -495,13 +495,13 @@ ion-side-menu.menu,
 
 .best-release.expired.near .number {
 	background-color: #FF8800;
-	border-color: #FF8800;
+	/*border-color: #FF8800;*/
 	color: #fff;
 }
 
 .best-release.expired.near .date {
 	background-color: #FAEF70;
-	border-color: #FF8800;
+	/*border-color: #FF8800;*/
 }
 
 .best-release.wishlist .number {

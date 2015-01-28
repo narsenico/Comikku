@@ -80,7 +80,7 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 		$timeout(function() {
 			var from = $scope.comics.length;
 			var max = Math.min(from + loadChunk, filteredComics.length);
-			console.log("loadMore", from, max);
+			// console.log("loadMore", from, max);
 			if (from < max) {
 				$scope.comics = _.union($scope.comics, filteredComics.slice(from, max));
 				//console.log(" - ", $scope.comics.length);
@@ -98,12 +98,15 @@ function($scope, $ionicModal, $timeout, $state, $filter, $undoPopup, $utils, $de
 	};
 	//
 	$scope.getComicsInfo = function(item) {
-    if (_.str.isBlank(item.series))
-      return item.notes;
-    else if (_.str.isBlank(item.notes))
-      return item.series
-    else
+		if (item.bestRelease && !_.str.isBlank(item.bestRelease.notes)) {
+			return item.bestRelease.notes;
+		} else if (_.str.isBlank(item.series)) {
+		  return item.notes;
+		} else if (_.str.isBlank(item.notes)) {
+			return item.series
+		} else {
       return item.series + " - " + item.notes;
+    }
 	};
 	//funzione di rimozione elemento
 	$scope.removeComicsEntry = function() {

@@ -48,6 +48,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
   	//console.log(new Date().getTime() + " applyFilter")
     var _items = [];
 
+    //chiavi gruppo -> aaa=to buy, lll=losts, zzz=wishlist, zzzz=purchased
+
     //estraggo tutt le releases
     var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
     	[$scope.entry]);
@@ -74,8 +76,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
     		return (rel.purchased == 'T');
     	});
 
-	    //TODO raggruppare per settimana/mese dalla settimana/mese corrente
-	    //	oppure senza gruppo, dal giorno corrente
+	    //raggruppare per settimana/mese
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
 		    	return moment(rel.date)[funcName]().format('YYYY-MM-DD');
@@ -84,10 +85,22 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	    	}
 	    });
 
-    } else {
+	  } else if ($stateParams.comicsId != null) {
+	  	//se sono le uscite di un fumetto raggruppo per categoria
+			grps = _.groupBy(rels, function(rel) {
+				if (rel.purchased == 'T') {
+					return 'zzzz'; //purchased
+				} else if (!rel.date) {
+					return 'zzz'; //wishlist
+				} else if (rel.date < today) {
+					return 'lll'; //losts
+				} else {
+					return 'aaa'; //to purchase
+				}
+			});
 
-	    //TODO raggruppare per settimana/mese dalla settimana/mese corrente
-	    //	oppure senza gruppo, dal giorno corrente
+    } else {
+	    //raggruppa per settimana/mese
 	    grps = _.groupBy(rels, function(rel) {
 	    	if (rel.date) {
 		    	return moment(rel.date)[funcName]().format('YYYY-MM-DD');
@@ -112,8 +125,12 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
     		if ($scope.entry == null && !$scope.isWishlist && !$scope.isPurchased) continue;
 				_items.push({ _kk: kk++, label: $filter('translate')('Wishlist'), count: grp.length });
     	} else if (grpKeys[ii] == 'lll') {
-    		if (!$scope.isWishlist) continue;
+    		if ($scope.entry == null && !$scope.isWishlist) continue;
 				_items.push({ _kk: kk++, label: $filter('translate')('Losts'), count: grp.length });
+			} else if (grpKeys[ii] == 'aaa') {
+				_items.push({ _kk: kk++, label: $filter('translate')('To buy'), count: grp.length });
+			} else if (grpKeys[ii] == 'zzzz') {
+				_items.push({ _kk: kk++, label: $filter('translate')('Purchased'), count: grp.length });
 			} else if (grpKeys[ii] == $scope.thisTime) {
 				_items.push({ _kk: kk++, label: lblThisTime, count: grp.length });
 			} else if (grpKeys[ii] == $scope.nextTime) {
