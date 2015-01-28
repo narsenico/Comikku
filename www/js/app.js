@@ -298,16 +298,17 @@ function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
 }]);
 
 angular.module('starter.controllers', ['starter.services'])
-.controller('AppCtrl', [
-  '$scope', '$settings', '$comicsData',
-  function($scope, $settings, $comicsData) {
+.controller('AppCtrl', [ '$scope', '$settings', '$comicsData',
+function($scope, $settings, $comicsData) {
   //
   $settings.load();
   //console.log("   ---- LOAD " + JSON.stringify($settings.userOptions))
   moment.weekStartOnMonday($settings.userOptions.weekStartMonday == 'T');
   //leggo l'elenco dei fumetti (per utente USER)
-  $comicsData.read("USER");
+  $comicsData.read('USER');
   //
-  $scope.uid = $comicsData.uid;
-  $scope.debugMode = ($settings.userOptions.debugMode == 'T');
+  $scope.$on('$ionicView.beforeEnter', function(scopes, states) {
+    $scope.uid = $comicsData.uid;
+    $scope.debugMode = ($settings.userOptions.debugMode == 'T');
+  });  
 }]);

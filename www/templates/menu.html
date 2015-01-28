@@ -19,7 +19,7 @@
     <ion-content class="has-header">
       <ion-list>
         <ion-item item-type="item-icon-left" class="item-menu-big" nav-clear menu-close ng-href="#/app/comics">
-          <i class="icon flaticon-comics" style="font-size: 1.4em"></i> <span translate>Comics</span>
+          <i class="icon flaticon-comics" style="font-size: 1.4em"></i> <span translate>Comics</span><!-- <span class="badge badge-assertive">0</span> -->
         </ion-item>
         <ion-item item-type="item-icon-left" class="item-menu-big" nav-clear menu-close ng-href="#/app/releases">
           <i class="icon flaticon-releases"></i> <span translate>Releases</span>
@@ -36,7 +36,7 @@
       </ion-list>
     </ion-content>
     <div class="bar bar-footer bar-balanced" ng-if="debugMode">
-      <div class="title">{{uid}}</div>
+      <div class="title">uid: {{uid}}</div>
     </div>
   </ion-side-menu>
 </ion-side-menus>
