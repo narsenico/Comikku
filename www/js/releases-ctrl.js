@@ -264,6 +264,36 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	  }
   };
   //
+  $scope.togglePurchased = function(release) {
+  	if (release) {
+	    release.purchased = (release.purchased == 'T' ? 'F' : 'T');
+	    $comicsData.save();
+	    $toast.show($filter('translate')(release.purchased == 'T' ? "Release purchased" : "Purchase canceled"));
+	  } else {
+	  	var value = ($scope.selectedReleases[0].purchased == 'T' ? 'F' : 'T');
+	  	angular.forEach($scope.selectedReleases, function(release) {
+	  		release.purchased = value;
+	  	});
+	  	$comicsData.save();
+			$toast.show($filter('translate')(value == 'T' ? "Releases purchased" : "Purchase canceled"));
+	  }
+  };
+  //
+  $scope.toggleOrdered = function(release) {
+  	if (release) {
+	    release.ordered = (release.ordered == 'T' ? 'F' : 'T');
+	    $comicsData.save();
+	    $toast.show($filter('translate')(release.ordered == 'T' ? "Release ordered" : "Order canceled"));
+	  } else {
+	  	var value = ($scope.selectedReleases[0].ordered == 'T' ? 'F' : 'T');
+	  	angular.forEach($scope.selectedReleases, function(release) {
+	  		release.ordered = value;
+	  	});
+	  	$comicsData.save();
+			$toast.show($filter('translate')(value == 'T' ? "Releases ordered" : "Order canceled"));
+	  }
+  };
+  //
   $scope.getComicsById = function(comicsId) {
   	return $comicsData.getComicsById(comicsId);
   };

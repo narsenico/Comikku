@@ -39,7 +39,7 @@
           ng-repeat="item in comics track by item.id"> 
 
         <div>
-          <span class="comics-title"><i class="icon ion-ios7-filing-outline" bo-if="item.reserved=='T'"></i> {{item.name}}</span>
+          <span class="comics-title"><i class="flaticon-reserved" bo-if="item.reserved=='T'"></i> {{item.name}}</span>
           <span class="comics-subtitle">{{item.publisher}}</span>
           <span class="comics-notes">{{getComicsInfo(item)}}</span>
           <span class="comics-notes" bo-if="debugMode">last upd {{item.lastUpdate}} best {{item.bestRelease.date}} id {{item.id}}</span>

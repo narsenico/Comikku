@@ -2,7 +2,7 @@
 <div class="title"><h4 ng-class="{'full-height': !release.notes}">{{comics.name}}</h4><p ng-if="release.notes">{{release.notes}}</p></div>
 <div class="flags">
 	<div class="date">{{datestr}}</div>
-	<i class="icon" 
-	ng-class="{ 'ion-eye ordered': release.purchased != 'T' && release.ordered == 'T', 'ion-ios7-filing-outline': release.purchased != 'T' && release.ordered != 'T' && comics.reserved=='T' }"
+	<i class="icon" style="font-size: 1.4em"
+	ng-class="{ 'flaticon-ordered-b ordered': release.ordered == 'T', 'flaticon-reserved': release.ordered != 'T' && comics.reserved=='T' }"
 	>&nbsp;</i>
 </div>

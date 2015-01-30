@@ -13,8 +13,8 @@
     <div class="buttons pull-right">
       <button class="button button-icon icon ion-plus" ng-show="canEdit" on-tap="showAddRelease()"></button>
       <button class="button button-icon icon ion-compose" ng-show="canEdit" on-tap="editReleaseEntry()"></button>
-      <!-- <button class="button button-icon icon flaticon-purchased" on-tap="setPurchased(null, 'T')"></button>
-      <button class="button button-icon icon flaticon-npurchased" on-tap="setPurchased(null, 'F')"></button> -->
+      <button class="button button-icon icon flaticon-purchased" on-tap="togglePurchased(null)"></button>
+      <button class="button button-icon icon flaticon-ordered-b" on-tap="toggleOrdered(null)"></button>
       <button class="button button-icon icon ion-android-trash" on-tap="removeReleaseEntry()"></button>
     </div>
   </ion-header-bar>

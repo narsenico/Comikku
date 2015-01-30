@@ -110,7 +110,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Every 3 months": "Ogni 3 mesi",
     "Every 4 months": "Ogni 4 mesi",
     "Every 6 months": "Ogni 6 mesi",
-    "Annual": "Annuale" 
+    "Annual": "Annuale",
+    "Release ordered": "Numero ordinato",
+    "Order canceled": "Ordine annullato"
   });
 
   //imposto la lingua di default

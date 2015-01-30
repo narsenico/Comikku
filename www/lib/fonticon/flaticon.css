@@ -14,24 +14,33 @@
         font-size: 20px;
 font-style: normal;
 margin-left: 20px;
-}.flaticon-purchased:before {
+}.flaticon-reserved:before {
 	content: "\e000";
 }
-.flaticon-npurchased:before {
+.flaticon-purchased:before {
 	content: "\e001";
 }
-.flaticon-wishlist:before {
+.flaticon-npurchased:before {
 	content: "\e002";
 }
-.flaticon-comics:before {
+.flaticon-wishlist:before {
 	content: "\e003";
 }
-.flaticon-download:before {
+.flaticon-releases:before {
 	content: "\e004";
 }
-.flaticon-releases:before {
+.flaticon-ordered-b:before {
 	content: "\e005";
 }
-.flaticon-upload:before {
+.flaticon-comics:before {
 	content: "\e006";
+}
+.flaticon-ordered:before {
+	content: "\e007";
+}
+.flaticon-download:before {
+	content: "\e008";
+}
+.flaticon-upload:before {
+	content: "\e009";
 }

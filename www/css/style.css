@@ -520,6 +520,12 @@ ion-side-menu.menu,
 	border-radius: 0 0 2px 2px;
 }
 
+.icon-editor-right {
+	position: absolute;
+	right: 10px;
+	top: 15px;
+}
+
 /* Release */
 .item-release {
 	padding: 0;
