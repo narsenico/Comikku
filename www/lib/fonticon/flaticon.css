@@ -38,9 +38,12 @@ margin-left: 20px;
 .flaticon-ordered:before {
 	content: "\e007";
 }
-.flaticon-download:before {
+.flaticon-radio-checked:before {
 	content: "\e008";
 }
-.flaticon-upload:before {
+.flaticon-download:before {
 	content: "\e009";
+}
+.flaticon-upload:before {
+	content: "\e00a";
 }

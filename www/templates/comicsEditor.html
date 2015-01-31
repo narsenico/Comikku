@@ -58,14 +58,16 @@
 </ion-view>
 
 <script id="comicsPeriodicity.html" type="text/ng-template">
+	<ion-scroll style="height: 300px">
 	<ion-list>
-		<ion-radio ng-model="entry.periodicity" ng-value="''" ng-change="comicsPeriodicityPopup.close('')"><span translate="Periodicity.None">None</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'w1'" ng-change="comicsPeriodicityPopup.close('w1')"><span translate>Weekly</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'M1'" ng-change="comicsPeriodicityPopup.close('M1')"><span translate>Monthly</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'M2'" ng-change="comicsPeriodicityPopup.close('M2')"><span translate>Every 2 months</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'M3'" ng-change="comicsPeriodicityPopup.close('M3')"><span translate>Every 3 months</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'M4'" ng-change="comicsPeriodicityPopup.close('M4')"><span translate>Every 4 months</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'M6'" ng-change="comicsPeriodicityPopup.close('M6')"><span translate>Every 6 months</span></ion-radio>
-		<ion-radio ng-model="entry.periodicity" ng-value="'Y1'" ng-change="comicsPeriodicityPopup.close('Y1')"><span translate>Annual</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="''" ng-change="comicsPeriodicityPopup.close('')" icon="flaticon-radio-checked"><span translate="Periodicity.None">None</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'w1'" ng-change="comicsPeriodicityPopup.close('w1')" icon="flaticon-radio-checked"><span translate>Weekly</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M1'" ng-change="comicsPeriodicityPopup.close('M1')" icon="flaticon-radio-checked"><span translate>Monthly</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M2'" ng-change="comicsPeriodicityPopup.close('M2')" icon="flaticon-radio-checked"><span translate>Every 2 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M3'" ng-change="comicsPeriodicityPopup.close('M3')" icon="flaticon-radio-checked"><span translate>Every 3 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M4'" ng-change="comicsPeriodicityPopup.close('M4')" icon="flaticon-radio-checked"><span translate>Every 4 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'M6'" ng-change="comicsPeriodicityPopup.close('M6')" icon="flaticon-radio-checked"><span translate>Every 6 months</span></ion-radio>
+		<ion-radio ng-model="entry.periodicity" ng-value="'Y1'" ng-change="comicsPeriodicityPopup.close('Y1')" icon="flaticon-radio-checked"><span translate>Annual</span></ion-radio>
 	</ion-list>
+	</ion-scroll>
 </script>

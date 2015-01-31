@@ -103,10 +103,10 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   //
   $scope.deleteAllData = function() {
     $ionicPopup.confirm({
-      title: $filter('translate')('Confirm'),
-      template: $filter('translate')('Delete all data?'),
+      title: $filter('translate')('Delete all data?'),
+      template: $filter('translate')('You\'ll lose all comics and releases!'),
       cancelText: $filter('translate')('Cancel'),
-      okText: $filter('translate')('OK')
+      okText: $filter('translate')('Delete')
     }).then(function(res) {
       if (res) {
         $comicsData.clear();
@@ -143,10 +143,10 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   //
   $scope.backup = function() {
     $ionicPopup.confirm({
-      title: $filter('translate')('Backup'),
-      template: $filter('translate')('Previous backup will be overridden. Continue?'),
+      title: $filter('translate')('Backup data?'),
+      template: $filter('translate')('Previous backup will be overridden.'),
       cancelText: $filter('translate')('Cancel'),
-      okText: $filter('translate')('OK')
+      okText: $filter('translate')('Backup')
     }).then(function(res) {
       if (res) {
         $comicsData.backupDataToFile().then(function(res) {
@@ -161,10 +161,10 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   //
   $scope.restore = function() {
     $ionicPopup.confirm({
-      title: $filter('translate')('Restore'),
-      template: $filter('translate')('Restore data from backup? Current data will be overridden.'),
+      title: $filter('translate')('Restore data from backup?'),
+      template: $filter('translate')('Current data will be overridden.'),
       cancelText: $filter('translate')('Cancel'),
-      okText: $filter('translate')('OK')
+      okText: $filter('translate')('Restore')
     }).then(function(res) {
       if (res) {
         $comicsData.restoreDataFromFile().then(function(res) {
