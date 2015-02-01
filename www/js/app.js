@@ -119,7 +119,9 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Every 6 months": "Ogni 6 mesi",
     "Annual": "Annuale",
     "Releases ordered": "Numeri ordinato",
-    "Order canceled": "Ordine annullato"
+    "Order canceled": "Ordine annullato",
+    "Send comment": "Invia commenti",
+    "Comment about Comikku": "Commenti su Comikku"
   });
 
   //imposto la lingua di default
