@@ -121,7 +121,8 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Releases ordered": "Numeri ordinato",
     "Order canceled": "Ordine annullato",
     "Send comment": "Invia commenti",
-    "Comment about Comikku": "Commenti su Comikku"
+    "Comment about Comikku": "Commenti su Comikku",
+    "Version": "Versione"
   });
 
   //imposto la lingua di default
