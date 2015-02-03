@@ -118,7 +118,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Every 4 months": "Ogni 4 mesi",
     "Every 6 months": "Ogni 6 mesi",
     "Annual": "Annuale",
-    "Releases ordered": "Numeri ordinato",
+    "Releases ordered": "Numeri ordinati",
     "Order canceled": "Ordine annullato",
     "Send comment": "Invia commenti",
     "Comment about Comikku": "Commenti su Comikku",

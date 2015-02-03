@@ -10,23 +10,23 @@
     <form name="data.form" novalidate class="validation-form">
 		  <label class="item item-input item-key">
 		  	<span class="input-label rmm-required" translate> Name</span>
-		    <input type="text" placeholder="{{'comics title' | translate}}" ng-model="entry.name" required>
+		    <input type="text" ng-model="entry.name" required>
 		  </label>
 		  <label class="item item-input">
 		    <span class="input-label" translate> Publisher</span>
-		    <input type="text" placeholder="{{'publisher' | translate}}" ng-model="entry.publisher">
+		    <input type="text" ng-model="entry.publisher">
 		  </label>
 		  <label class="item item-input">
 		    <span class="input-label" translate> Series</span>
-		    <input type="text" placeholder="{{'comics series' | translate}}" ng-model="entry.series">
+		    <input type="text" ng-model="entry.series">
 		  </label>
 		  <label class="item item-input">
 		    <span class="input-label" translate> Authors</span>
-		    <input type="text" placeholder="{{'authors' | translate}}" ng-model="entry.authors">
+		    <input type="text" ng-model="entry.authors">
 		  </label>
 		  <label class="item item-input">
 		    <span class="input-label" translate> Price</span>
-		    <input type="number" placeholder="{{'price' | translate}}" ng-model="entry.price" onfocus="this.select()">
+		    <input type="number" ng-model="entry.price" onfocus="this.select()">
 		  </label>
 		  <label class="item item-input" ng-click="chooseComicsPeriodicity()">
 		    <span class="input-label" translate> Periodicity</span>
@@ -47,7 +47,7 @@
 			</label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label" translate> Notes</span>
-		    <input type="text" placeholder="{{'notes' | translate}}" ng-model="entry.notes">
+		    <input type="text" ng-model="entry.notes">
 		  </label>
 		  <div class="content padding">
 		  	&nbsp;

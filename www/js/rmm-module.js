@@ -239,6 +239,7 @@ function($ionicTemplateLoader, $q, $timeout, $document) {
 
     if (options.timeout == 'short' || options.timeout < 0) options.timeout = 2000;
     else if (options.timeout == 'long') options.timeout = 10000;
+    else if (options.timeout == 'none') options.timeout = -1;
 
     var popupPromise = $ionicTemplateLoader.compile({
       template: TOAST_TPL,

@@ -12,7 +12,6 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   $scope.version = null;
   $scope.lastBackup = $filter('translate')('not found');
   $scope.currentUser = $comicsData.uid;
-  $scope.debugMode = ($settings.userOptions.debugMode == 'T');
   $scope.langinfo = 'moment: ' + moment.locale() + ' - translate: ' + $translate.use();
   //
   if (window.cordova) {
@@ -177,6 +176,20 @@ function($scope, $q, $ionicPopup, $undoPopup, $toast, $ionicPopover, $ionicModal
   };
   //
   $scope.readLastBackup();
+
+  //
+  $scope.avatarTapped = 5;
+  $scope.tapAvatar = function() {
+    if ($settings.userOptions.debugMode == 'F' && $scope.avatarTapped <= 0) {
+      $scope.avatarTapped = 5;
+    }
+    if (--$scope.avatarTapped <= 0) {
+      $settings.userOptions.debugMode = 'T';
+      $toast.show("Debug mode enabled!");
+    } else if ($scope.avatarTapped <= 3) {
+      $toast.show("You are now " + $scope.avatarTapped + " steps away from debug mode!");
+    }
+  };
 
   //DEBUG
   //
