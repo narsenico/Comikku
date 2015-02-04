@@ -20,7 +20,7 @@ margin-left: 20px;
 .flaticon-purchased:before {
 	content: "\e001";
 }
-.flaticon-npurchased:before {
+.flaticon-purchased2:before {
 	content: "\e002";
 }
 .flaticon-wishlist:before {
@@ -38,12 +38,15 @@ margin-left: 20px;
 .flaticon-ordered:before {
 	content: "\e007";
 }
-.flaticon-radio-checked:before {
+.flaticon-radio-unchecked:before {
 	content: "\e008";
 }
-.flaticon-download:before {
+.flaticon-radio-checked:before {
 	content: "\e009";
 }
-.flaticon-upload:before {
+.flaticon-download:before {
 	content: "\e00a";
+}
+.flaticon-upload:before {
+	content: "\e00b";
 }

@@ -400,6 +400,15 @@ ion-side-menu.menu,
 	border-color: #2E2E2E;
 }
 
+/* */
+
+.item-radio-unchecked-icon {
+	position: absolute;
+	font-size: 20px;
+	right: 16px;
+	top: 18px;
+}
+
 /* Comics */
 .item-comics {
 	min-height: 64px;

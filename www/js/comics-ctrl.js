@@ -301,7 +301,6 @@ function($scope, $stateParams, $ionicHistory, $comicsData, $ionicPopup, $filter)
 	//usato per contenere la form in modo da poter accedere alla form anche all'esterno del tag <form>
 	$scope.data = {};
   //console.log($stateParams, $comicsData)
-  $scope.periodicities = PERIODICITIES;
   //originale
   $scope.master = $comicsData.getComicsById($stateParams.comicsId);
   //aggiorno l'originale e torno indietro
@@ -325,7 +324,7 @@ function($scope, $stateParams, $ionicHistory, $comicsData, $ionicPopup, $filter)
   $scope.chooseComicsPeriodicity = function() {
     $scope.comicsPeriodicityPopup = $ionicPopup.show({
       templateUrl: 'comicsPeriodicity.html',
-      title: $filter('translate')('Comics periodicity'),
+      title: $filter('translate')('Comics released every'),
       scope: $scope,
       buttons: [{
         text: $filter('translate')('Cancel'),
@@ -333,10 +332,6 @@ function($scope, $stateParams, $ionicHistory, $comicsData, $ionicPopup, $filter)
         onTap: function(e) { return false; }
       }]
     });
-  };
-  //
-  $scope.getPeriodicityDescr = function(periodicity) {
-  	return $filter('translate')(PERIODICITIES[periodicity]) || "";
   };
   $scope.reset();
 }]);

@@ -6,17 +6,6 @@ function indexByKey(arr, value, property) {
 	return -1;
 }
 
-//TODO rivedere l'inglese
-var PERIODICITIES = {
-	"w1": "Weekly",
-	"M1": "Monthly",
-	"M2": "Every 2 months",
-	"M3": "Every 3 months",
-	"M4": "Every 4 months",
-	"M6": "Every 6 months",
-	"Y1": "Annual" 
-};
-
 angular.module('starter.services', [])
 
 .factory('$comicsData', ['$q', '$filter', '$utils', '$file', 
@@ -34,7 +23,7 @@ function ($q, $filter, $utils, $file) {
 		publisher: null,
 		authors: null,
 		price: 0.0,
-		periodicity: null,
+		periodicity: '', //w1, M1, M2, M3, M4, M6, Y1
 		reserved: "F",
 		notes: null,
 		releases: [],

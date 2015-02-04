@@ -20,8 +20,23 @@ angular.module('starter',
   }];
 })
 
-.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider', '$ionicConfigProvider',
-function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider, $ionicConfigProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$initOptionsProvider', '$translateProvider', '$ionicConfigProvider', '$provide',
+function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translateProvider, $ionicConfigProvider, $provide) {
+
+  //estendo la direttiva ion-radio modificando il template
+  //  che aggiunge un'icona per gli elementi non selezionati
+  $provide.decorator('ionRadioDirective', function($delegate) {
+    var directive = $delegate[0];
+
+    directive.template = '<label class="item item-radio">' +
+        '<input type="radio" name="radio-group">' +
+        '<div class="item-content disable-pointer-events" ng-transclude></div>' +
+        '<i class="radio-icon disable-pointer-events icon flaticon-radio-checked"></i>' +
+        '<i class="radio-icon disable-pointer-events icon flaticon-radio-unchecked" style="visibility: visible"></i>' +
+      '</label>';
+
+    return $delegate;
+  });
 
   //TODO caricare le stringhe da file esterni
   $translateProvider.translations('en', {
@@ -45,8 +60,15 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Series": "Serie",
     "Authors": "Autore",
     "Price": "Prezzo",
-    "Periodicity": "Periodicit&agrave;",
-    "Comics periodicity": "Periodicit&agrave;",
+    "Comics released every": "Fumetto in uscita ogni",
+    "Not specified": "Non specificato",
+    "Week": "Settimana",
+    "Month": "Mese",
+    "2 months": "2 mesi",
+    "3 months": "3 mesi",
+    "4 months": "4 mesi",
+    "6 months": "6 mesi",
+    "Year": "Anno",
     "Reserved": "Prenotato",
     "Notes": "Note",
     "comics title": "titolo",
@@ -110,14 +132,6 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Enabled": "Abilitata",
     "Disabled": "Disabilitata",
     "Ordered": "Ordinato",
-    "Periodicity.None": "Nessuna",
-    "Weekly": "Settimanale",
-    "Monthly": "Mensile",
-    "Every 2 months": "Ogni 2 mesi",
-    "Every 3 months": "Ogni 3 mesi",
-    "Every 4 months": "Ogni 4 mesi",
-    "Every 6 months": "Ogni 6 mesi",
-    "Annual": "Annuale",
     "Releases ordered": "Numeri ordinati",
     "Order canceled": "Ordine annullato",
     "Send comment": "Invia commenti",
@@ -270,6 +284,8 @@ function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
   moment.locale($translate.use());
   //console.log("Language moment " + moment.locale() + " translate " + $translate.use());
 
+  console.log("************************** before")
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -280,6 +296,7 @@ function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
     //leggo la lingua di sistema e la uso in moment e $translate
     if(typeof navigator.globalization !== "undefined") {
       navigator.globalization.getPreferredLanguage(function(language) {
@@ -290,7 +307,12 @@ function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
         }, function(error) {
           console.log("ERROR -> " + error);
         })*/;
-      }, null);
+      });
+    }
+
+    //nascondo la splash screen al termine del caricamento
+    if (navigator.splashscreen) {
+      navigator.splashscreen.hide();
     }
   });
 
