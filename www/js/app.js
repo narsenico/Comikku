@@ -284,8 +284,6 @@ function($ionicPlatform, $translate, $state, $ionicHistory, $settings) {
   moment.locale($translate.use());
   //console.log("Language moment " + moment.locale() + " translate " + $translate.use());
 
-  console.log("************************** before")
-
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
