@@ -628,3 +628,30 @@ IonicModule
         }
     };
 } );
+
+//https://github.com/driftyco/ionic/issues/2674
+//thx to cbruun
+//risolve il problema del menu laterale che non si chiude con lo swype
+IonicModule
+.directive('fixAndroidTouch', [
+  '$rootScope', '$ionicPlatform',
+  function(rootScope, ionicPlatform) {
+    return {
+      link: function() {
+        ionicPlatform.ready().then(function() {
+          if (ionic.Platform.isAndroid()) {
+            var documentOnTouchMoveFix = function (event) {
+              event.preventDefault();
+            };
+
+            document.ontouchmove = documentOnTouchMoveFix;
+
+            rootScope.$on('$ionicView.afterEnter', function () {
+              document.ontouchmove = documentOnTouchMoveFix;
+            });
+          }
+        });
+      }
+    };
+  }
+]);
