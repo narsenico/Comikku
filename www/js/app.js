@@ -101,6 +101,7 @@ function($stateProvider, $urlRouterProvider, $initOptionsProvider, $translatePro
     "Data": "Dati",
     "Delete": "Elimina",
     "Delete all data": "Elimina tutti i dati",
+    "Delete releases": "Rimuovi uscite",
     "You\'ll lose all comics and releases!": "Perderai tutti i fumetti e le uscite!",
     "Reset settings": "Ripristina le impostazioni di default",
     "Cancel": "Annulla",

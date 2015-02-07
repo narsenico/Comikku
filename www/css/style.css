@@ -133,6 +133,10 @@
 	padding-bottom: 4px;
 }
 
+.bar.bar-comikku {
+	background-color: #FFBC01;
+}
+
 .item-big {
 	font-size: 1.25em;
 }
@@ -346,6 +350,9 @@ ion-side-menu.menu,
 	margin-top: 5px!important;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
+}
+.platform-android .popover.popover-menu .item {
+	border-color: #E4E3E3;
 }
 
 /* Popup */
@@ -659,6 +666,9 @@ ion-side-menu.menu,
 }
 .item-release.release>.flags>.icon {
 	font-size: 1.3em;
+}
+.release-trash:before {
+	padding: 0 6px 0 7px;
 }
 
 /** about **/

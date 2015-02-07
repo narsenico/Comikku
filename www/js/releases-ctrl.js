@@ -21,6 +21,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//indcia quanti dati caricare alla volta tramite infinite scroll
 	var loadChunk = $settings.userOptions.infiniteScrollChunk;
 	var items = [];
+	//contiene le release dopo aver applicato i filtri 
+	var rels = null;
 
 	var changeGroup = function() {
 		if ($scope.groupBy == 'week') { 
@@ -51,7 +53,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
     //chiavi gruppo -> aaa=to buy, lll=losts, zzz=wishlist, zzzz=purchased
 
     //estraggo tutt le releases
-    var rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
+    rels = $comicsData.getReleases($stateParams.comicsId == null ? null : 
     	[$scope.entry]);
 		lastReadTime = new Date().getTime();
     var grps;
@@ -168,6 +170,8 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	//se true mostro solo wishlist (senza data) e scadute, e non acquistate
 	$scope.isWishlist = $state.is('app.wishlist');
 	//
+	$scope.canGroup = !$scope.isWishlist && !$scope.entry;
+	//
 	$scope.isPurchased = $state.is('app.purchased');
 	//
 	$scope.currentBar = 'title';
@@ -222,10 +226,12 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		$state.go('app.release_editor', {comicsId: cid, releaseId: release.number});
   };
   //
-  $scope.removeReleaseEntry = function() {
-  	//console.log($scope.selectedReleases)
-		if (!_.isEmpty($scope.selectedReleases)) {
-			$comicsData.removeReleases($scope.selectedReleases);
+  $scope.removeReleaseEntry = function(bAll) {
+  	//
+  	var relsToRemove = bAll ? rels : $scope.selectedReleases;
+
+		if (!_.isEmpty(relsToRemove)) {
+			$comicsData.removeReleases(relsToRemove);
 			$comicsData.save();
 			$scope.selectedReleases = [];
 			$scope.canEdit = false;
@@ -237,8 +243,12 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 			  								text: '<i class="icon ion-android-system-back"></i> ' + $filter('translate')('CANCEL'),  
 			  								timeout: "long"}).then(function(res) {
 			    if (res == 'ok') {
-			      $scope.selectedReleases = $comicsData.undoRemoveReleases() || [];
-			      $scope.canEdit = ($scope.selectedReleases.length == 1);
+			    	if (bAll) {
+			    		$comicsData.undoRemoveReleases();
+			    	} else {
+			      	$scope.selectedReleases = $comicsData.undoRemoveReleases() || [];
+			      	$scope.canEdit = ($scope.selectedReleases.length == 1);
+			      }
 			      $comicsData.save();
 			      applyFilter();
 			      // scrollToLastPos();
@@ -362,25 +372,29 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 		return $utils.indexFindWhere($scope.selectedReleases, {comicsId: release.comicsId, number: release.number}) >= 0;
 	};
 	//
-	$scope.groupByPopover = null;
-	$scope.openGroupByPopover = function($event) {
-		if (!$scope.groupByPopover) {
-		  $ionicPopover.fromTemplateUrl('groupby-popover.html', {
+	$scope.menuPopover = null;
+	$scope.openMenuPopover = function($event) {
+		if (!$scope.menuPopover) {
+		  $ionicPopover.fromTemplateUrl('menu-popover.html', {
 		    scope: $scope,
 		  }).then(function(popover) {
-		    $scope.groupByPopover = popover;
-		    $scope.groupByPopover.show($event);
+		    $scope.menuPopover = popover;
+		    $scope.menuPopover.show($event);
 		  });
 		} else {
-			$scope.groupByPopover.show($event);
+			$scope.menuPopover.show($event);
 		}
 	};
 	//
-	$scope.closeGroupByPopover = function(groupBy) {
-		$scope.groupByPopover.hide();
-		$scope.groupBy = groupBy;
-		changeGroup();
-		applyFilter();
+	$scope.closeMenuPopover = function(action, option) {
+		$scope.menuPopover.hide();
+		if (action == 'group') {
+			$scope.groupBy = option;
+			changeGroup();
+			applyFilter();
+		} else if (action == 'delete') {
+			$scope.removeReleaseEntry(true);
+		}
 	};
   //
   // changeGroup();
@@ -402,7 +416,7 @@ function($scope, $ionicModal, $timeout, $state, $undoPopup, $utils, $toast, $ion
 	// }, 100);
 	////deregistro l'evento sul back all'uscita
 	$scope.$on('$destroy', function() {
-		$scope.groupByPopover && $scope.groupByPopover.remove(); 
+		$scope.menuPopover && $scope.menuPopover.remove(); 
 		//$scope._deregisterBackButton && $scope._deregisterBackButton(); -> gestito in beforeLeave
 		$settings.save();
 	});

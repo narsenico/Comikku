@@ -3,7 +3,7 @@
   <!-- pu\santi barra di navigazione -->
   <ion-nav-buttons side="secondary">
     <button class="button button-icon icon ion-plus-round" ng-if="entry" on-tap="showAddRelease(entry)"></button>
-    <button class="button button-icon icon ion-android-more" on-tap="openGroupByPopover($event)" ng-if="!isWishlist"></button>
+    <button class="button button-icon icon ion-android-more" on-tap="openMenuPopover($event)"></button>
   </ion-nav-buttons>
 
   <!-- barra secondaria, visibile quando quella primaria è nascosta -->
@@ -42,11 +42,12 @@
   </ion-content>
 </ion-view>
 
-<script id="groupby-popover.html" type="text/ng-template">
-  <ion-popover-view class="popover-menu" style="height: 52px">
+<script id="menu-popover.html" type="text/ng-template">
+  <ion-popover-view class="popover-menu" style="width: 250px; height: {{canGroup ? '104px' : '52px'}}">
     <ion-list>
-      <ion-item ng-if="groupBy !== 'week'" on-tap="closeGroupByPopover('week')"><span translate>Group by week</span></ion-item>
-      <ion-item ng-if="groupBy !== 'month'" on-tap="closeGroupByPopover('month')"><span translate>Group by month</span></ion-item>
+      <ion-item ng-if="canGroup && groupBy !== 'week'" on-tap="closeMenuPopover('group', 'week')"><i class="icon flaticon-group"></i> <span translate>Group by week</span></ion-item>
+      <ion-item ng-if="canGroup && groupBy !== 'month'" on-tap="closeMenuPopover('group', 'month')"><i class="icon flaticon-group"></i> <span translate>Group by month</span></ion-item>
+      <ion-item on-tap="closeMenuPopover('delete')"><i class="icon ion-android-trash release-trash"></i> <span translate>Delete releases</span></ion-item>
     </ion-list>
   </ion-popover-view>
 </script>
